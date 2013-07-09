@@ -41,22 +41,27 @@ react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
 react.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
 react.k = 0.1667
 
-#react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:koffMinDadp')
-#react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '-1']]
-#react.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
-#react.k = 0.1667
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:koffMinDadp')
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
+react.k = 0.1667
 
-#react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:dissociateMinDD')
-#react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '-1']]
-#react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '1']]
-#react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '1']]
-#react.k = 0.005 #2x loose since 2ATP -> 2ADP
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:koffMinDD')
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
+react.k = 0.1667
 
-#react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:dimerizeMinD')
-#react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
-#react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
-#react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '1']]
-#react.p = 0.00001
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:dissociateMinDD')
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '1']]
+react.k = 500 #2x loose since 2ATP -> 2ADP
+
+react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:dimerizeMinD')
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '1']]
+react.p = 0.00001
 
 diff = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffMinDatp')
 diff.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp']]
@@ -80,10 +85,11 @@ diff.D = 1e-13
 #iterator.LogInterval = 1
 
 life = theSimulator.createEntity('LifetimeLogProcess', 'Process:/:lifetime')
-life.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
-life.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
+life.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp']]
+life.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp']]
+life.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
 life.Iterations = 1
-life.LogEnd = 10000
+life.LogEnd = 100000
 life.FileName = "LifetimeLogMinDKon.csv"
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:filam')
@@ -103,7 +109,7 @@ import time
 run(1e-6)
 print "Done stirring. Now running..."
 start = time.time()
-run(10001)
+run(100001)
 end = time.time()
 duration = end-start
 print duration
