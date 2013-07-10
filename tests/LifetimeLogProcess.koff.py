@@ -34,6 +34,10 @@ populator.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
 
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:konMinDatp')
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '1']]
+react.k = 0.10e+14
+
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:konMinDD')
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '1']]
 react.k = 1.70e+14
 
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:koffMinDatp')
@@ -55,7 +59,7 @@ react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:di
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '-1']]
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '1']]
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '1']]
-react.k = 500 #2x loose since 2ATP -> 2ADP
+react.k = 0.05 #2x loose since 2ATP -> 2ADP
 
 react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:dimerizeMinD')
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
