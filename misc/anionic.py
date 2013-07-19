@@ -17,177 +17,177 @@ theSimulator.createEntity('System', 'System:/:Surface').StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/Surface:DIMENSION').Value = 2
 theSimulator.createEntity('Variable', 'Variable:/Surface:VACANT')
 
-theSimulator.createEntity('Variable', 'Variable:/Surface:ANIO').Value = 3400
-theSimulator.createEntity('Variable', 'Variable:/Surface:ANIOs').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/Surface:ANIO_PTEN').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/Surface:ANIOs_PTEN').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/Surface:PTEN').Value = 20
+theSimulator.createEntity('Variable', 'Variable:/Surface:PG').Value = 3400
+theSimulator.createEntity('Variable', 'Variable:/Surface:PGs').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/Surface:PG_MinD').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/Surface:PGs_MinD').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/:MinD').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/Surface:MinD').Value = 20
 
 logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
-logger.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:ANIO']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:MinD']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PG']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PGs']]
 logger.LogInterval = 1e-5
 logger.MultiscaleStructure = 0
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop')
-populator.VariableReferenceList = [['_', 'Variable:/Surface:ANIO']]
-populator.VariableReferenceList = [['_', 'Variable:/:PTEN']]
-populator.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN']]
-populator.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN']]
+populator.VariableReferenceList = [['_', 'Variable:/Surface:PG']]
+populator.VariableReferenceList = [['_', 'Variable:/:MinD']]
+populator.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD']]
+populator.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD']]
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop2')
-populator.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
+populator.VariableReferenceList = [['_', 'Variable:/Surface:MinD']]
 populator.UniformRadiusY = 0.99
 populator.UniformRadiusZ = 0.99
 
 #react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:adsorp')
-#react.VariableReferenceList = [['_', 'Variable:/:PTEN', '-1']]
+#react.VariableReferenceList = [['_', 'Variable:/:MinD', '-1']]
 #react.VariableReferenceList = [['_', 'Variable:/:Vacant', '-1']]
-#react.VariableReferenceList = [['_', 'Variable:/Surface:PTEN', '1']]
+#react.VariableReferenceList = [['_', 'Variable:/Surface:MinD', '1']]
 #react.p = 1
 
-react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:reactPTEN_ANIO')
-react.VariableReferenceList = [['_', 'Variable:/Surface:PTEN', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '1']]
+react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:reactMinD_PG')
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD', '1']]
 react.p = 1
 
-react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:dissocANIO_PTEN')
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '-1']]
+react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:dissocPG_MinD')
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD', '-1']]
 react.VariableReferenceList = [['_', 'Variable:/:Lipid', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG', '1']]
 react.p = 0.3
 
 
-#AA: ANIOx + ANIOx => 2 reactions
+#AA: PGx + PGx => 2 reactions
 react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:reactAA')
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '1']]
 react.p = 0.1
 
 react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:reactAAs')
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '1']]
 react.p = 0.1
 
-#AB: ANIOx + ANIOx_PTEN => 3 reactions
+#AB: PGx + PGx_MinD => 3 reactions
 react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:reactAB')
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '1']]
 react.p = 0.1
 
 react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:reactABs')
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '1']]
 react.p = 0.1
 
 react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:reactAsB')
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '1']]
 react.p = 0.1
 
 
-#BB: ANIOx_PTEN + ANIOx_PTEN => 2 reactions
+#BB: PGx_MinD + PGx_MinD => 2 reactions
 react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:reactBB')
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '1']]
 react.p = 0.1
 
 react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:reactBBs')
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '1']]
 react.p = 0.1
 
 #First order reactions (deoligomerizations)
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:dissocANIOsLip')
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO', '1']]
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:dissocPGsLip')
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG', '1']]
 react.Deoligomerize = 6
 react.SearchVacant = 1
 react.k = 1e+5
 
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:dissocPTENANIOs')
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '-1']]
-react.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '1']]
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:dissocMinDPGs')
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD', '1']]
 react.Deoligomerize = 6
 react.SearchVacant = 1
 react.k = 1e+5
 
-#diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePTENv')
-#diffuser.VariableReferenceList = [['_', 'Variable:/:PTEN']]
+#diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseMinDv')
+#diffuser.VariableReferenceList = [['_', 'Variable:/:MinD']]
 #diffuser.D = 5e-12
 
-#diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePTEN')
-#diffuser.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
+#diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseMinD')
+#diffuser.VariableReferenceList = [['_', 'Variable:/Surface:MinD']]
 #diffuser.D = 5e-12
 
-#rotator = theSimulator.createEntity('DiffusionProcess', 'Process:/:rotatePTEN')
-#rotator.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
+#rotator = theSimulator.createEntity('DiffusionProcess', 'Process:/:rotateMinD')
+#rotator.VariableReferenceList = [['_', 'Variable:/Surface:MinD']]
 #rotator.D = 1e-12
 
-#rotator = theSimulator.createEntity('DiffusionProcess', 'Process:/:rotatePropenPTEN')
-#rotator.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
+#rotator = theSimulator.createEntity('DiffusionProcess', 'Process:/:rotatePropenMinD')
+#rotator.VariableReferenceList = [['_', 'Variable:/Surface:MinD']]
 #rotator.D = 1e-12
 #rotator.Propensity = 1
 
-diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:propenPTEN')
-diffuser.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
+diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:propenMinD')
+diffuser.VariableReferenceList = [['_', 'Variable:/Surface:MinD']]
 diffuser.Interval = 5e-7
 diffuser.Propensity = 3.5
 #diffuser.Propensity = 1
 diffuser.Origins = 1
 
-diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseANIO')
-diffuser.VariableReferenceList = [['_', 'Variable:/Surface:ANIO']]
+diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePG')
+diffuser.VariableReferenceList = [['_', 'Variable:/Surface:PG']]
 diffuser.D = 10e-12
 
-diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseANIO_PTEN')
-diffuser.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN']]
-diffuser.VariableReferenceList = [['_', 'Variable:/Surface:PTEN', '-1']]
+diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePG_MinD')
+diffuser.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD']]
+diffuser.VariableReferenceList = [['_', 'Variable:/Surface:MinD', '-1']]
 diffuser.D = 10e-12
 
-diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseANIOs')
-diffuser.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs']]
+diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePGs')
+diffuser.VariableReferenceList = [['_', 'Variable:/Surface:PGs']]
 diffuser.D = 0
 
-diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseANIOs_PTEN')
-diffuser.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN']]
-diffuser.VariableReferenceList = [['_', 'Variable:/Surface:PTEN', '-1']]
+diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePGs_MinD')
+diffuser.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD']]
+diffuser.VariableReferenceList = [['_', 'Variable:/Surface:MinD', '-1']]
 diffuser.D = 0
 
-multi = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:multiPTEN_ANIOs')
-multi.VariableReferenceList = [['_', 'Variable:/Surface:PTEN', '-1']]
-multi.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '-1']]
-multi.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '1']]
-multi.VariableReferenceList = [['_', 'Variable:/Surface:PTEN', '1']]
+multi = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:multiMinD_PGs')
+multi.VariableReferenceList = [['_', 'Variable:/Surface:MinD', '-1']]
+multi.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '-1']]
+multi.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '1']]
+multi.VariableReferenceList = [['_', 'Variable:/Surface:MinD', '1']]
 
-multi = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:multiPTEN_ANIO')
-multi.VariableReferenceList = [['_', 'Variable:/Surface:PTEN', '-1']]
-multi.VariableReferenceList = [['_', 'Variable:/Surface:ANIO', '-1']]
-multi.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '1']]
-multi.VariableReferenceList = [['_', 'Variable:/Surface:PTEN', '1']]
+multi = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:multiMinD_PG')
+multi.VariableReferenceList = [['_', 'Variable:/Surface:MinD', '-1']]
+multi.VariableReferenceList = [['_', 'Variable:/Surface:PG', '-1']]
+multi.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD', '1']]
+multi.VariableReferenceList = [['_', 'Variable:/Surface:MinD', '1']]
 
 
 iterator = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iterate')
-iterator.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
+iterator.VariableReferenceList = [['_', 'Variable:/Surface:MinD']]
 iterator.Iterations = 1
 iterator.SeparateFiles = 1
 iterator.LogEnd = 0.001
@@ -195,14 +195,14 @@ iterator.LogStart = 0.0001
 iterator.LogInterval = 1e-4
 iterator.FrameDisplacement = 1
 iterator.FileStartCount = 0
-iterator.FileName = "2013.matsuoka.pcb.Fig4B.sim.anionic.csv"
+iterator.FileName = "2013.matsuoka.pcb.Fig4B.sim.PGnic.csv"
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:filam')
-fil.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
-fil.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '1']]
-fil.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '1']]
-fil.VariableReferenceList = [['_', 'Variable:/Surface:ANIO', '1']]
-fil.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs', '1']]
+fil.VariableReferenceList = [['_', 'Variable:/Surface:MinD']]
+fil.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinD', '1']]
+fil.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinD', '1']]
+fil.VariableReferenceList = [['_', 'Variable:/Surface:PG', '1']]
+fil.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '1']]
 fil.Length = 1e-7
 fil.Width = 1e-7
 #fil.Filaments = 4
