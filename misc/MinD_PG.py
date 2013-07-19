@@ -25,9 +25,9 @@ theSimulator.createEntity('Variable', 'Variable:/Surface:PG_MinDadp').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Surface:PGs_MinDadp').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Surface:PG_MinDD').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Surface:PGs_MinDD').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/Surface:MinDatp').Value = 5
-theSimulator.createEntity('Variable', 'Variable:/Surface:MinDadp').Value = 5
-theSimulator.createEntity('Variable', 'Variable:/Surface:MinDD').Value = 5
+theSimulator.createEntity('Variable', 'Variable:/Surface:MinDatp').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/Surface:MinDadp').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/Surface:MinDD').Value = 0
 
 logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
 logger.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinDatp']]
@@ -53,6 +53,21 @@ populator.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp']]
 populator.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
 
 
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:konMinD')
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '1']]
+react.k = 2.04e+17
+
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:dissociateMinD')
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '1']]
+react.k = 500
+
+react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:dimerizeMinD')
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '1']]
+react.p = 0.5
 
 react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:reactMinDatp_PG')
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
