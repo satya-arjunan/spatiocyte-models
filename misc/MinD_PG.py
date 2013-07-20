@@ -29,20 +29,6 @@ theSimulator.createEntity('Variable', 'Variable:/Surface:MinDatp').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Surface:MinDadp').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Surface:MinDD').Value = 0
 
-logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
-logger.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinDatp']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinDatp']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinDadp']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinDadp']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinDD']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinDD']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:PG']]
-logger.VariableReferenceList = [['_', 'Variable:/Surface:PGs']]
-logger.LogInterval = 1e-5
-logger.MultiscaleStructure = 1
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop')
 populator.VariableReferenceList = [['_', 'Variable:/Surface:PG']]
@@ -55,7 +41,10 @@ populator.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
 
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:konMinD')
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '1']]
-react.k = 2.04e+17
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG', '0']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '0']]
+react.k = 2.04e+18
+react.Rates = [0.01, 1, 1]
 
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:dissociateMinD')
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '-1']]
@@ -67,7 +56,9 @@ react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:dimeri
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp', '-1']]
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '1']]
-react.p = 0.5
+react.p = 0.1
+react.SearchVacant = 1
+
 
 react = theSimulator.createEntity('MultiscaleReactionProcess', 'Process:/:reactMinDatp_PG')
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp', '-1']]
@@ -305,21 +296,21 @@ multi.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '1']]
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:propenMinDatp')
 diffuser.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp']]
-diffuser.Interval = 5e-7
-diffuser.Propensity = 3.5
+diffuser.Interval = 5e-6
+diffuser.Propensity = 1e+1
 diffuser.MoleculeRadius = 2e-9
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:propenMinDadp')
 diffuser.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp']]
-diffuser.Interval = 5e-7
-diffuser.Propensity = 3.5
+diffuser.Interval = 5e-6
+diffuser.Propensity = 1e+1
 diffuser.MoleculeRadius = 2e-9
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:propenMinDD')
 diffuser.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
-diffuser.Interval = 5e-7
-diffuser.Propensity = 3.5
-diffuser.MoleculeRadius = 4e-9
+diffuser.Interval = 5e-6
+diffuser.Propensity = 1e+1
+diffuser.MoleculeRadius = 3.2e-9
 
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePG_MinDatp')
@@ -385,11 +376,26 @@ fil.LipidRadius = 0.436e-9
 fil.Periodic = 1
 fil.RegularLattice = 1
 
+logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinDatp']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinDatp']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinDadp']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinDadp']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinDD']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinDD']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PG']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:PGs']]
+logger.LogInterval = 1e-4
+logger.MultiscaleStructure = 1
+
 import time
 run(1e-6)
 print "Done stirring. Now running..."
 start = time.time()
-run(0.01)
+run(0.1)
 end = time.time()
 duration = end-start
 print duration
