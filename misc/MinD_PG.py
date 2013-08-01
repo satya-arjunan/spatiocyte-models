@@ -5,8 +5,8 @@ sim.SearchVacant = 0
 theSimulator.rootSystem.StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 1.0e-8
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 1e-7
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 1e-7
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 1.115e-7
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 1.115e-7
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
@@ -38,12 +38,19 @@ populator.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp']]
 populator.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp']]
 populator.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
 
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:koffMinD')
+react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinDD', '0']]
+react.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinDD', '0']]
+react.k = 500
+react.Rates = [1, 1, 1]
 
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:konMinD')
 react.VariableReferenceList = [['_', 'Variable:/Surface:MinDD', '1']]
 react.VariableReferenceList = [['_', 'Variable:/Surface:PG', '0']]
 react.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '0']]
-react.k = 2.04e+18
+react.k = 4.04e+18
 react.Rates = [0.01, 1, 1]
 
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:dissociateMinD')
@@ -298,19 +305,19 @@ diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:propenMinDat
 diffuser.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp']]
 diffuser.Interval = 5e-6
 diffuser.Propensity = 1e+1
-diffuser.MoleculeRadius = 2e-9
+diffuser.MoleculeRadius = 2.81e-9
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:propenMinDadp')
 diffuser.VariableReferenceList = [['_', 'Variable:/Surface:MinDadp']]
 diffuser.Interval = 5e-6
 diffuser.Propensity = 1e+1
-diffuser.MoleculeRadius = 2e-9
+diffuser.MoleculeRadius = 2.81e-9
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:propenMinDD')
 diffuser.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
 diffuser.Interval = 5e-6
 diffuser.Propensity = 1e+1
-diffuser.MoleculeRadius = 3.2e-9
+diffuser.MoleculeRadius = 3.61e-9
 
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePG_MinDatp')
@@ -369,7 +376,7 @@ fil.VariableReferenceList = [['_', 'Variable:/Surface:PGs', '1']]
 fil.Length = 1e-7
 fil.Width = 1e-7
 #fil.Filaments = 4
-fil.SubunitRadius = 1.74e-9
+fil.SubunitRadius = 2.81e-9
 fil.SubunitAngle = 0
 fil.DiffuseRadius = 0.436e-9
 fil.LipidRadius = 0.436e-9
