@@ -95,6 +95,7 @@ life.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
 life.Iterations = 1
 life.LogEnd = 100000
 life.FileName = "LifetimeLogMinDKon.csv"
+life.Verbose = 1
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:filam')
 fil.VariableReferenceList = [['_', 'Variable:/Surface:MinDD']]
