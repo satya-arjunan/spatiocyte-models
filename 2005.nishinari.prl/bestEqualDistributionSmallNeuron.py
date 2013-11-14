@@ -13,7 +13,6 @@ MTLength = neuriteLength*0.95
 singleMTVolumeVoxels = 717256.0
 singleNeuriteVolumeVoxels = 48325789.0
 totalKinesins = 1000*singleMTVolumeVoxels/singleNeuriteVolumeVoxels
-print "totalKinesins:", totalKinesins
 
 theSimulator.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 
@@ -76,7 +75,7 @@ react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
 react.p = 0.009
 #react.k = 1.69706e-20
 
-react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:explicitAttach')
+react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:explicitAttach_k1')
 react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:Tubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
@@ -84,7 +83,8 @@ react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
 react.p = 0.009
 #react.k = 6.78823e-24
 
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:detach')
+#actTubulin == Tubulin since the binding rates are the same
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:detach_k4')
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin','1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','1']]
@@ -99,19 +99,19 @@ react.k = 0.055
 
 
 
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:hydrolysis')
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:hydrolysis_k3')
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
 react.SearchVacant = 1
 react.k = 100
 
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:phosphorylate')
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:phosphorylate_k2')
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','1']]
 react.SearchVacant = 1
 react.k = 145
 
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:ratchet')
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:ratchet_k5')
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin','1']]

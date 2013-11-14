@@ -68,7 +68,7 @@ diffuse.D = 0.5e-12
 
 
 
-react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:explicitAttachAct')
+react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:explicitAttachAct_k6')
 react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
@@ -76,7 +76,7 @@ react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
 react.p = 1
 #react.k = 1.69706e-20
 
-react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:explicitAttach')
+react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:explicitAttach_k1')
 react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:Tubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
@@ -84,14 +84,14 @@ react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
 react.p = 0.00005
 #react.k = 6.78823e-24
 
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:detach')
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:detach_k4')
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin','1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','1']]
 react.SearchVacant = 1
 react.k = 15
 
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:inactive')
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:inactive_k7')
 react.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:Tubulin','1']]
 react.k = 0.055
@@ -99,19 +99,19 @@ react.k = 0.055
 
 
 
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:hydrolysis')
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:hydrolysis_k3')
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
 react.SearchVacant = 1
 react.k = 100
 
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:phosphorylate')
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:phosphorylate_k2')
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','1']]
 react.SearchVacant = 1
 react.k = 145
 
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:ratchet')
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:ratchet_k5')
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','1']]
 react.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin','1']]
