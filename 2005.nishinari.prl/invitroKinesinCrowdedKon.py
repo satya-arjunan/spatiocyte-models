@@ -17,6 +17,7 @@ theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = neuriteRadiu
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:Kinesin').Value = 100
 theSimulator.createEntity('Variable', 'Variable:/:Crowder').Value = 500000
+#theSimulator.createEntity('Variable', 'Variable:/:Crowder').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:MTKinesin' ).Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:MTKinesinATP' ).Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:Tubulin' ).Value = 0
@@ -80,7 +81,7 @@ react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:detach_
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','1']]
 react.VariableReferenceList = [['_', 'Variable:/:Kinesin','1']]
-react.SearchVacant = 1
+react.SearchVacant = 0
 react.k = 15
 
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:inactive_k7')
@@ -155,5 +156,5 @@ Microtubule.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP' ]]
 Microtubule.VariableReferenceList = [['_', 'Variable:/:actTubulin' ]]
 Microtubule.VariableReferenceList = [['_', 'Variable:/:Tubulin' , '-1']]
 
-run(10000)
+run(100000)
 
