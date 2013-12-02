@@ -72,8 +72,8 @@ react.VariableReferenceList = [['_', 'Variable:/:Kinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:Tubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','1']]
 #react.k = 2.5863133e-24
-react.p = 0.00005
-react.Collision = 3
+react.p = 0.005
+#react.Collision = 3
 #react.k = 6.78823e-24
 
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:detach_k4')
@@ -86,7 +86,7 @@ react.k = 15
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:inactive_k7')
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:Tubulin','1']]
-react.k = 0.055
+react.k = 1
 
 
 
