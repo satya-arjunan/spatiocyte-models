@@ -21,15 +21,15 @@ def plot_data(N, T, fmt):
     loglog(N, mean, fmt)
 
 
-imp.load_source('out_Vspatiocyte', 'out_Vspatiocyte.py')
-from out_Vspatiocyte import *
+imp.load_source('spatiocyte_out', 'spatiocyte_out.py')
+from spatiocyte_out import *
 
 from run_all import Nv
 
 axes([.12,.14,.86,.83])
 
 X = numpy.array(Nv)
-plot_data(Nv, data_Vspatiocyte,'r.')
+plot_data(Nv, spatiocyte_data,'r.')
 loglog(X, 0.4*X, 'r-')
 
 xlabel('N [# particles]', size=22)

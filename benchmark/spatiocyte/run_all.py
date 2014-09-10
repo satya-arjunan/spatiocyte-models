@@ -30,8 +30,8 @@ Tv = [max(1e-5, min(T, 1e0 / math.pow(N, 2.0 / 3.0))) for N in Nv] #duration
 REPEAT = 1
 
 if __name__ == '__main__':
-    prefix = 'out_'
-    mode = "Vspatiocyte"
-    outfile = open(prefix+mode+'.py','w'); 
-    dataname = 'data_' + mode
+    mode = "spatiocyte"
+    postfix = '_out'
+    outfile = open(mode+postfix+'.py','w'); 
+    dataname = mode+'_data'
     run_set(outfile, dataname, Vv, Nv, Tv, Rv, Dv, REPEAT); outfile.write('\n\n')
