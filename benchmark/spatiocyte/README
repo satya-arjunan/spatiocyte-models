@@ -1,0 +1,5 @@
+to run single:
+python run_single.py
+
+to run all:
+python run_all.py
