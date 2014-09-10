@@ -24,26 +24,14 @@ def run_set(outfile, name, V_list, N_list, T_list, R, D, REPEAT):
 T = 10.
 Rv = 2.5e-9 #voxel radius
 Dv = 1e-12 #diffusion coefficient
-Vv = [2e-15, ] * 11 #simulation volume
+Vv = [2e-15, ] * 11 #simulation volume (should be 2e-14)
 Nv = [100,300,1000,3000,10000,30000,100000,300000,1000000,3000000,10000000] #number of molecules
 Tv = [max(1e-5, min(T, 1e0 / math.pow(N, 2.0 / 3.0))) for N in Nv] #duration
 REPEAT = 1
-print Tv
-#Vc = [3.33e-15,1e-14, 3.33e-14,1e-13, 3.33e-13,1e-12, 3.33e-12,1e-11, 3.33e-11,1e-10, 3.33e-10,1e-9]#,3.33e-9]
-#Nc = [100,300,1000,3000,10000,30000,100000,300000,1000000,3000000,10000000,30000000]#,100000000]
-#Tc = [max(1e-3, min(T, 1e1 / math.pow(float(N), 1.0))) for N in Nc]
-#V300 = [40e-14, 40e-15, 40e-16, 40e-17, 40e-18, 40e-19, 40e-20, 13.3e-20]#,40e-22]
-#N300 = [300, ] * 8
-#T300 = [1e-2, 1e-2, 1e-3, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7]#, 1e-8]
-#T300 = [1e7 / math.pow(1.0/V, 2.0 / 3.0) for V in V300]
-#V3000 = [40e-13, 40e-14, 40e-15, 40e-16, 40e-17, 40e-18, 40e-19, 13.3e-19]#,40e-21]
-#N3000 = [3000, ] * 8
-#T3000 = [1e-2, 1e-2, 1e-3, 1e-3, 1e-3, 1e-4, 1e-5, 1e-6]#, 1e-7]
-#T3000 = [2e6 / math.pow(1.0/V, 2.0 / 3.0) for V in V3000]
 
-prefix = 'out_'
-mode = "Vspatiocyte"
-outfile = open(prefix+mode+'.py','w'); 
-dataname = 'data_' + mode
-run_set(outfile, dataname, Vv, Nv, Tv, Rv, Dv, REPEAT); outfile.write('\n\n')
-
+if __name__ == '__main__':
+    prefix = 'out_'
+    mode = "Vspatiocyte"
+    outfile = open(prefix+mode+'.py','w'); 
+    dataname = 'data_' + mode
+    run_set(outfile, dataname, Vv, Nv, Tv, Rv, Dv, REPEAT); outfile.write('\n\n')
