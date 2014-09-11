@@ -1,0 +1,5 @@
+tar xzvf smoldyn-2.32.tgz
+cd smoldyn-2.32
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/home/satya/root -DOPTION_USE_OPENGL=OFF -DOPTION_USE_LIBTIFF=OFF -DOPTION_USE_ZLIB=OFF
+make -j4
+make install
