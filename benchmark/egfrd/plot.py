@@ -36,8 +36,7 @@ xlabel('N [# particles]', size=22)
 
 Y = numpy.array([60,3600,3600*24,3600*24*30, 3600*24*30*12])
 
-xlim(X[0],X[len(X)-1]*2)
-ylim(0,Y[3])
+xlim(X[0],X[len(X)-1]*10)
 
 xticks(size=18)
 yticks(Y, ['minute', 'hour', 'day', 'month', 'year'], size=16)

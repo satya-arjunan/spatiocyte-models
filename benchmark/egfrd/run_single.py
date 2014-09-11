@@ -20,12 +20,12 @@ def run_single(T, V, N, R, D):
   nrw = gfrdbase.create_network_rules_wrapper(m)
   sim = _gfrd._EGFRDSimulator(w, nrw, myrandom.rng) 
   #_gfrd.Logger.level = 'L_OFF'
-  stirTime = T*0.5
+  stirTime = T*0.1
   t = 0.0
   gc.disable
   while (sim.t < stirTime):
     sim.step()
-  print "Done stirring. Now running..."
+  print "Now running",int(N),"molecules for",T,"s"
   nextTime = stirTime+T
   start = time.time()
   while (sim.t < nextTime):
@@ -34,7 +34,7 @@ def run_single(T, V, N, R, D):
   gc.collect()
   gc.enable()
   duration = end-start
-  print duration, " ", sim.t
+  print duration,"s"
   return  duration
 
 if __name__ == '__main__':
