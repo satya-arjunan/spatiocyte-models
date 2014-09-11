@@ -2,9 +2,9 @@
 import sys
 import numpy
 import math
-import run_single
 
 def run_set(outfile, name, V_list, N_list, T_list, R, D, REPEAT):
+    import run_single
     outfile.write('%s = [\n' % name)
     for i in range(len(V_list)):
         outfile.write('# T=%g, N=%g, V=%g\n' % 
