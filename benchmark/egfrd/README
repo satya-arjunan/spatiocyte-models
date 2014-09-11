@@ -1,0 +1,9 @@
+Install eGFRD:
+git clone https://github.com/ecell/epdp.git
+./autogen.sh
+./configure --prefix=/home/satya/root
+make -j4
+
+LD_LIBRARY_PATH=/home/satya/wrk/epdp PYTHONPATH=/home/satya/wrk/epdp LOGLEVEL=FATAL python run_single.py
+
+LD_LIBRARY_PATH=/home/satya/wrk/epdp PYTHONPATH=/home/satya/wrk/epdp LOGLEVEL=FATAL python run_all.py
