@@ -30,7 +30,7 @@ axes([.12,.14,.86,.83])
 
 X = numpy.array(Nv)
 plot_data(Nv, smoldyn_data,'r.')
-loglog(X, 0.4*X, 'r-')
+loglog(X, 3e-2*X**1.25, 'r-')
 
 xlabel('N [# particles]', size=22)
 
