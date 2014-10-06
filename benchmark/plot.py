@@ -34,20 +34,22 @@ axes([.12,.14,.86,.83])
 
 X = numpy.array(Nv)
 plot_data(Nv, spatiocyte_data,'r.')
-loglog(X, 0.24*X**1.06, 'r-')
+loglog(X, 0.24*X**1.06, 'r-', label="Spatiocyte")
 
 plot_data(Nv, egfrd_data,'b.')
-loglog(X, 0.8e-4*X**1.8, 'b-')
+loglog(X, 0.8e-4*X**1.8, 'b-', label="eGFRD")
 
 plot_data(Nv, smoldyn_data,'g.')
-loglog(X, 3e-2*X**1.25, 'g-')
+loglog(X, 3e-2*X**1.25, 'g-', label="Smoldyn")
 
-xlabel('N [# particles]', size=17)
+legend(loc='upper left', labelspacing=0.2, handletextpad=0.2, fancybox=True)
+
+xlabel('# Molecules', size=17)
 ylabel('Execution Time', size=17)
 
 Y = numpy.array([60,3600,3600*24,3600*24*30, 3600*24*30*12])
 
-xlim(X[0],X[len(X)-1]*2)
+xlim(X[0]*0.9,X[len(X)-1]*1.1)
 
 xticks(size=18)
 yticks(Y, ['minute', 'hour', 'day', 'month', 'year'], size=16)
