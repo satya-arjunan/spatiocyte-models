@@ -1,0 +1,77 @@
+--------------------------------------------------------------
+Running Smoldyn 2.32
+
+CONFIGURATION FILE
+ Path: ''
+ Name: 'model.txt'
+ Reading file: 'model.txt'
+ Loaded file successfully
+ setting up molecules
+ setting up virtual boxes
+
+SIMULATION PARAMETERS
+ file: model.txt
+ starting clock time: Mon Oct  6 15:31:45 2014
+ 3 dimensions
+ Random number seed: 1412577105
+ Time from 0 to 0.1 step 4.16667e-06
+
+GRAPHICS PARAMETERS
+ No graphical output
+
+WALL PARAMETERS
+ wall 0: dimension 0, at 0, type p
+ wall 1: dimension 0, at 1e-06, type p
+ wall 2: dimension 1, at 0, type p
+ wall 3: dimension 1, at 1e-06, type p
+ wall 4: dimension 2, at 0, type p
+ wall 5: dimension 2, at 1e-06, type p
+ volume: 1e-18
+ system corners: (0,0,0) and (1e-06,1e-06,1e-06)
+
+MOLECULE PARAMETERS
+ 1 species defined:
+ A:
+  solution: difc=1e-12, rms step=2.88675e-09, list=diffuselist, number=1
+ 2 molecule lists:
+  diffuselist, fixedlist
+ Overall spatial resolution: 2.88675e-09
+
+SURFACE PARAMETERS
+ No internal surfaces
+
+RUNTIME COMMAND INTERPRETER
+ No output files
+
+VIRTUAL BOX PARAMETERS
+ 1 boxes
+ Number of boxes on each side: 1 1 1
+ Minimum box position:  0 0 0
+ Requested molecules per box: 4
+ Box dimensions:  1e-06 1e-06 1e-06
+ Box volumes: 1e-18
+ Molecules per box= 1
+
+ORDER 0 REACTION PARAMETERS
+ No reactions of order 0
+
+ORDER 1 REACTION PARAMETERS
+ No reactions of order 1
+
+ORDER 2 REACTION PARAMETERS
+ No reactions of order 2
+
+PARAMETER CHECK
+ No errors
+ No warnings
+
+Simulating
+
+Simulation complete
+Current simulation time: 0.100000
+183 wall interactions
+total execution time: 0 seconds
+--define T=1.000000e-01 --define L=1.000000e-06 --define N=1.000000e+05 --define D=1.000000e-12 --define DELTA_T=4.166667e-06
+TIMING:
+0 
+

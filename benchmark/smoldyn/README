@@ -3,3 +3,12 @@ cd smoldyn-2.32
 cmake -DCMAKE_INSTALL_PREFIX:PATH=/home/satya/root -DOPTION_USE_OPENGL=OFF -DOPTION_USE_LIBTIFF=OFF -DOPTION_USE_ZLIB=OFF
 make -j4
 make install
+
+to run single:
+python run_single.py
+
+to run all:
+python run_all.py
+
+after running to view the plot:
+python plot.py
