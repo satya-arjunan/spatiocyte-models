@@ -40,8 +40,8 @@ def run_single(T, V, N, R, D):
 if __name__ == '__main__':
   myrandom.seed(0)
   T = 1e-5
-  V = 1e-15
-  N = 1e+3
+  V = 3e-15
+  N = 1e+4
   R = 2.5e-9
   D = 1e-12
   #python run_single.py 1e-5 1e-15 1e+3 2.5e-9 1e-12
