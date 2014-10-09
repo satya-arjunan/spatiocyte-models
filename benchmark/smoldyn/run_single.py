@@ -12,8 +12,8 @@ import time
 #D = diffusion coefficient
 
 def run_single(T, V, N, R, D):
-  # V is in liters, convert it to m^3 and get the cube length, L
-  L = math.pow(V * 1e-3, 1.0 / 3.0)
+  # V is in m^3, get the cube length, L
+  L = math.pow(V, 1.0 / 3.0)
   DELTA_T = 2.0*R*R/(3.0*D)
   param = ("--define T=%e --define L=%e --define N=%d --define D=%e --define DELTA_T=%e" %(T, L, int(N), D, DELTA_T))
   print "Now running",int(N),"molecules for",T,"s"

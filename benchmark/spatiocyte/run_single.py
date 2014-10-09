@@ -15,8 +15,8 @@ import random
 def run_single(T, V, N, R, D):
   print 'T (sim time) =', T, '; V (liter volume) = ', V, '; N (#molecules) =', N, '; R (voxel radius) =', R, '; D (diffusion coef) =', D
   filename = ('%f' %random.random())
-  # V is in liters, convert it to m^3 and get the cube length, L
-  L = math.pow(V * 1e-3, 1.0 / 3.0)
+  # V is in m^3, get the cube length, L
+  L = math.pow(V, 1.0 / 3.0)
   param = ("--parameters=\"{'T':%e, 'L':%e, 'N':%e, 'R':%e, 'D':%e, 'filename':'%s'}\"" %(T, L, N, R, D, filename))
   os.system("ecell3-session " + param + " spatiocyte.py")
   f = open(filename, 'r')
@@ -28,7 +28,7 @@ def run_single(T, V, N, R, D):
 
 if __name__ == '__main__':
   T = 1e-5
-  V = 3e-15
+  V = 4e-18
   N = 1e+3
   R = 2.5e-9
   D = 1e-12
