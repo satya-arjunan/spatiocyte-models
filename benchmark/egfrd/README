@@ -7,3 +7,5 @@ make -j4
 LD_LIBRARY_PATH=$HOME/wrk/epdp PYTHONPATH=$HOME/wrk/epdp LOGLEVEL=FATAL python run_single.py
 
 LD_LIBRARY_PATH=$HOME/wrk/epdp PYTHONPATH=$HOME/wrk/epdp LOGLEVEL=FATAL python run_all.py
+
+LD_LIBRARY_PATH=$HOME/wrk/epdp PYTHONPATH=$HOME/wrk/epdp LOGLEVEL=FATAL python run_all_dense.py

@@ -20,7 +20,7 @@ def run_single(T, V, N, R, D):
   nrw = gfrdbase.create_network_rules_wrapper(m)
   sim = _gfrd._EGFRDSimulator(w, nrw, myrandom.rng) 
   #_gfrd.Logger.level = 'L_OFF'
-  stirTime = T*0.1
+  stirTime = T*0.01
   t = 0.0
   gc.disable
   while (sim.t < stirTime):

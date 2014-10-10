@@ -25,6 +25,8 @@ imp.load_source('spatiocyte_out', 'spatiocyte/spatiocyte_out.py')
 from spatiocyte_out import *
 imp.load_source('egfrd_out', 'egfrd/egfrd_out.py')
 from egfrd_out import *
+imp.load_source('egfrd_dense_out', 'egfrd/egfrd_dense_out.py')
+from egfrd_dense_out import *
 imp.load_source('smoldyn_out', 'smoldyn/smoldyn_out.py')
 from smoldyn_out import *
 
@@ -41,6 +43,8 @@ annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.05}}$', xy=(X[2], spati
 plot(Nv, egfrd_data,'bs', label="eGFRD")
 loglog(X, 0.8e-4*X**1.8, 'b-')
 annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.8}}$', xy=(X[3], egfrd_data[3][0]),  xycoords='data', xytext=(-10, -20), textcoords='offset points', color='b', size=16)
+
+plot(Nv, egfrd_dense_data,'bs', label="eGFRD")
 
 plot(Nv, smoldyn_data,'g^', label="Smoldyn")
 loglog(X, 3e-2*X**1.25, 'g-')
