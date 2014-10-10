@@ -36,19 +36,22 @@ axes([.12,.14,.86,.83])
 
 X = numpy.array(Nv)
 
-plot(Nv, spatiocyte_data,'ro', label="Spatiocyte")
-loglog(X, 0.24*X**1.05, 'r-')
-annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.05}}$', xy=(X[2], spatiocyte_data[2][0]),  xycoords='data', xytext=(-20, 10), textcoords='offset points', color='r', size=16)
+plot(Nv, egfrd_dense_data,'mD', label=r'eGFRD ($V=3\times10^{-18}\mathrm{m}^{3}$)')
+loglog(X, 10e-4*X**2.15, 'm-')
+annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{2.15}}$', xy=(X[5], egfrd_dense_data[5][0]),  xycoords='data', xytext=(-50, 5), textcoords='offset points', color='m', size=16)
 
-plot(Nv, egfrd_data,'bs', label="eGFRD")
-loglog(X, 0.8e-4*X**1.8, 'b-')
-annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.8}}$', xy=(X[3], egfrd_data[3][0]),  xycoords='data', xytext=(-10, -20), textcoords='offset points', color='b', size=16)
+plot(Nv, egfrd_data,'rs', label=r'eGFRD ($V=3\times10^{-15}\mathrm{m}^{3}$)')
+loglog(X, 1.1e-4*X**1.75, 'r-')
+annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.75}}$', xy=(X[3], egfrd_data[3][0]),  xycoords='data', xytext=(-10, -20), textcoords='offset points', color='r', size=16)
 
-plot(Nv, egfrd_dense_data,'bs', label="eGFRD")
+plot(Nv, smoldyn_data,'g^', label=r'Smoldyn ($V=3\times10^{-18}\mathrm{m}^{3}$)')
+loglog(X, 8e-2*X**1.15, 'g-')
+annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.15}}$', xy=(X[1], smoldyn_data[1][0]),  xycoords='data', xytext=(-30, -25), textcoords='offset points', color='g', size=16)
 
-plot(Nv, smoldyn_data,'g^', label="Smoldyn")
-loglog(X, 3e-2*X**1.25, 'g-')
-annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.25}}$', xy=(X[1], smoldyn_data[1][0]),  xycoords='data', xytext=(-30, -30), textcoords='offset points', color='g', size=16)
+plot(Nv, spatiocyte_data,'bo', label=r'Spatiocyte ($V=3\times10^{-18}\mathrm{m}^{3}$)')
+loglog(X, 0.24*X**1.05, 'b-')
+annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.05}}$', xy=(X[4], spatiocyte_data[4][0]),  xycoords='data', xytext=(-25, 7), textcoords='offset points', color='b', size=16)
+
 
 legend(loc='upper left')
 #legend(loc='upper left', labelspacing=0.2, handletextpad=0.2, fancybox=True)
