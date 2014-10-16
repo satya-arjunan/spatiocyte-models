@@ -23,13 +23,14 @@ def run_single(T, V, N, R, D):
   stirTime = T*0.01
   t = 0.0
   gc.disable
-  while (sim.step(stirTime) == False):
+  while (sim.step(stirTime)):
       pass
   print "Now running",int(N),"molecules for",T,"s"
   endTime = stirTime+T
   start = time.time()
-  while (sim.step(endTime) == False):
+  while (sim.step(endTime)):
       pass
+  print "time",sim.t,endTime
   end = time.time()
   gc.collect()
   gc.enable()
@@ -39,7 +40,7 @@ def run_single(T, V, N, R, D):
 
 if __name__ == '__main__':
   myrandom.seed(0)
-  T = 1e-5
+  T = 1e-2
   V = 3e-15
   N = 1e+4
   R = 2.5e-9
