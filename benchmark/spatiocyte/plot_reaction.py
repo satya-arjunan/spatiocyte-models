@@ -14,7 +14,7 @@ fileNames = ['ode.csv','spatiocyte.csv','smoldyn.csv']
 legendTitles = ['State 2', 'State 1']
 speciesList = ['E','S','ES','P']
 lines = ['-', '--', '-', '-']
-colors = ['r', 'b', '#000000', 'black', 'c', 'k', '#009955', '#ff9933', '#ff00ff', '#11dd00']
+colors = ['r', 'b', 'g', 'black', 'c', 'k', '#009955', '#ff9933', '#ff00ff', '#11dd00']
 
 data = genfromtxt(fileNames[0], delimiter=',').T
 colSize = len(data)-1
