@@ -23,19 +23,13 @@ def run_single(T, V, N, R, D):
   stirTime = T*0.01
   t = 0.0
   gc.disable
-  while (sim.t < stirTime):
-
-    while (!sim.step(upto)): pass
-    # here you get sim.t == upto
-
-    print len(w.get_particle_ids(A))
-    if(sim.step(time)):
-        log
+  while (sim.step(stirTime) == False):
+      pass
   print "Now running",int(N),"molecules for",T,"s"
-  nextTime = stirTime+T
+  endTime = stirTime+T
   start = time.time()
-  while (sim.t < nextTime):
-    sim.step()
+  while (sim.step(endTime) == False):
+      pass
   end = time.time()
   gc.collect()
   gc.enable()

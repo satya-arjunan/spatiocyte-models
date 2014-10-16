@@ -1,7 +1,7 @@
 import time
 
 sim = theSimulator.createStepper('SpatiocyteStepper', 'SS')
-sim.VoxelRadius = 65e-9;
+sim.VoxelRadius = 10e-9;
 
 theSimulator.rootSystem.StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
@@ -67,6 +67,7 @@ log.VariableReferenceList = [['_', 'Variable:.:ES']]
 log.VariableReferenceList = [['_', 'Variable:.:P']]
 log.LogInterval = 0.01
 log.LogEnd = 10
+log.FileName = "spatiocyte.csv"
 
 run(0.0001)
 start = time.time()

@@ -15,7 +15,7 @@ Using benchmark model from Supporting Information Text S1 of
 Andrews et al, PLoS Comp Biol 2010
 
 To run the reaction using ODE-based mass action:
-ecell3-session mass_action.py 
+ecell3-session ode.py 
 
 To run the reaction with Spatiocyte:
 ecell3-session reaction.py 

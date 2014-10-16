@@ -10,7 +10,7 @@ tickFontSize = 14
 legendFontSize = 14
 lineFontSize = 14
 
-fileNames = ['IterateLog.csv','new2.csv','new2.csv']
+fileNames = ['ode.csv','spatiocyte.csv','smoldyn.csv']
 legendTitles = ['State 2', 'State 1']
 speciesList = ['E','S','ES','P']
 lines = ['-', '--', '-', '-']
@@ -26,7 +26,7 @@ colSize = len(data)-1
 for i in range(colSize):
   plot(data[0], data[i+1], ls=lines[0], color=colors[1], label=legendTitles[0], linewidth=1)
 
-data = genfromtxt(fileNames[2], delimiter=',').T
+data = genfromtxt(fileNames[2], delimiter=' ').T
 colSize = len(data)-1
 for i in range(colSize):
   plot(data[0], data[i+1], ls=lines[0], color=colors[2], label=legendTitles[0], linewidth=1)
