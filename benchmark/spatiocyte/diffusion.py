@@ -22,9 +22,11 @@ theSimulator.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = L
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = L
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = L
+#periodic boundaries
 theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 1
 theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 1
 theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 1
+
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:A').Value = N
 #log = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:log')

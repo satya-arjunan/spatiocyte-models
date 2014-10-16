@@ -18,7 +18,7 @@ def run_single(T, V, N, R, D):
   # V is in m^3, get the cube length, L
   L = math.pow(V, 1.0 / 3.0)
   param = ("--parameters=\"{'T':%e, 'L':%e, 'N':%e, 'R':%e, 'D':%e, 'filename':'%s'}\"" %(T, L, N, R, D, filename))
-  os.system("ecell3-session " + param + " spatiocyte.py")
+  os.system("ecell3-session " + param + " diffusion.py")
   f = open(filename, 'r')
   timing = pickle.load(f)
   f.close()
