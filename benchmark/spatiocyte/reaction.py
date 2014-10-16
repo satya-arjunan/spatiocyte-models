@@ -1,7 +1,7 @@
 import time
 
 sim = theSimulator.createStepper('SpatiocyteStepper', 'SS')
-sim.VoxelRadius = 40e-9;
+sim.VoxelRadius = 10e-9;
 
 theSimulator.rootSystem.StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
@@ -14,8 +14,8 @@ theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 1;
 theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 1;
 
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
-theSimulator.createEntity('Variable', 'Variable:/:E').Value = 909
-theSimulator.createEntity('Variable', 'Variable:/:S').Value = 9091
+theSimulator.createEntity('Variable', 'Variable:/:E').Value = 91
+theSimulator.createEntity('Variable', 'Variable:/:S').Value = 909
 theSimulator.createEntity('Variable', 'Variable:/:ES').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:P').Value = 0
 
@@ -28,19 +28,19 @@ pop.VariableReferenceList = [['_', 'Variable:.:S']]
 
 dif = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffE')
 dif.VariableReferenceList = [['_', 'Variable:.:E']]
-dif.D = 10e-12
+dif.D = 1e-12
 
 dif = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffS')
 dif.VariableReferenceList = [['_', 'Variable:.:S']]
-dif.D = 10e-12
+dif.D = 1e-12
 
 dif = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffES')
 dif.VariableReferenceList = [['_', 'Variable:.:ES']]
-dif.D = 10e-12
+dif.D = 1e-12
 
 dif = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffP')
 dif.VariableReferenceList = [['_', 'Variable:.:P']]
-dif.D = 10e-12
+dif.D = 1e-12
 
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:fwd')
 binder.VariableReferenceList = [['_', 'Variable:.:E','-1']]
@@ -66,11 +66,11 @@ log.VariableReferenceList = [['_', 'Variable:.:S']]
 log.VariableReferenceList = [['_', 'Variable:.:ES']]
 log.VariableReferenceList = [['_', 'Variable:.:P']]
 log.LogInterval = 0.01
-log.LogEnd = 10
+log.LogEnd = 100
 log.FileName = "spatiocyte.csv"
 
 run(0.0001)
 start = time.time()
-run(10)
+run(100)
 end = time.time()
 print end-start

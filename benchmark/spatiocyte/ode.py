@@ -1,7 +1,7 @@
 import time
 
 ss = theSimulator.createStepper('SpatiocyteStepper', 'SS')
-ss.VoxelRadius = 65e-9;
+ss.VoxelRadius = 10e-9;
 
 de = theSimulator.createStepper('ODEStepper', 'DE')
 de.MaxStepInterval = 1e-3
@@ -14,10 +14,10 @@ theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 4.4964e-6;
 
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 E = theSimulator.createEntity('Variable', 'Variable:/:E')
-E.Value = 909
+E.Value = 91
 E.Name = 'HD'
 S = theSimulator.createEntity('Variable', 'Variable:/:S')
-S.Value = 9091
+S.Value = 909
 S.Name = 'HD'
 ES = theSimulator.createEntity('Variable', 'Variable:/:ES')
 ES.Value = 0
@@ -53,11 +53,11 @@ log.VariableReferenceList = [['_', 'Variable:.:S']]
 log.VariableReferenceList = [['_', 'Variable:.:ES']]
 log.VariableReferenceList = [['_', 'Variable:.:P']]
 log.LogInterval = 0.01
-log.LogEnd = 10
+log.LogEnd = 100
 log.FileName = "ode.csv"
 
 run(0.0001)
 start = time.time()
-run(10)
+run(100)
 end = time.time()
 print end-start

@@ -9,13 +9,13 @@ max_mol 11000
 molperbox 3
 accuracy 10
 
-difc E 10
-difc S 10
-difc ES 10
-difc P 10
+difc E 1
+difc S 1
+difc ES 1
+difc P 1
 
 time_start 0
-time_stop 10
+time_stop 100
 time_step 0.001
 
 boundaries 0 0 4.4964 p
@@ -32,8 +32,8 @@ output_files smoldyn.csv
 cmd i 0 100 0.01 molcount smoldyn.csv
 
 # 10 E/vol and 100 S/vol
-mol 909 E u u u
-mol 9091 S u u u
+mol 91 E u u u
+mol 909 S u u u
 
 reaction fwd E + S -> ES 0.01
 reaction back ES -> E + S 1

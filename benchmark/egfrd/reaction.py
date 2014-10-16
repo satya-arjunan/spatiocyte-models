@@ -7,7 +7,7 @@ import time
 import sys
 import gc
 
-T = 1e-0
+T = 1e+2
 V = 90.9e-18
 R = 2.5e-9
 D = 1e-12
@@ -44,10 +44,12 @@ sim = _gfrd._EGFRDSimulator(w, nrw, myrandom.rng)
 
 start = time.time()
 t = 0
+f = open('egfrd.csv','w')
 while (sim.step(T)):
     t = t+1e-2
     while (sim.step(t)): pass
-    print sim.t,len(w.get_particle_ids(E)),len(w.get_particle_ids(S)),len(w.get_particle_ids(ES)),len(w.get_particle_ids(P))
+    f.write(str(sim.t)+','+str(len(w.get_particle_ids(E)))+','+str(len(w.get_particle_ids(S)))+','+str(len(w.get_particle_ids(ES)))+','+str(len(w.get_particle_ids(P)))+'\n')
+    f.flush()
 print "time",sim.t,T
 end = time.time()
 duration = end-start
