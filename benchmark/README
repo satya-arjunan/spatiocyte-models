@@ -12,3 +12,7 @@ Periodic boundary
 After N particles are randomly placed, the simulator runs for some small 
 duration of time (stirTime in the script) to stir. After that, the simulator is
 re-initialized, and run for T to take the benchmark.
+
+
+To compare the output of reactions:
+python plot_reaction.py

@@ -10,26 +10,23 @@ tickFontSize = 14
 legendFontSize = 14
 lineFontSize = 14
 
-fileNames = ['ode.csv','spatiocyte.csv','smoldyn.csv']
+fileNames = ['spatiocyte/ode.csv','spatiocyte/spatiocyte.csv','spatiocyte/spatiocyte_small_dt.csv','egfrd/egfrd.csv','smoldyn/smoldyn.csv','smoldyn/smoldyn_small_dt.csv']
 legendTitles = ['State 2', 'State 1']
 speciesList = ['E','S','ES','P']
 lines = ['-', '--', '-', '-']
-colors = ['r', 'b', 'g', 'black', 'c', 'k', '#009955', '#ff9933', '#ff00ff', '#11dd00']
+colors = ['r', 'b', 'g', 'c', 'k', '#009955', '#ff9933', '#ff00ff', '#11dd00']
 
-data = genfromtxt(fileNames[0], delimiter=',').T
-colSize = len(data)-1
-for i in range(colSize):
-  plot(data[0], data[i+1], ls=lines[0], color=colors[0], label=legendTitles[0], linewidth=1)
-
-data = genfromtxt(fileNames[1], delimiter=',').T
-colSize = len(data)-1
-for i in range(colSize):
-  plot(data[0], data[i+1], ls=lines[0], color=colors[1], label=legendTitles[0], linewidth=1)
-
-data = genfromtxt(fileNames[2], delimiter=' ').T
-colSize = len(data)-1
-for i in range(colSize):
-  plot(data[0], data[i+1], ls=lines[0], color=colors[2], label=legendTitles[0], linewidth=1)
+for f in range(len(fileNames)):
+  deli = ','
+  if (f > 3):
+    deli = ' '
+  data = genfromtxt(fileNames[f], delimiter=deli).T
+  colSize = len(data)-1
+  for i in range(colSize):
+    if (i == 0):
+      plot(data[0], data[i+1], ls=lines[0], color=colors[f], label=legendTitles[0], linewidth=1)
+    else:
+      plot(data[0], data[i+1], ls=lines[0], color=colors[f], linewidth=1)
 
 ax = gca()
 ax.grid(color='b', linestyle='--')

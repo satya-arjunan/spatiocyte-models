@@ -9,7 +9,7 @@ import gc
 
 T = 1e+2
 V = 90.9e-18
-R = 2.5e-9
+R = 10e-9
 D = 1e-12
 L = numpy.power(V, 1.0/3.0) # cuboid side length
 nE = 91
@@ -28,8 +28,8 @@ m.add_species_type(ES)
 m.add_species_type(P)
 
 fwd = model.create_binding_reaction_rule(E, S, ES, 0.01e-18)
-back = model.create_unbinding_reaction_rule(ES, E, S, 1)
-prod = model.create_unbinding_reaction_rule(ES, E, P, 1)
+back = model.create_unbinding_reaction_rule(ES, E, S, 0.1)
+prod = model.create_unbinding_reaction_rule(ES, E, P, 0.1)
 m.network_rules.add_reaction_rule(fwd)
 m.network_rules.add_reaction_rule(back)
 m.network_rules.add_reaction_rule(prod)

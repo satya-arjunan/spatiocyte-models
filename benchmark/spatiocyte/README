@@ -20,5 +20,4 @@ ecell3-session ode.py
 To run the reaction with Spatiocyte:
 ecell3-session reaction.py 
 
-To compare the output of Spatiocyte with ODE:
-python plot_reaction.py
+

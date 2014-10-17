@@ -8,9 +8,9 @@ de.MaxStepInterval = 1e-3
 
 theSimulator.rootSystem.StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 4.4964e-6;
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 4.4964e-6;
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 4.4964e-6;
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 4.42e-6;
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 4.42e-6;
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 4.42e-6;
 
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 E = theSimulator.createEntity('Variable', 'Variable:/:E')
@@ -38,14 +38,14 @@ back.StepperID = 'DE'
 back.VariableReferenceList = [['_', 'Variable:.:ES', '-1']]
 back.VariableReferenceList = [['_', 'Variable:.:E', '1']]
 back.VariableReferenceList = [['_', 'Variable:.:S', '1']]
-back.k = 1
+back.k = 0.1
 
 prod = theSimulator.createEntity('MassActionProcess', 'Process:/:prod')
 prod.StepperID = 'DE'
 prod.VariableReferenceList = [['_', 'Variable:.:ES', '-1']]
 prod.VariableReferenceList = [['_', 'Variable:.:E', '1']]
 prod.VariableReferenceList = [['_', 'Variable:.:P', '1']]
-prod.k = 1
+prod.k = 0.1
 
 log = theSimulator.createEntity('IteratingLogProcess', 'Process:/:log')
 log.VariableReferenceList = [['_', 'Variable:.:E']]
