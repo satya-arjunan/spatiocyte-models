@@ -27,7 +27,7 @@ Dv = 1e-12 #diffusion coefficient
 Vv = [3e-15, ] * 11 #simulation volume in m^3
 Nv = [100,300,1000,3000,10000,30000,100000,300000,1000000,3000000,10000000] #number of molecules
 #Tv = [max(1e-5, min(T, 1e0 / math.pow(N, 2.0 / 3.0))) for N in Nv] #duration
-Tv = [50,25,10,5,1,0.1,0.01,0.002,0.0008,4.81e-5,2.15e-5]
+Tv = [50,25,10,5,1,0.1,0.01,0.002,0.0008,4.81e-5,4e-5]
 REPEAT = 1
 
 if __name__ == '__main__':

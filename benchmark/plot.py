@@ -30,6 +30,7 @@ from egfrd_dense_out import *
 imp.load_source('smoldyn_out', 'smoldyn/smoldyn_out.py')
 from smoldyn_out import *
 
+imp.load_source('run_all', 'spatiocyte/run_all.py')
 from run_all import Nv
 
 axes([.12,.14,.86,.83])
