@@ -10,7 +10,7 @@ tickFontSize = 14
 legendFontSize = 14
 lineFontSize = 14
 
-fileNames = ['spatiocyte/ode.csv','spatiocyte/spatiocyte.csv','spatiocyte/spatiocyte_small_dt.csv','egfrd/egfrd.csv','smoldyn/smoldyn.csv','smoldyn/smoldyn_small_dt.csv']
+fileNames = ['spatiocyte/ode.csv','spatiocyte/spatiocyte.csv','spatiocyte/spatiocyte_small_dt.csv','egfrd/egfrd.csv', 'egfrd/egfrd_small_r.csv','smoldyn/smoldyn.csv','smoldyn/smoldyn_small_dt.csv']
 legendTitles = ['State 2', 'State 1']
 speciesList = ['E','S','ES','P']
 lines = ['-', '--', '-', '-']
