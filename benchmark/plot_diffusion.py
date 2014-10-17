@@ -21,12 +21,16 @@ def plot_data(N, T, fmt):
 
 imp.load_source('spatiocyte_out', 'spatiocyte/spatiocyte_out.py')
 from spatiocyte_out import *
-imp.load_source('egfrd_out', 'egfrd/egfrd_out.py')
+imp.load_source('spatiocyte_dillute_out', 'spatiocyte/spatiocyte_dillute_out.py')
+from spatiocyte_dillute_out import *
+imp.load_source('egfrd_out', 'egfrd/back.py')
 from egfrd_out import *
-imp.load_source('egfrd_dense_out', 'egfrd/egfrd_dense_out.py')
+imp.load_source('egfrd_dense_out', 'egfrd/dense_back.py')
 from egfrd_dense_out import *
 imp.load_source('smoldyn_out', 'smoldyn/smoldyn_out.py')
 from smoldyn_out import *
+imp.load_source('smoldyn_dillute_out', 'smoldyn/smoldyn_dillute_out.py')
+from smoldyn_dillute_out import *
 
 imp.load_source('run_all', 'spatiocyte/run_all.py')
 from run_all import Nv
@@ -46,10 +50,12 @@ annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.75}}$', xy=(X[3], egfrd
 plot(Nv, smoldyn_data,'g^', label=r'Smoldyn ($V=3\ \mathrm{\mu m}^{3}$)')
 loglog(X, 8e-2*X**1.15, 'g-')
 annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.15}}$', xy=(X[1], smoldyn_data[1][0]),  xycoords='data', xytext=(-30, -25), textcoords='offset points', color='g', size=16)
+plot(Nv, smoldyn_dillute_data,'g+', label=r'Smoldyn ($V=3\times10^{-18}\mathrm{m}^{3}$)')
 
 plot(Nv, spatiocyte_data,'bo', label=r'Spatiocyte ($V=3\ \mathrm{\mu m}^{3}$)')
 loglog(X, 0.24*X**1.05, 'b-')
 annotate(r'$\mathsf{t} \ \propto \ \mathsf{N}^{\mathsf{1.05}}$', xy=(X[4], spatiocyte_data[4][0]),  xycoords='data', xytext=(-25, 7), textcoords='offset points', color='b', size=16)
+plot(Nv, spatiocyte_dillute_data,'b+', label=r'Spatiocyte ($V=3\times10^{-17}\mathrm{m}^{3}$)')
 
 
 legend(loc='upper left', labelspacing=0.3, handletextpad=0.2)
