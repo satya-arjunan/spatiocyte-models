@@ -18,7 +18,7 @@ colors = ['r', 'b', 'g', 'c', 'k', '#009955', '#ff9933', '#ff00ff', '#11dd00']
 
 for f in range(len(fileNames)):
   deli = ','
-  if (f > 3):
+  if (f > 4):
     deli = ' '
   data = genfromtxt(fileNames[f], delimiter=deli).T
   colSize = len(data)-1
