@@ -8,8 +8,6 @@ import scipy.io
 from matplotlib.pylab import *
 matplotlib.rcParams["mathtext.fontset"] = "stix"
 
-N_A = 6.0221367e23
-
 def plot_data(N, T, fmt):
     T = numpy.array(T)
 
@@ -64,8 +62,8 @@ Y = numpy.array([60,3600,3600*24,3600*24*30, 3600*24*30*12])
 
 xlim(X[0]*0.9,X[len(X)-1]*1.1)
 
-xticks(size=18)
+xticks(size=17)
 yticks(Y, ['minute', 'hour', 'day', 'month', 'year'], size=16)
 
-savefig('data.eps', format='eps', dpi=1000)
+savefig('diffusion.eps', format='eps', dpi=1000)
 show()
