@@ -53,11 +53,11 @@ X = numpy.array(Nv)
 
 plot(Nv, egfrd_dense_data,'bs', label=r'eGFRD ($V=3\ \mathrm{\mu m}^{3}$)')
 loglog(X, 10e-4*X**2.15, 'b-')
-annotate(r'$RT\propto N^{\mathsf{2.15}}$', xy=(X[5], egfrd_dense_data[5][0]),  xycoords='data', xytext=(10, -2), textcoords='offset points', color='b', size=14)
+annotate(r'$RT\propto N^{\mathsf{2.15}}$', xy=(X[5], egfrd_dense_data[5][0]),  xycoords='data', xytext=(-80, 0), textcoords='offset points', color='b', size=14)
 
 plot(Nv, egfrd_data,'bo', label=r'eGFRD ($V=3000\ \mathrm{\mu m}^{3}$)')
 loglog(X, 1.1e-4*X**1.75, 'b-')
-annotate(r'$RT\propto N^{\mathsf{1.75}}$', xy=(X[3], egfrd_data[3][0]),  xycoords='data', xytext=(-10, -20), textcoords='offset points', color='b', size=14)
+annotate(r'$RT\propto N^{\mathsf{1.75}}$', xy=(X[9], egfrd_data[9][0]),  xycoords='data', xytext=(-35, 10), textcoords='offset points', color='b', size=14)
 
 plot(Nv, smoldyn_data,'g^', label=r'Smoldyn ($V=3\ \mathrm{\mu m}^{3}$)')
 loglog(X, 8e-2*X**1.15, 'g-')
@@ -68,6 +68,12 @@ plot(Nv, spatiocyte_data,'r<', label=r'Spatiocyte ($V=3\ \mathrm{\mu m}^{3}$)')
 loglog(X, 0.24*X**1.05, 'r-')
 annotate(r'$RT\propto N^{\mathsf{1.05}}$', xy=(X[4], spatiocyte_data[4][0]),  xycoords='data', xytext=(-30, 9), textcoords='offset points', color='r', size=14)
 plot(Nv, spatiocyte_dillute_data,'r>', label=r'Spatiocyte ($V=30\ \mathrm{\mu m}^{3}$)')
+
+loglog(X, 1e-4*X**(5.0/3.0), 'm--')
+annotate(r'$RT\propto N^{\mathsf{\frac{5}{3}}}$', xy=(X[3], egfrd_data[3][0]),  xycoords='data', xytext=(-10, -30), textcoords='offset points', color='m', size=14)
+
+loglog(X, 2e-1*X, 'k--')
+annotate(r'$RT\propto N$', xy=(X[8], spatiocyte_data[8][0]),  xycoords='data', xytext=(0, -30), textcoords='offset points', color='k', size=14)
 
 annotate('B', xy=(0, 1),  xycoords='axes fraction', xytext=(-60,-20), textcoords='offset points', color='k', size=30)
 
