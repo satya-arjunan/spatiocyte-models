@@ -89,5 +89,5 @@ xlim(X[0]*0.9,X[len(X)-1]*1.1)
 xticks(size=17)
 yticks(Y, ['min', 'hour', 'day', 'mon', 'year'], size=14)
 
-savefig('diffusion1.eps', format='eps', dpi=1000)
+savefig('diffusion.eps', format='eps', dpi=1000)
 show()
