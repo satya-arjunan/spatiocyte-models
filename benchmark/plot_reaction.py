@@ -18,7 +18,7 @@ legendFontSize = 14
 lineFontSize = 15
 
 fileNames = ['egfrd/egfrd.csv', 'egfrd/egfrd_small_r.csv','smoldyn/smoldyn.csv','smoldyn/smoldyn_small_dt.csv','spatiocyte/spatiocyte.csv','spatiocyte/spatiocyte_small_dt.csv','spatiocyte/ode.csv',]
-legendTitles = ['eGFRD ($r=10\ \mathrm{nm},\ T=2914\ \mathrm{s}$)','eGFRD ($r=1\ \mathrm{nm},\ T=2272\ \mathrm{s}$)','Smoldyn ($\Delta t=1\ \mathrm{ms},\ T=21\ \mathrm{s}$)','Smoldyn ($\Delta t=67\ \mathrm{\mu s},\ T=306\ \mathrm{s}$)','Spatiocyte ($\Delta t=1\ \mathrm{ms},\ r=38.73\ \mathrm{nm},\ T=8\ \mathrm{s}$)','Spatiocyte ($\Delta t=67\ \mathrm{\mu s},\ r=10\ \mathrm{nm},\ T=238\ \mathrm{s}$)','Mass Action']
+legendTitles = ['eGFRD ($r=10\ \mathrm{nm},\ T=2914\ \mathrm{s}$)','eGFRD ($r=1\ \mathrm{nm},\ T=2272\ \mathrm{s}$)','Smoldyn ($\Delta t=1\ \mathrm{ms},\ T=21\ \mathrm{s}$)','Smoldyn ($\Delta t=67\ \mathrm{\mu s},\ T=302\ \mathrm{s}$)','Spatiocyte ($\Delta t=1\ \mathrm{ms},\ r=38.73\ \mathrm{nm},\ T=8\ \mathrm{s}$)','Spatiocyte ($\Delta t=67\ \mathrm{\mu s},\ r=10\ \mathrm{nm},\ T=238\ \mathrm{s}$)','Mass Action']
 speciesList = ['E','S','ES','P']
 lines = ['-','--','-','--','-','--','-']
 colors = ['b', 'b', 'g', 'g', 'r', 'r','k']

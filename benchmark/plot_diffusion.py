@@ -56,7 +56,7 @@ loglog(X, 2e-2*X**(5.0/3.0), 'b--')
 annotate(r'$T\propto N^{\mathsf{\frac{5}{3}}}$', xy=(X[2], egfrd_dense_data[2][0]),  xycoords='data', xytext=(-20, 15), textcoords='offset points', color='b', size=14)
 
 plot(Nv, egfrd_data,'bo', label=r'eGFRD ($V=3000\ \mathrm{\mu m}^{3}$)')
-loglog(X, 1.8e-4*X**(5.0/3.0), 'b--')
+loglog(X, 2.05e-4*X**(5.0/3.0), 'b--')
 annotate(r'$T\propto N^{\mathsf{\frac{5}{3}}}$', xy=(X[3], egfrd_data[3][0]),  xycoords='data', xytext=(-15, -25), textcoords='offset points', color='b', size=14)
 
 plot(Nv, smoldyn_data,'g^', label=r'Smoldyn ($V=3\ \mathrm{\mu m}^{3}$)')
@@ -66,7 +66,7 @@ annotate(r'$T\propto N$', xy=(X[1], smoldyn_data[1][0]),  xycoords='data', xytex
 plot(Nv, smoldyn_dillute_data,'gv', label=r'Smoldyn ($V=30\ \mathrm{\mu m}^{3}$)')
 
 plot(Nv, spatiocyte_data,'r<', label=r'Spatiocyte ($V=3\ \mathrm{\mu m}^{3}$)')
-loglog(X, 0.5*X, 'r--')
+loglog(X, 0.4*X, 'r--')
 #loglog(X, 0.24*X**1.05, 'r-')
 annotate(r'$T\propto N$', xy=(X[5], spatiocyte_data[5][0]),  xycoords='data', xytext=(-15, 12), textcoords='offset points', color='r', size=14)
 plot(Nv, spatiocyte_dillute_data,'r>', label=r'Spatiocyte ($V=30\ \mathrm{\mu m}^{3}$)')
@@ -79,7 +79,7 @@ for t in leg.get_texts():
   t.set_fontsize(legendFontSize) 
 #legend(loc='upper left', labelspacing=0.2, handletextpad=0.2, fancybox=True)
 
-xlabel('N (\# Molecules)', size=17)
+xlabel('$N$ (\# Molecules)', size=17)
 ylabel('Run time, $T$', size=17)
 
 Y = numpy.array([60,3600,3600*24,3600*24*30, 3600*24*30*12])
