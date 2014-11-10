@@ -47,6 +47,9 @@ def print_first_sphere(location):
     bpy.ops.object.select_all(action='DESELECT')
     bpy.ops.mesh.primitive_uv_sphere_add(size=0.5)
     sphere = bpy.context.active_object
+    mypolys = sphere.data.polygons
+    for p in mypolys:
+      p.use_smooth = True
     sphere.name = "Sphere (%d, %d, %d)" % (location[0], location[1],
             location[2])
     sphere.location = location
@@ -91,8 +94,7 @@ if __name__ == "__main__":
   c = load_coord_file(filename)
   set_scene()
   sphere = print_first_sphere((c[0],c[1],c[2]))
-  for i in range(1, int(len(c)/3)):
-    print_sphere((c[i*3],c[i*3+1],c[i*3+2]), sphere)
-
+  #for i in range(1, int(len(c)/3)):
+  #  print_sphere((c[i*3],c[i*3+1],c[i*3+2]), sphere)
 
 
