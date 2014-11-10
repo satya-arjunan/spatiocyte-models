@@ -1,14 +1,6 @@
 import bpy
 
 def make_material(name, color_diffuse, color_specular, alpha):
-    """
-    Create a blender material.
-
-    :param name: The name.
-    :param color_diffuse: The diffuse color.
-    :param color_specular: The specular color.
-    :param alpha: The alpha channel.
-    """
     mat = bpy.data.materials.new(name)
     mat.diffuse_color = color_diffuse
     mat.diffuse_shader = 'LAMBERT'
@@ -21,7 +13,7 @@ def make_material(name, color_diffuse, color_specular, alpha):
     mat.use_transparency = True
     return mat
 
-red = make_material('Red', (1,0.1,0.1), (1,1,1), 1)
+red = make_material('Red', (1,0.1,0.1), (0.3,0.3,0.3), 1)
 green = make_material('Green', (0,1,0), (1,1,1), 1)
 blue = make_material('Blue', (0,0.3,1), (1,1,1), 1)
 white_trans = make_material('White', (1,1,1), (0.2,0.2,0.2), 0.4)
@@ -51,27 +43,21 @@ def set_scene():
     set_horizon()
     #bpy.context.scene.render.resolution_percentage = 60
 
-def print_sphere(location, init_sphere):
-    if not init_sphere:
-      bpy.ops.mesh.primitive_uv_sphere_add(segments=8, ring_count=8,
-          size=1, view_align=False, enter_editmode=False,
-          location=(0,0,0), rotation=(0,0,0), layers=(True, False,
-            False, False, False, False, False, False, False,
-            False, False, False, False, False, False,
-            False, False, False, False, False))
-      sphere = bpy.context.active_object
-      sphere.name = "Sphere"
-      sphere.location = location
-      sphere.select = False
-      sphere.data.materials.append(red)
-      init_sphere = True
-      return
+def print_first_sphere(location): 
+    bpy.ops.object.select_all(action='DESELECT')
+    bpy.ops.mesh.primitive_uv_sphere_add(size=0.5)
+    sphere = bpy.context.active_object
+    sphere.name = "Sphere (%d, %d, %d)" % (location[0], location[1],
+            location[2])
+    sphere.location = location
+    sphere.select = False
+    #sphere.data.materials.append(red)
+    return sphere
 
-    sphere = bpy.data.objects["Sphere"]
-    l = location
+def print_sphere(location, sphere): 
     ob = sphere.copy()
-    ob.name = "Sphere (%d, %d, %d)" % (l[0], l[1], l[2])
-    ob.location = l
+    ob.name = "Sphere (%d, %d, %d)" % (location[0], location[1], location[2])
+    ob.location = location
     ob.data = sphere.data.copy()
     bpy.context.scene.objects.link(ob)
     return ob
@@ -104,6 +90,9 @@ if __name__ == "__main__":
   filename = '/home/satya/wrk/blender/CoordinateLog.csv'
   c = load_coord_file(filename)
   set_scene()
-  init_sphere = False
-  for i in range(int(len(c)/3)):
-    print_sphere((c[i*3],c[i*3+1],c[i*3+2]), init_sphere)
+  sphere = print_first_sphere((c[0],c[1],c[2]))
+  for i in range(1, int(len(c)/3)):
+    print_sphere((c[i*3],c[i*3+1],c[i*3+2]), sphere)
+
+
+
