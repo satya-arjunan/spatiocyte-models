@@ -10,7 +10,6 @@ def make_material(name, color_diffuse, color_specular, alpha):
     mat.specular_intensity = 0.02
     mat.alpha = alpha
     mat.ambient = 1
-    mat.use_transparency = True
     return mat
 
 red = make_material('Red', (0.46,0.1,0.1), (1.0,1.0,1.0), 1)
@@ -46,9 +45,9 @@ def set_scene():
 
 def print_first_sphere(location): 
     bpy.ops.object.select_all(action='DESELECT')
-    bpy.ops.mesh.primitive_uv_sphere_add(size=0.5)
+    bpy.ops.mesh.primitive_uv_sphere_add(size=1)
     sphere = bpy.context.active_object
-    polygons = sphere.data.polygons
+    polygons = sphere.data.faces
     for i in polygons:
       i.use_smooth = True
     sphere.name = "Sphere (%d, %d, %d)" % (location[0], location[1],
@@ -65,7 +64,6 @@ def print_sphere(location, sphere):
     ob.data = sphere.data.copy()
     bpy.context.scene.objects.link(ob)
     return ob
-
 
 def load_coord_file(filename):
   f = open(filename, 'r')
@@ -91,12 +89,31 @@ def load_coord_file(filename):
     return coords
 
 if __name__ == "__main__": 
-  filename = '/home/satya/wrk/blender/CoordinateLog.csv'
+  filename = '/home/satya/wrk/blender/mtcoords.csv'
   c = load_coord_file(filename)
   set_scene()
-  #sphere = print_first_sphere((c[0],c[1],c[2]))
   sphere = print_first_sphere((0,0,0))
-  #for i in range(1, intnt(len(c)/3)):
-  #  print_sphere((c[i*3],c[i*3+1],c[i*3+2]), sphere)
+  #sphere = print_first_sphere((0,0,0))
+  print_sphere((0,0,1), sphere)
+  print_sphere((0,1,0), sphere)
+  print_sphere((0,1,1), sphere)
+  print_sphere((1,0,0), sphere)
+  print_sphere((1,0,1), sphere)
+  print_sphere((1,1,0), sphere)
+  print_sphere((1,1,1), sphere)
 
+#bpy.data.objects["Icosphere.003"].data.materials
+#import bpy
+#matName = 'planeGlass'
+#bpy.ops.mesh.primitive_plane_add()
+#bpy.data.materials.new(matName)
+#bpy.data.materials[matName].use_nodes = True
+#bpy.data.materials[matName].node_tree.nodes.new(type='ShaderNodeBsdfGlass')
+#inp = bpy.data.materials[matName].node_tree.nodes['Material Output'].inputs['Surface']
+#outp = bpy.data.materials[matName].node_tree.nodes['Glass BSDF'].outputs['BSDF']
+#bpy.data.materials[matName].node_tree.links.new(inp,outp)
+#bpy.data.objects['Plane'].active_material = bpy.data.materials[matName]
+#bpy.data.objects["Icosphere.003"].active_material.node_tree.nodes["Mix Shader"].inputs["Fac"].default_value
+#just hover over the input box to get the corresponding python property
 
+#bpy.data.objects["Icosphere.003"].active_material.node_tree.nodes["Subsurface Scattering"].inputs[0].default_value
