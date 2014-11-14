@@ -246,8 +246,8 @@ def render(filename):
     bpy.ops.render.render( write_still=True )
 
 if __name__ == "__main__": 
-  filename = '/home/satya/wrk/blender/mtcoords.csv'
-  c = load_coord_file(filename)
+  #filename = '/home/satya/wrk/blender/mtcoords.csv'
+  #c = load_coord_file(filename)
   set_scene()
   loc = (random.uniform(-5, 5), random.uniform(-5, 5), random.uniform(-5, 5))
   sphere = print_first_sphere(loc, materials[random.randrange(6)])
