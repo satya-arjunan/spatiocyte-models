@@ -1,16 +1,50 @@
 import bpy
+import random
 
-def make_material(name, color_diffuse, color_specular, alpha):
-  mat = bpy.data.materials.new(name)
-  mat.diffuse_color = color_diffuse
-  mat.diffuse_shader = 'LAMBERT'
-  mat.diffuse_intensity = 1.0
-  mat.specular_color = color_specular
-  mat.specular_shader = 'COOKTORR'
-  mat.specular_intensity = 0.02
-  mat.alpha = alpha
-  mat.ambient = 1
+def get_node_index(nodes, data_type):
+  idx = 0
+  for m in nodes:
+    if (m.type == data_type):
+      return idx
+    idx = idx + 1
+  return 1
+
+def set_background():
+  world = bpy.context.scene.world
+  world.use_nodes = True
+  nodes = world.node_tree.nodes
+  node = nodes[get_node_index(nodes,'BACKGROUND')]
+  node.inputs[0].default_value = [1,1,1,1]
+  node.inputs[1].default_value = 0.3
+  #print(nodes.keys())
+  outN = nodes['Background'].outputs[0]
+  inN = nodes['World Output'].inputs[0]
+  world.node_tree.links.new(outN, inN)
+
+def make_material(mat_name, color):
+  scn = bpy.context.scene
+  # Set cycles render engine if not selected
+  if not scn.render.engine == 'CYCLES':
+    scn.render.engine = 'CYCLES'
+
+  mat = bpy.data.materials.new(mat_name)
+  mat.use_nodes = True
+  nodes = mat.node_tree.nodes
+
+  node = nodes[get_node_index(nodes,'BSDF_DIFFUSE')]
+  node.name = 'Diffuse BSDF'
+  node.label = 'Diffuse BSDF'
+  node.inputs[0].default_value = color
+
+  outN = nodes['Diffuse BSDF'].outputs[0]
+  inN = nodes['Material Output'].inputs[0]
+  mat.node_tree.links.new(outN, inN)
   return mat
+
+#from 2.55/scripts/ui/BioBlender/settings.py
+#color={CA:[0.4,1.0,0.14],(0.8,0.48,1.0), S:[1.0,0.75,0.17], P:[1.0,0.37,0.05], MG:[0.64,1.0,0.05], ZN:[0.32,0.42,1], CU:[1.0,0.67,0.0], K:[0.72,0.29,1.0], CL:[0.1,1.0,0.6], MN:[0.67,0.6,1.0]}
+
+materials = [make_material('Red', [0.46,0.1,0.1,1]), make_material('Black', [0.1,0.1,0.1,1]),  make_material('Blue', [0.24,0.41,0.7,1]), make_material('Green', [0.27, 0.8, 0.21, 1]),  make_material('Yellow', [1.0,0.5,0.0,1]), make_material('White', [0.9,0.9,0.9,1])]
 
 def make_material_cycles():
   scn = bpy.context.scene
@@ -99,34 +133,52 @@ def set_camera(location=(34,42,24), rotation=(1.08, 0.013, 2.43)):
 def set_horizon():
   bpy.context.scene.world.horizon_color = (1,1,1)
 
+def set_default_camera_view():
+  for scrn in bpy.data.screens:
+    if scrn.name == 'Default':
+      bpy.context.window.screen = scrn
+      for area in scrn.areas:
+        if area.type == 'VIEW_3D':
+          for space in area.spaces:
+            if space.type == 'VIEW_3D':
+              space.viewport_shade = 'MATERIAL'
+              reg = space.region_3d
+              reg.view_perspective = 'CAMERA'
+      break
+  return
+
 def set_scene():
   remove_default_cube()
+  set_default_camera_view()
+  set_background()
   #set_lamp()
   #set_camera()
   #set_horizon()
   #bpy.context.scene.render.engine = 'CYCLES'
   #bpy.context.scene.render.resolution_percentage = 60
 
-def print_first_sphere(location):
-  bpy.ops.object.select_all(action='DESELECT')
-  bpy.ops.mesh.primitive_uv_sphere_add(size=0.8)
-  sphere = bpy.context.active_object
-  polygons = sphere.data.polygons
-  for i in polygons:
-    i.use_smooth = True
-  sphere.name = "Sphere (%d, %d, %d)" % (location[0], location[1], location[2])
-  sphere.location = location
-  sphere.select = False
-  sphere.data.materials.append(make_material_cycles())
-  return sphere
+def print_first_sphere(location, mat): 
+    bpy.ops.object.select_all(action='DESELECT')
+    bpy.ops.mesh.primitive_uv_sphere_add(size=0.3)
+    sphere = bpy.context.scene.objects.active
+    polygons = sphere.data.polygons
+    for i in polygons:
+      i.use_smooth = True
+    sphere.name = "Sphere (%d, %d, %d)" % (location[0], location[1],
+            location[2])
+    sphere.location = location
+    sphere.select = False
+    sphere.active_material = mat
+    return sphere
 
-def print_sphere(location, sphere): 
-  ob = sphere.copy()
-  ob.name = "Sphere (%d, %d, %d)" % (location[0], location[1], location[2])
-  ob.location = location
-  ob.data = sphere.data.copy()
-  bpy.context.scene.objects.link(ob)
-  return ob
+def print_sphere(location, sphere, mat): 
+    ob = sphere.copy()
+    ob.name = "Sphere (%d, %d, %d)" % (location[0], location[1], location[2])
+    ob.location = location
+    ob.data = sphere.data.copy()
+    ob.active_material = mat
+    bpy.context.scene.objects.link(ob)
+    return ob
 
 def load_coord_file(filename):
   f = open(filename, 'r')
@@ -155,13 +207,10 @@ if __name__ == "__main__":
   filename = '/home/satya/wrk/blender/mtcoords.csv'
   c = load_coord_file(filename)
   set_scene()
-  sphere = print_first_sphere((0,0,0))
-  #sphere = print_first_sphere((0,0,0))
-  print_sphere((0,0,1), sphere)
-  print_sphere((0,2,0), sphere)
-  print_sphere((0,1,1), sphere)
-  print_sphere((2,0,0), sphere)
-  print_sphere((1,0,2), sphere)
-  print_sphere((2,1,0), sphere)
-  print_sphere((1,1,1), sphere)
+  loc = (random.uniform(-5, 5), random.uniform(-5, 5), random.uniform(-5, 5))
+  sphere = print_first_sphere(loc, materials[random.randrange(6)])
+  for i in range(0,1000):
+      loc = (random.uniform(-5, 5), random.uniform(-5, 5), random.uniform(-5, 5))
+      print_sphere(loc, sphere, materials[random.randrange(6)])
+
 
