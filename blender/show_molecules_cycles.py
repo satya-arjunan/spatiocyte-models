@@ -254,8 +254,8 @@ if __name__ == "__main__":
   for i in range(0,1000):
       loc = (random.uniform(-5, 5), random.uniform(-5, 5), random.uniform(-5, 5))
       print_sphere(loc, sphere, materials[random.randrange(6)])
-  save('/home/satya/wrk/blender/test.blend')
-  render('/home/satya/wrk/blender/image.png')  
+  #save('/home/satya/wrk/blender/test.blend')
+  #render('/home/satya/wrk/blender/image.png')  
 
 #import bpy
 #import math
