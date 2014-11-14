@@ -123,8 +123,42 @@ def remove_default_cube():
     bpy.ops.object.delete()
 
 def set_lamp():
-  bpy.data.objects["Lamp"].data.type = 'POINT'
-  bpy.data.objects["Lamp"].location = (20,20,20)
+  scn = bpy.context.scene
+  # Set cycles render engine if not selected
+  if not scn.render.engine == 'CYCLES':
+    scn.render.engine = 'CYCLES'
+  bpy.data.objects["Lamp"].data.type = 'SUN'
+  lamp = bpy.data.lamps['Lamp']
+  lamp.use_nodes = True
+  nodes = lamp.node_tree.nodes
+  #print(nodes.keys())
+  lamp_node = nodes[get_node_index(nodes,'EMISSION')]
+  lamp_node.inputs[1].default_value = 5 #Strength
+  outN = lamp_node.outputs[0]
+  inN = nodes['Lamp Output'].inputs[0]
+  lamp.node_tree.links.new(outN, inN)
+
+
+# name = "AreaLamp.table"
+#        lamp = self.__data.lamps.get(name)
+#
+#        if not lamp:
+#            lamp = self.__data.lamps.new(name, 'AREA')
+#            tmp_engine = self.__scene.render.engine
+#            self.__scene.render.engine = 'BLENDER_RENDER'
+#            lamp.shadow_method = 'RAY_SHADOW'
+#            lamp.shadow_ray_samples_x = 10
+#            lamp.shadow_ray_samples_y = 10
+#            lamp.distance = 500.0
+#            lamp.energy = 1.0
+#            lamp.use_specular = False
+#            lamp.size = width2
+#            lamp.shape = 'RECTANGLE'
+#            lamp.size_y = length2
+#            self.__scene.render.engine = 'CYCLES'
+#            lamp.cycles.use_multiple_importance_sampling = True
+#            lamp.use_nodes = True
+#            self.__scene.render.engine = tmp_engine
 
 def set_camera(location=(34,42,24), rotation=(1.08, 0.013, 2.43)):
   bpy.data.objects["Camera"].location = location
@@ -151,10 +185,11 @@ def set_scene():
   remove_default_cube()
   set_default_camera_view()
   set_background()
-  #set_lamp()
+  set_lamp()
   #set_camera()
   #set_horizon()
-  #bpy.context.scene.render.engine = 'CYCLES'
+  bpy.context.scene.render.engine = 'CYCLES'
+  bpy.context.scene.cycles.samples = 100
   #bpy.context.scene.render.resolution_percentage = 60
 
 def print_first_sphere(location, mat): 
@@ -203,6 +238,13 @@ def load_coord_file(filename):
       coords.append(float(coords_str[i+1]))
     return coords
 
+def save(filename):
+    bpy.ops.wm.save_as_mainfile(filepath=filename)
+
+def render(filename):
+    bpy.data.scenes['Scene'].render.filepath = filename
+    bpy.ops.render.render( write_still=True )
+
 if __name__ == "__main__": 
   filename = '/home/satya/wrk/blender/mtcoords.csv'
   c = load_coord_file(filename)
@@ -212,5 +254,28 @@ if __name__ == "__main__":
   for i in range(0,1000):
       loc = (random.uniform(-5, 5), random.uniform(-5, 5), random.uniform(-5, 5))
       print_sphere(loc, sphere, materials[random.randrange(6)])
+  save('/home/satya/wrk/blender/test.blend')
+  render('/home/satya/wrk/blender/image.png')  
+
+#import bpy
+#import math
+
+#def degToRad(angleDeg):
+#    return (pi * angleDeg / 180.0)
+
+#def set_sun_position(elevation, azimuth, radius):
+#    sd = bpy.data.worlds['World'].node_tree.nodes['Sky Texture'].sun_direction
+#    theta = pi / 2 - degToRad(elevation)
+#    phi = degToRad(-azimuth)
+#    sd.x = sin(phi) * sin(-theta)
+#    sd.y = sin(theta) * cos(phi)
+#    sd.z = cos(theta)
+#    return sd * radius
+    
+#bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, size=1.0, location=(10, 0, 0))
+#obj = bpy.context.active_object
 
 
+# Set sun elevation to 30 degrees and azimuth 90 with sun object at
+# a distance of 20 blender units from the world center.
+#obj.location = set_sun_position(30, 90, 20)
