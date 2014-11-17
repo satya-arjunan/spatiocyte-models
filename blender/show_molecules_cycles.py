@@ -1,6 +1,10 @@
 import bpy
 import random
 
+world_len_x = 0.0
+world_len_y = 0.0
+world_len_z = 0.0
+
 def get_node_index(nodes, data_type):
   idx = 0
   for m in nodes:
@@ -164,6 +168,31 @@ def set_camera(location=(34,42,24), rotation=(1.08, 0.013, 2.43)):
   bpy.data.objects["Camera"].location = location
   bpy.data.objects["Camera"].rotation_euler = rotation
 
+def print_planes(world_vec):
+  len_x = world_vec[0]
+  len_y = world_vec[1]
+  len_z = world_vec[2]
+  print(len_x,len_y,len_z)
+
+  bpy.ops.mesh.primitive_plane_add(location=(len_x/2.0,len_y/2.0,0), rotation=(0,0,0))
+  plane = bpy.context.scene.objects.active
+  plane.name = "PlaneXY"
+  plane.select = False
+  bpy.data.objects["PlaneXY"].dimensions = (len_x+2,len_y+2,0)
+
+  bpy.ops.mesh.primitive_plane_add(location=(0,len_y/2,len_z/2.0), rotation=(0,1.5708,0))
+  plane = bpy.context.scene.objects.active
+  plane.name = "PlaneYZ"
+  plane.select = False
+  bpy.data.objects["PlaneYZ"].dimensions = (len_z+2,len_y+2,0)
+
+  bpy.ops.mesh.primitive_plane_add(location=(len_x/2,0,len_z/2.0), rotation=(1.5708,0,0))
+  plane = bpy.context.scene.objects.active
+  plane.name = "PlaneXZ"
+  plane.select = False 
+  bpy.data.objects["PlaneXZ"].dimensions = (len_x+2,len_z+2,0)
+
+
 def set_horizon():
   bpy.context.scene.world.horizon_color = (1,1,1)
 
@@ -183,7 +212,6 @@ def set_default_camera_view():
 
 def set_scene():
   remove_default_cube()
-  set_default_camera_view()
   set_background()
   set_lamp()
   #set_camera()
@@ -194,7 +222,7 @@ def set_scene():
 
 def print_first_sphere(location, mat): 
     bpy.ops.object.select_all(action='DESELECT')
-    bpy.ops.mesh.primitive_uv_sphere_add(size=0.3)
+    bpy.ops.mesh.primitive_uv_sphere_add(size=0.5)
     sphere = bpy.context.scene.objects.active
     polygons = sphere.data.polygons
     for i in polygons:
@@ -202,7 +230,7 @@ def print_first_sphere(location, mat):
     sphere.name = "Sphere (%d, %d, %d)" % (location[0], location[1],
             location[2])
     sphere.location = location
-    sphere.select = False
+    sphere.select = True 
     sphere.active_material = mat
     return sphere
 
@@ -212,6 +240,7 @@ def print_sphere(location, sphere, mat):
     ob.location = location
     ob.data = sphere.data.copy()
     ob.active_material = mat
+    ob.select = True
     bpy.context.scene.objects.link(ob)
     return ob
 
@@ -219,10 +248,8 @@ def load_coord_file(filename):
   f = open(filename, 'r')
   titles = f.readline().strip().split(',')
   log_interval = float(titles[0].split('=')[1])
-  world_width = float(titles[1].split('=')[1])
-  world_height = float(titles[2].split('=')[1])
-  world_length = float(titles[3].split('=')[1])
-  voxel_radius = float(titles[4].split('=')[1])
+  world_vec = [float(titles[1].split('=')[1]), float(titles[2].split('=')[1]),
+      float(titles[3].split('=')[1])]
   species_names = []
   species_radii = []
   for i in range(len(titles)-5):
@@ -236,7 +263,7 @@ def load_coord_file(filename):
     coords = []
     for i in range(len(coords_str)-1):
       coords.append(float(coords_str[i+1]))
-    return coords
+    return coords, world_vec
 
 def save(filename):
     bpy.ops.wm.save_as_mainfile(filepath=filename)
@@ -245,15 +272,29 @@ def render(filename):
     bpy.data.scenes['Scene'].render.filepath = filename
     bpy.ops.render.render( write_still=True )
 
+#if __name__ == "__main__": 
+#  set_scene()
+#  loc = (random.uniform(-5, 5), random.uniform(-5, 5), random.uniform(-5, 5))
+#  sphere = print_first_sphere(loc, materials[random.randrange(6)])
+#  for i in range(0,1000):
+#      loc = (random.uniform(-5, 5), random.uniform(-5, 5), random.uniform(-5, 5))
+#      print_sphere(loc, sphere, materials[random.randrange(6)])
+  #save('/home/satya/wrk/blender/test.blend')
+  #render('/home/satya/wrk/blender/image.png')  
+
 if __name__ == "__main__": 
-  #filename = '/home/satya/wrk/blender/mtcoords.csv'
-  #c = load_coord_file(filename)
+  filename = '/home/satya/wrk/blender/CoordinateLog.csv'
+  c, world_vec = load_coord_file(filename)
   set_scene()
-  loc = (random.uniform(-5, 5), random.uniform(-5, 5), random.uniform(-5, 5))
+  print_planes(world_vec)
+  loc = (c[0], c[1], c[2])
   sphere = print_first_sphere(loc, materials[random.randrange(6)])
-  for i in range(0,1000):
-      loc = (random.uniform(-5, 5), random.uniform(-5, 5), random.uniform(-5, 5))
-      print_sphere(loc, sphere, materials[random.randrange(6)])
+  for i in range(1, int(len(c)/3)):
+    print_sphere((c[i*3],c[i*3+1],c[i*3+2]), sphere, materials[random.randrange(6)])
+  #bpy.ops.view3d.view_selected()
+  bpy.ops.view3d.camera_to_view_selected()
+  set_default_camera_view()
+
   #save('/home/satya/wrk/blender/test.blend')
   #render('/home/satya/wrk/blender/image.png')  
 
