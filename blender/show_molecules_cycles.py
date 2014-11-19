@@ -1,9 +1,6 @@
 import bpy
 import random
-
-world_len_x = 0.0
-world_len_y = 0.0
-world_len_z = 0.0
+import math
 
 def get_node_index(nodes, data_type):
   idx = 0
@@ -18,7 +15,8 @@ def set_background():
   world.use_nodes = True
   nodes = world.node_tree.nodes
   node = nodes[get_node_index(nodes,'BACKGROUND')]
-  node.inputs[0].default_value = [1,1,1,1]
+  #node.inputs[0].default_value = [1,1,1,1]
+  node.inputs[0].default_value = [0,0,0,1]
   node.inputs[1].default_value = 0.3
   #print(nodes.keys())
   outN = nodes['Background'].outputs[0]
@@ -48,7 +46,7 @@ def make_material(mat_name, color):
 #from 2.55/scripts/ui/BioBlender/settings.py
 #color={CA:[0.4,1.0,0.14],(0.8,0.48,1.0), S:[1.0,0.75,0.17], P:[1.0,0.37,0.05], MG:[0.64,1.0,0.05], ZN:[0.32,0.42,1], CU:[1.0,0.67,0.0], K:[0.72,0.29,1.0], CL:[0.1,1.0,0.6], MN:[0.67,0.6,1.0]}
 
-materials = [make_material('Red', [0.46,0.1,0.1,1]), make_material('Black', [0.1,0.1,0.1,1]),  make_material('Blue', [0.24,0.41,0.7,1]), make_material('Green', [0.27, 0.8, 0.21, 1]),  make_material('Yellow', [1.0,0.5,0.0,1]), make_material('White', [0.9,0.9,0.9,1])]
+materials = [make_material('Red', [0.46,0.1,0.1,1]), make_material('Black', [0.1,0.1,0.1,1]),  make_material('Blue', [0.24,0.41,0.7,1]), make_material('Green', [0.27, 0.8, 0.21, 1]),  make_material('Yellow', [1.0,0.5,0.0,1]), make_material('White', [0.9,0.9,0.9,1]), make_material('CA', [0.4,1.0,0.14,1]), make_material('un',[0.8,0.48,1.0,1]), make_material('S', [1.0,0.75,0.17,1]), make_material('P', [1.0,0.37,0.05,1]), make_material('MG', [0.64,1.0,0.05,1]), make_material('ZN', [0.32,0.42,1,1]), make_material('CU', [1.0,0.67,0.0,1]), make_material('K', [0.72,0.29,1.0,1]), make_material('CL', [0.1,1.0,0.6,1]), make_material('MN', [0.67,0.6,1.0,1]), make_material('Grey', [0.46,0.46,0.46,1])]
 
 def make_material_cycles():
   scn = bpy.context.scene
@@ -126,18 +124,20 @@ def remove_default_cube():
     bpy.data.objects["Cube"].select = True
     bpy.ops.object.delete()
 
-def set_lamp():
+def set_lamp(world_vec):
   scn = bpy.context.scene
   # Set cycles render engine if not selected
   if not scn.render.engine == 'CYCLES':
     scn.render.engine = 'CYCLES'
   bpy.data.objects["Lamp"].data.type = 'SUN'
+  #bpy.data.objects["Lamp"].location = (world_vec[0]*2,-world_vec[1]*2,world_vec[2]*2)
   lamp = bpy.data.lamps['Lamp']
   lamp.use_nodes = True
   nodes = lamp.node_tree.nodes
   #print(nodes.keys())
   lamp_node = nodes[get_node_index(nodes,'EMISSION')]
-  lamp_node.inputs[1].default_value = 5 #Strength
+  #lamp_node.inputs[1].default_value = 5 #Strength
+  lamp_node.inputs[1].default_value = 2 #Strength
   outN = lamp_node.outputs[0]
   inN = nodes['Lamp Output'].inputs[0]
   lamp.node_tree.links.new(outN, inN)
@@ -161,37 +161,50 @@ def set_lamp():
 #            lamp.size_y = length2
 #            self.__scene.render.engine = 'CYCLES'
 #            lamp.cycles.use_multiple_importance_sampling = True
-#            lamp.use_nodes = True
+#            lamp.use_nodes = Truerue
 #            self.__scene.render.engine = tmp_engine
 
-def set_camera(location=(34,42,24), rotation=(1.08, 0.013, 2.43)):
-  bpy.data.objects["Camera"].location = location
-  bpy.data.objects["Camera"].rotation_euler = rotation
+def set_camera(world_vec):
+  #bpy.data.objects["Camera"].location = world_vec
+  bpy.data.objects["Camera"].rotation_euler = (45*math.pi/180.0,0,120*math.pi/180.0)
+  #bpy.data.objects["Camera"].lock_location = (True, True, True)
+  x,y,z = world_vec[0], world_vec[1], world_vec[2]
+  #bpy.data.cameras["Camera"].clip_end = 200
+  bpy.data.cameras["Camera"].clip_end = max(200, math.sqrt(x*x+y*y+z*z)*2)
+  bpy.ops.view3d.camera_to_view_selected()
 
 def print_planes(world_vec):
   len_x = world_vec[0]
   len_y = world_vec[1]
   len_z = world_vec[2]
   print(len_x,len_y,len_z)
+  mat = materials[16]
 
-  bpy.ops.mesh.primitive_plane_add(location=(len_x/2.0,len_y/2.0,0), rotation=(0,0,0))
-  plane = bpy.context.scene.objects.active
-  plane.name = "PlaneXY"
-  plane.select = False
-  bpy.data.objects["PlaneXY"].dimensions = (len_x+2,len_y+2,0)
+  bpy.ops.mesh.primitive_plane_add(location=(len_x/2.0,len_y/2.0,1.5), rotation=(0,0,0))
+  planeXY = bpy.context.scene.objects.active
+  planeXY.name = "PlaneXY"
+  planeXY.select = False
+  planeXY.active_material = mat
+  bpy.data.objects["PlaneXY"].dimensions = (len_x,len_y,0)
 
-  bpy.ops.mesh.primitive_plane_add(location=(0,len_y/2,len_z/2.0), rotation=(0,1.5708,0))
-  plane = bpy.context.scene.objects.active
-  plane.name = "PlaneYZ"
-  plane.select = False
-  bpy.data.objects["PlaneYZ"].dimensions = (len_z+2,len_y+2,0)
+  planeYZ = planeXY.copy()
+  planeYZ.name = "PlaneYZ"
+  planeYZ.location = (1.15,len_y/2,len_z/2)
+  planeYZ.rotation_euler = (0,1.5708,0)
+  planeYZ.data = planeXY.data.copy()
+  planeYZ.dimensions = (len_z,len_y,0)
+  planeYZ.select = False
+  bpy.context.scene.objects.link(planeYZ)
 
-  bpy.ops.mesh.primitive_plane_add(location=(len_x/2,0,len_z/2.0), rotation=(1.5708,0,0))
-  plane = bpy.context.scene.objects.active
-  plane.name = "PlaneXZ"
-  plane.select = False 
-  bpy.data.objects["PlaneXZ"].dimensions = (len_x+2,len_z+2,0)
-
+  planeXZ = planeXY.copy()
+  planeXZ.name = "PlaneXZ"
+  #planeXZ.location = (len_x/2,len_y,len_z/2.0)
+  planeXZ.location = (len_x/2,1.25,len_z/2.0)
+  planeXZ.rotation_euler = (1.5708,0,0)
+  planeXZ.data = planeXY.data.copy()
+  planeXZ.dimensions = (len_x,len_z,0)
+  planeXZ.select = False
+  bpy.context.scene.objects.link(planeXZ)
 
 def set_horizon():
   bpy.context.scene.world.horizon_color = (1,1,1)
@@ -213,8 +226,6 @@ def set_default_camera_view():
 def set_scene():
   remove_default_cube()
   set_background()
-  set_lamp()
-  #set_camera()
   #set_horizon()
   bpy.context.scene.render.engine = 'CYCLES'
   bpy.context.scene.cycles.samples = 100
@@ -230,7 +241,7 @@ def print_first_sphere(location, mat):
     sphere.name = "Sphere (%d, %d, %d)" % (location[0], location[1],
             location[2])
     sphere.location = location
-    sphere.select = True 
+    sphere.select = True
     sphere.active_material = mat
     return sphere
 
@@ -284,15 +295,17 @@ def render(filename):
 
 if __name__ == "__main__": 
   filename = '/home/satya/wrk/blender/CoordinateLog.csv'
+  #filename = '/home/satya/wrk/blender/mtcoords.csv'
   c, world_vec = load_coord_file(filename)
   set_scene()
+  set_lamp(world_vec)
   print_planes(world_vec)
   loc = (c[0], c[1], c[2])
   sphere = print_first_sphere(loc, materials[random.randrange(6)])
   for i in range(1, int(len(c)/3)):
     print_sphere((c[i*3],c[i*3+1],c[i*3+2]), sphere, materials[random.randrange(6)])
   #bpy.ops.view3d.view_selected()
-  bpy.ops.view3d.camera_to_view_selected()
+  set_camera(world_vec)
   set_default_camera_view()
 
   #save('/home/satya/wrk/blender/test.blend')
