@@ -46,7 +46,7 @@ def make_material(mat_name, color):
 #from 2.55/scripts/ui/BioBlender/settings.py
 #color={CA:[0.4,1.0,0.14],(0.8,0.48,1.0), S:[1.0,0.75,0.17], P:[1.0,0.37,0.05], MG:[0.64,1.0,0.05], ZN:[0.32,0.42,1], CU:[1.0,0.67,0.0], K:[0.72,0.29,1.0], CL:[0.1,1.0,0.6], MN:[0.67,0.6,1.0]}
 
-materials = [make_material('Red', [0.46,0.1,0.1,1]), make_material('Blue', [0.24,0.41,0.7,1]), make_material('Green', [0.27, 0.8, 0.21, 1]),  make_material('Yellow', [1.0,0.5,0.0,1]), make_material('White', [0.9,0.9,0.9,1]), make_material('CA', [0.4,1.0,0.14,1]), make_material('un',[0.8,0.48,1.0,1]), make_material('S', [1.0,0.75,0.17,1]), make_material('P', [1.0,0.37,0.05,1]), make_material('MG', [0.64,1.0,0.05,1]), make_material('ZN', [0.32,0.42,1,1]), make_material('CU', [1.0,0.67,0.0,1]), make_material('K', [0.72,0.29,1.0,1]), make_material('CL', [0.1,1.0,0.6,1]), make_material('MN', [0.67,0.6,1.0,1]), make_material('Black', [0.1,0.1,0.1,1]),  make_material('Grey', [0.46,0.46,0.46,1])]
+materials = [make_material('Red', [0.46,0.1,0.1,1]), make_material('Blue', [0.24,0.41,0.7,1]), make_material('ZN', [0.32,0.42,1,1]), make_material('CU', [1.0,0.67,0.0,1]), make_material('Green', [0.27, 0.8, 0.21, 1]),  make_material('P', [1.0,0.37,0.05,1]), make_material('MG', [0.64,1.0,0.05,1]), make_material('K', [0.72,0.29,1.0,1]), make_material('CA', [0.4,1.0,0.14,1]), make_material('White', [0.9,0.9,0.9,1]), make_material('Yellow', [1.0,0.5,0.0,1]), make_material('un',[0.8,0.48,1.0,1]), make_material('S', [1.0,0.75,0.17,1]), make_material('CL', [0.1,1.0,0.6,1]), make_material('MN', [0.67,0.6,1.0,1]), make_material('Black', [0.1,0.1,0.1,1]),  make_material('Grey', [0.46,0.46,0.46,1])]
 
 def make_material_cycles():
   scn = bpy.context.scene
@@ -344,7 +344,7 @@ if __name__ == "__main__":
   set_lamp(world_vec)
   sphere = print_first_sphere((-10,-10,-10), materials[0])
   bpy.context.scene.render.resolution_percentage = 100
-  bpy.context.scene.cycles.samples = 10
+  bpy.context.scene.cycles.samples = 100
   print_planes(world_vec, [1, 1, 1, 0, 0, 0])
   camera_rotation = (62*math.pi/180.0,0*math.pi/180.0,140*math.pi/180.0)
   set_camera(world_vec, camera_rotation)
@@ -352,7 +352,9 @@ if __name__ == "__main__":
   time = 0
   time_location = (87.85, 15.87, 43.9)
   print_time(time, time_location, camera_rotation)
-  for i in range(1): #number of frames
+  for i in range(100):
+    f.readline()
+  for i in range(100, 1000): #number of frames
     for j in range(species_size):
       time, c = load_coords(f)
       if len(c):
@@ -360,8 +362,8 @@ if __name__ == "__main__":
         for k in range(0, int(len(c)/3)):
           print_sphere((c[k*3],c[k*3+1],c[k*3+2]), sphere, materials[j])
     update_time(time)
-    #render('/home/satya/wrk/blender/image%04d.png' %i)
-    #remove_molecules()
+    render('/home/satya/wrk/blender/image%04d.png' %i)
+    remove_molecules()
 
   #save('/home/satya/wrk/blender/test.blend')
   #render('/home/satya/wrk/blender/image.png')  
