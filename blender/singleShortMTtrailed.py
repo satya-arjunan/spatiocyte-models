@@ -62,26 +62,26 @@ react.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','1']]
 react.VariableReferenceList = [['_', 'Variable:/:Kinesin','1']]
 react.SearchVacant = 1
-react.k = 25
+react.k = 250
 
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:hydrolysis')
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','1']]
 react.SearchVacant = 1
-react.k = 10000
+react.k = 100000
 
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:phosphorylate')
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP','1']]
 react.SearchVacant = 1
-react.k = 14500
+react.k = 145000
 
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:ratchet')
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP','1']]
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','1']]
 react.BindingSite = 1
-react.k = 5500
+react.k = 55000
 
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:inactive')
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','-1']]
@@ -91,7 +91,7 @@ react.k = 0
 diffuse = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePlus')
 diffuse.VariableReferenceList = [['_', 'Variable:/:MTKinesin']]
 diffuse.VariableReferenceList = [['_', 'Variable:/:actTubulin', '1']]
-diffuse.D = 0.04e-11
+diffuse.D = 0.04e-9
 
 #tagger = theSimulator.createEntity('TagProcess', 'Process:/:tagger')
 #tagger.VariableReferenceList = [['_', 'Variable:/:GFP', '-1' ]]

@@ -364,15 +364,18 @@ if __name__ == "__main__":
   set_background(background_strength)
   set_lamp(world_vec, lamp_shadow_size, lamp_strength)
   spheres = init_spheres(species_size, species_material_names)
-  bpy.context.scene.render.resolution_percentage = 30
-  bpy.context.scene.cycles.samples = 10
+  bpy.context.scene.render.resolution_percentage = 100
+  bpy.context.scene.cycles.samples = 100
+  bpy.data.scenes['Scene'].cycles.device = 'GPU'
+  bpy.data.scenes['Scene'].render.tile_x = 512
+  bpy.data.scenes['Scene'].render.tile_y = 768
   print_planes(world_vec, visible_planes, plane_scale)
   set_camera(world_vec, camera_rotation)
   set_default_camera_view()
   time = 0
   time_location = (87.85, 15.87, 43.9)
   print_time(time, time_location, camera_rotation)
-  for i in range(1): #number of frames
+  for i in range(1000): #number of frames
     for j in range(species_size):
       time, c = load_coords(f)
       if len(c):
@@ -380,8 +383,8 @@ if __name__ == "__main__":
         for k in range(0, int(len(c)/3)):
           print_sphere((c[k*3],c[k*3+1],c[k*3+2]), spheres[j], materials[j])
     update_time(time)
-    #render('/home/satya/wrk/blender/image%04d.png' %i)
-    #remove_molecules()
+    render('/home/satya/wrk/blender/image%04d.png' %i)
+    remove_molecules()
 
   #save('/home/satya/wrk/blender/test.blend')
   #render('/home/satya/wrk/blender/image.png')  
