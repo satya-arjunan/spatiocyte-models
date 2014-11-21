@@ -10,14 +10,14 @@ def get_node_index(nodes, data_type):
     idx = idx + 1
   return 1
 
-def set_background():
+def set_background(strength):
   world = bpy.context.scene.world
   world.use_nodes = True
   nodes = world.node_tree.nodes
   node = nodes[get_node_index(nodes,'BACKGROUND')]
   node.inputs[0].default_value = [1,1,1,1]
   #node.inputs[0].default_value = [0,0,0,1]
-  node.inputs[1].default_value = 0.4
+  node.inputs[1].default_value = strength
   #print(nodes.keys())
   outN = nodes['Background'].outputs[0]
   inN = nodes['World Output'].inputs[0]
@@ -46,7 +46,18 @@ def make_material(mat_name, color):
 #from 2.55/scripts/ui/BioBlender/settings.py
 #color={CA:[0.4,1.0,0.14],(0.8,0.48,1.0), S:[1.0,0.75,0.17], P:[1.0,0.37,0.05], MG:[0.64,1.0,0.05], ZN:[0.32,0.42,1], CU:[1.0,0.67,0.0], K:[0.72,0.29,1.0], CL:[0.1,1.0,0.6], MN:[0.67,0.6,1.0]}
 
-materials = [make_material('Red', [0.46,0.1,0.1,1]), make_material('Blue', [0.24,0.41,0.7,1]), make_material('ZN', [0.32,0.42,1,1]), make_material('CU', [1.0,0.67,0.0,1]), make_material('Green', [0.27, 0.8, 0.21, 1]),  make_material('P', [1.0,0.37,0.05,1]), make_material('MG', [0.64,1.0,0.05,1]), make_material('K', [0.72,0.29,1.0,1]), make_material('CA', [0.4,1.0,0.14,1]), make_material('White', [0.9,0.9,0.9,1]), make_material('Yellow', [1.0,0.5,0.0,1]), make_material('un',[0.8,0.48,1.0,1]), make_material('S', [1.0,0.75,0.17,1]), make_material('CL', [0.1,1.0,0.6,1]), make_material('MN', [0.67,0.6,1.0,1]), make_material('Black', [0.1,0.1,0.1,1]),  make_material('Grey', [0.46,0.46,0.46,1])]
+materials = [make_material('Red', [0.46,0.1,0.1,1]), make_material('Blue',
+  [0.24,0.41,0.7,1]), make_material('Green', [0.27, 0.8, 0.21, 1]),
+  make_material('Yellow', [1.0,0.5,0.0,1]), make_material('White', [1,1,1,1]), make_material('WhiteGray', [0.9,0.9,0.9,1]), make_material('BrightGreen', [0.4,1.0,0.14,1]),
+  make_material('WhiteMagenta',[0.8,0.48,1.0,1]), make_material('WhiteYellow',
+    [1.0,0.75,0.17,1]), make_material('Orange', [1.0,0.37,0.05,1]),
+  make_material('BrightYellowGreen', [0.64,1.0,0.05,1]),
+  make_material('LightBlue', [0.32,0.42,1,1]), make_material('BrightYellow',
+    [1.0,0.67,0.0,1]), make_material('Magenta', [0.72,0.29,1.0,1]),
+  make_material('Cyan', [0.1,1.0,0.6,1]), make_material('WhitePurple',
+    [0.67,0.6,1.0,1]), make_material('Black', [0.1,0.1,0.1,1]),
+  make_material('Grey', [0.46,0.46,0.46,1]), make_material('DarkOrange',
+    [0.845,0.179,0.102,1])] 
 
 def make_material_cycles():
   scn = bpy.context.scene
@@ -124,7 +135,7 @@ def remove_default_cube():
     bpy.data.objects["Cube"].select = True
     bpy.ops.object.delete()
 
-def set_lamp(world_vec):
+def set_lamp(world_vec, shadow_size, strength):
   scn = bpy.context.scene
   # Set cycles render engine if not selected
   if not scn.render.engine == 'CYCLES':
@@ -132,13 +143,12 @@ def set_lamp(world_vec):
   bpy.data.objects["Lamp"].data.type = 'SUN'
   #bpy.data.objects["Lamp"].location = (world_vec[0]*2,-world_vec[1]*2,world_vec[2]*2)
   lamp = bpy.data.lamps['Lamp']
+  lamp.shadow_soft_size = shadow_size
   lamp.use_nodes = True
   nodes = lamp.node_tree.nodes
   #print(nodes.keys())
   lamp_node = nodes[get_node_index(nodes,'EMISSION')]
-  #lamp_node.inputs[1].default_value = 5 #Strength
-  #lamp_node.inputs[1].default_value = 2 #Strength
-  lamp_node.inputs[1].default_value = 1 #Strength
+  lamp_node.inputs[1].default_value = strength
   outN = lamp_node.outputs[0]
   inN = nodes['Lamp Output'].inputs[0]
   lamp.node_tree.links.new(outN, inN)
@@ -157,7 +167,6 @@ def set_lamp(world_vec):
 #            lamp.distance = 500.0
 #            lamp.energy = 1.0
 #            lamp.use_specular = False
-#            lamp.size = width2
 #            lamp.shape = 'RECTANGLE'
 #            lamp.size_y = length2
 #            self.__scene.render.engine = 'CYCLES'
@@ -178,20 +187,18 @@ def set_camera(world_vec, rotation):
   bpy.data.cameras["Camera"].clip_end = max(200, math.sqrt(x*x+y*y+z*z)*2)
   #bpy.ops.view3d.camera_to_view_selected()
 
-def print_planes(world_vec, show_planes):
+def print_planes(world_vec, show_planes, scale):
   len_x = world_vec[0]
   len_y = world_vec[1]
   len_z = world_vec[2]
-  print(len_x,len_y,len_z)
-  mat = materials[16]
 
   bpy.ops.mesh.primitive_plane_add(location=(len_x/2.0+1,len_y/2.0+1.25,1.5), rotation=(0,0,0))
   planeXY = bpy.context.scene.objects.active
   planeXY.name = "PlaneXY"
   planeXY.select = True
-  planeXY.active_material = mat
+  planeXY.active_material = bpy.data.materials['Grey']
   if show_planes[0]:
-    bpy.data.objects["PlaneXY"].dimensions = (len_x,len_y,0)
+    bpy.data.objects["PlaneXY"].dimensions = (len_x*scale,len_y*scale,0)
 
   if show_planes[1]:
     planeYZ = planeXY.copy()
@@ -199,7 +206,7 @@ def print_planes(world_vec, show_planes):
     planeYZ.location = (1.15,len_y/2+1.25,len_z/2+1.5)
     planeYZ.rotation_euler = (0,1.5708,0)
     planeYZ.data = planeXY.data.copy()
-    planeYZ.dimensions = (len_z,len_y,0)
+    planeYZ.dimensions = (len_z*scale,len_y*scale,0)
     planeYZ.select = True
     bpy.context.scene.objects.link(planeYZ)
 
@@ -209,7 +216,7 @@ def print_planes(world_vec, show_planes):
     planeXZ.location = (len_x/2+1,1.25,len_z/2.0+1.5)
     planeXZ.rotation_euler = (1.5708,0,0)
     planeXZ.data = planeXY.data.copy()
-    planeXZ.dimensions = (len_x,len_z,0)
+    planeXZ.dimensions = (len_x*scale,len_z*scale,0)
     planeXZ.select = True
     bpy.context.scene.objects.link(planeXZ)
 
@@ -219,7 +226,7 @@ def print_planes(world_vec, show_planes):
     planeXZm.location = (len_x/2+1,1.25+len_y,len_z/2.0+1.5)
     planeXZm.rotation_euler = (1.5708,0,0)
     planeXZm.data = planeXY.data.copy()
-    planeXZm.dimensions = (len_x,len_z,0)
+    planeXZm.dimensions = (len_x*scale,len_z*scale,0)
     planeXZm.select = True
     bpy.context.scene.objects.link(planeXZm)
 
@@ -229,7 +236,7 @@ def print_planes(world_vec, show_planes):
     planeXYm.location = (len_x/2.0+1,len_y/2.0+1.25,1.5+len_z)
     planeXYm.rotation_euler = rotation=(0,0,0)
     planeXYm.data = planeXY.data.copy()
-    planeXYm.dimensions = (len_x,len_y,0)
+    planeXYm.dimensions = (len_x*scale,len_y*scale,0)
     planeXYm.select = True
     bpy.context.scene.objects.link(planeXYm)
 
@@ -252,34 +259,40 @@ def set_default_camera_view():
 
 def set_scene():
   remove_default_cube()
-  set_background()
   #set_horizon()
   bpy.context.scene.render.engine = 'CYCLES'
   #bpy.context.scene.render.resolution_percentage = 60
 
-def print_first_sphere(location, mat): 
-    bpy.ops.object.select_all(action='DESELECT')
-    bpy.ops.mesh.primitive_uv_sphere_add(size=0.5)
-    sphere = bpy.context.scene.objects.active
-    polygons = sphere.data.polygons
-    for i in polygons:
-      i.use_smooth = True
-    sphere.name = "First Sphere (%d, %d, %d)" % (location[0], location[1],
-            location[2])
-    sphere.location = location
-    sphere.select = False
-    sphere.active_material = mat
-    return sphere
+def init_spheres(species_size, species_material_names): 
+  delta = 0.01
+  size = 0.5
+  location = (-10,-10,-10)
+  spheres = []
+  bpy.ops.object.select_all(action='DESELECT')
+  for i in range(species_size):
+    bpy.ops.mesh.primitive_uv_sphere_add(size=size)
+    spheres.append(bpy.context.scene.objects.active)
+    polygons = spheres[i].data.polygons
+    for j in polygons:
+      j.use_smooth = True
+    spheres[i].name = "InitSphere %d" % (i)
+    spheres[i].location = location
+    spheres[i].select = False
+    spheres[i].hide_render = True
+    spheres[i].active_material = bpy.data.materials[species_material_names[i]]
+    size = size+delta
+  return spheres
 
 def print_sphere(location, sphere, mat): 
-    ob = sphere.copy()
-    ob.name = "Sphere (%d, %d, %d)" % (location[0], location[1], location[2])
-    ob.location = location
-    ob.data = sphere.data.copy()
-    ob.active_material = mat
-    ob.select = False
-    bpy.context.scene.objects.link(ob)
-    return ob
+  ob = sphere.copy()
+  ob.name = "Sphere (%d, %d, %d)" % (location[0], location[1], location[2])
+  ob.location = location
+  ob.data = sphere.data.copy()
+  #ob.active_material = mat
+  ob.select = False
+  ob.hide_render = False
+  bpy.context.scene.objects.link(ob)
+  return ob
 
 def init_coord_file(filename):
   f = open(filename, 'r')
@@ -308,7 +321,7 @@ def save(filename):
 
 def render(filename):
   bpy.data.scenes['Scene'].render.filepath = filename
-  bpy.ops.render.render( write_still=True )
+  bpy.ops.render.render(write_still=True)
 
 def remove_molecules():
   bpy.ops.object.select_all(action='DESELECT')
@@ -333,37 +346,42 @@ def update_time(time):
 
 def print_time(time, location, rotation):
   bpy.ops.object.text_add(enter_editmode=True, location=location, rotation=rotation)
-  #ob = bpy.context.active_object
-  #ob.data.size = 2
-  #ob.data.materials.append(color)
+  ob = bpy.context.active_object
+  ob.active_material = bpy.data.materials['White']
 
 if __name__ == "__main__": 
+  lamp_shadow_size = 0.08
+  lamp_strength = 1.5
+  plane_scale = 5
+  background_strength = 0.1
+  visible_planes = [1, 1, 1, 0, 0, 0]
+  camera_rotation = (62*math.pi/180.0,0*math.pi/180.0,140*math.pi/180.0)
   filename = '/home/satya/wrk/blender/mtcoords.csv'
+  species_material_names = ['Red','DarkOrange','DarkOrange','Yellow','Blue',
+      'Green']
   f, world_vec, species_size = init_coord_file(filename)
   set_scene()
-  set_lamp(world_vec)
-  sphere = print_first_sphere((-10,-10,-10), materials[0])
-  bpy.context.scene.render.resolution_percentage = 100
-  bpy.context.scene.cycles.samples = 100
-  print_planes(world_vec, [1, 1, 1, 0, 0, 0])
-  camera_rotation = (62*math.pi/180.0,0*math.pi/180.0,140*math.pi/180.0)
+  set_background(background_strength)
+  set_lamp(world_vec, lamp_shadow_size, lamp_strength)
+  spheres = init_spheres(species_size, species_material_names)
+  bpy.context.scene.render.resolution_percentage = 30
+  bpy.context.scene.cycles.samples = 10
+  print_planes(world_vec, visible_planes, plane_scale)
   set_camera(world_vec, camera_rotation)
   set_default_camera_view()
   time = 0
   time_location = (87.85, 15.87, 43.9)
   print_time(time, time_location, camera_rotation)
-  for i in range(100):
-    f.readline()
-  for i in range(100, 1000): #number of frames
+  for i in range(1): #number of frames
     for j in range(species_size):
       time, c = load_coords(f)
       if len(c):
         loc = (c[0], c[1], c[2])
         for k in range(0, int(len(c)/3)):
-          print_sphere((c[k*3],c[k*3+1],c[k*3+2]), sphere, materials[j])
+          print_sphere((c[k*3],c[k*3+1],c[k*3+2]), spheres[j], materials[j])
     update_time(time)
-    render('/home/satya/wrk/blender/image%04d.png' %i)
-    remove_molecules()
+    #render('/home/satya/wrk/blender/image%04d.png' %i)
+    #remove_molecules()
 
   #save('/home/satya/wrk/blender/test.blend')
   #render('/home/satya/wrk/blender/image.png')  
