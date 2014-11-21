@@ -45,13 +45,13 @@ react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process
 react.VariableReferenceList = [['_', 'Variable:/:Kinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:Tubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','1']]
-react.k = 2.5863133e-20
+react.k = 2.5863133e-18
 
 react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:explicitAttachAct')
 react.VariableReferenceList = [['_', 'Variable:/:Kinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','1']]
-react.k = 2.5863133e-19
+react.k = 2.5863133e-18
 
 diffuse = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseKinesin')
 diffuse.VariableReferenceList = [['_', 'Variable:/:Kinesin']]
@@ -62,7 +62,7 @@ react.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','1']]
 react.VariableReferenceList = [['_', 'Variable:/:Kinesin','1']]
 react.SearchVacant = 1
-react.k = 250
+react.k = 2.5
 
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:hydrolysis')
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP','-1']]
@@ -74,7 +74,7 @@ react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:phospho
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP','1']]
 react.SearchVacant = 1
-react.k = 145000
+react.k = 14500
 
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:ratchet')
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','-1']]
@@ -86,12 +86,12 @@ react.k = 55000
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:inactive')
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:Tubulin','1']]
-react.k = 0
+react.k = 10000
 
 diffuse = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePlus')
 diffuse.VariableReferenceList = [['_', 'Variable:/:MTKinesin']]
 diffuse.VariableReferenceList = [['_', 'Variable:/:actTubulin', '1']]
-diffuse.D = 0.04e-9
+diffuse.D = 0.04e-10
 
 #tagger = theSimulator.createEntity('TagProcess', 'Process:/:tagger')
 #tagger.VariableReferenceList = [['_', 'Variable:/:GFP', '-1' ]]
@@ -110,7 +110,7 @@ coord.VariableReferenceList = [['_', 'Variable:/:TubulinP']]
 coord.VariableReferenceList = [['_', 'Variable:/:Kinesin']]
 coord.VariableReferenceList = [['_', 'Variable:/:MTKinesin']]
 coord.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP']]
-coord.LogInterval = 1e-5
+coord.LogInterval = 8e-6
 
 visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:visualLogger')
 visualLogger.VariableReferenceList = [['_', 'Variable:/:Tubulin']]
@@ -120,7 +120,7 @@ visualLogger.VariableReferenceList = [['_', 'Variable:/:Kinesin']]
 visualLogger.VariableReferenceList = [['_', 'Variable:/:actTubulin']]
 visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesin']]
 visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP']]
-visualLogger.LogInterval = 1e-5
+visualLogger.LogInterval = 8e-6
 
 Microtubule = theSimulator.createEntity('MicrotubuleProcess', 'Process:/:Microtubule')
 Microtubule.OriginX = 0

@@ -358,7 +358,7 @@ if __name__ == "__main__":
   camera_rotation = (62*math.pi/180.0,0*math.pi/180.0,140*math.pi/180.0)
   filename = '/home/satya/wrk/blender/mtcoords.csv'
   species_material_names = ['Red','DarkOrange','DarkOrange','Yellow','Blue',
-      'Green']
+      'Blue']
   f, world_vec, species_size = init_coord_file(filename)
   set_scene()
   set_background(background_strength)
