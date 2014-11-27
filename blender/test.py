@@ -287,12 +287,11 @@ def print_sphere(location, sphere, mat):
   ob = sphere.copy()
   ob.name = "Sphere (%d, %d, %d)" % (location[0], location[1], location[2])
   ob.location = location
+  ob.location = location
   ob.data = sphere.data.copy()
-  #ob.active_material = mat
-  ob.select = False
+  ob.select = True
   ob.hide_render = False
   bpy.context.scene.objects.link(ob)
-  return ob
 
 def init_coord_file(filename):
   f = open(filename, 'r')
@@ -323,12 +322,28 @@ def render(filename):
   bpy.data.scenes['Scene'].render.filepath = filename
   bpy.ops.render.render(write_still=True)
 
-def remove_molecules():
+def remove_molecules_old():
   bpy.ops.object.select_all(action='DESELECT')
   bpy.ops.object.select_pattern(pattern="Sphere*")
   bpy.ops.object.delete()
+  for mesh in bpy.data.meshes:
+    if(mesh.users==0):
+      bpy.data.meshes.remove(mesh)
+
+def remove_molecules():
+  print("rem1",len(bpy.data.objects))
+  bpy.ops.object.delete()
+  for ob in bpy.context.scene.objects:
+    if (ob.select == True):
+      bpy.context.scene.objects.unlink(ob)
+  print("rem2",len(bpy.data.objects))
+  for mesh in bpy.data.meshes:
+    if(mesh.users==0):
+      bpy.data.meshes.remove(mesh)
+  print("rem3",len(bpy.data.objects))
 
 def update_time(time):
+  bpy.data.objects["Text"].select = True
   bpy.ops.object.mode_set(mode='EDIT')
   bpy.ops.font.delete()
   if time < 1e-3:
@@ -343,6 +358,7 @@ def update_time(time):
     text = "t = %d h %d m %d s" % int(time/3600), int(aTime)%3600/60, int(time)%3600%60
   bpy.ops.font.text_insert(text=text)
   bpy.ops.object.mode_set(mode='OBJECT')
+  bpy.data.objects["Text"].select = False
 
 def print_time(time, location, rotation):
   bpy.ops.object.text_add(enter_editmode=True, location=location, rotation=rotation)
@@ -372,19 +388,27 @@ if __name__ == "__main__":
   print_planes(world_vec, visible_planes, plane_scale)
   set_camera(world_vec, camera_rotation)
   set_default_camera_view()
+  bpy.ops.object.select_all(action='DESELECT')
   time = 0
   time_location = (87.85, 15.87, 43.9)
   print_time(time, time_location, camera_rotation)
-  for i in range(1000): #number of frames
+  for i in range(100): #number of frames
     for j in range(species_size):
+      print("before load coords")
       time, c = load_coords(f)
+      print("after load coords")
       if len(c):
         loc = (c[0], c[1], c[2])
         for k in range(0, int(len(c)/3)):
           print_sphere((c[k*3],c[k*3+1],c[k*3+2]), spheres[j], materials[j])
+        print('done sphere.................:', len(c)/3)
+    print("update time")
     update_time(time)
-    render('/home/satya/wrk/blender/image%04d.png' %i)
+    bpy.context.scene.update()
+    #render('/home/satya/wrk/blender/image%04d.png' %i)
+    print("removing mols")
     remove_molecules()
+    print("done removing mols")
 
   #save('/home/satya/wrk/blender/test.blend')
   #render('/home/satya/wrk/blender/image.png')  
