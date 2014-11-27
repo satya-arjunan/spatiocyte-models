@@ -14,7 +14,6 @@ theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 1
 
 theSimulator.createEntity('Variable', 'Variable:/:A').Value = 100
 theSimulator.createEntity('Variable', 'Variable:/:B').Value = 100
-theSimulator.createEntity('Variable', 'Variable:/:C').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:D').Value = N
 
 #logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
@@ -29,10 +28,9 @@ populator.VariableReferenceList = [['_', 'Variable:/:D']]
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:reaction1')
 binder.VariableReferenceList = [['_', 'Variable:/:A','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:B','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/:C','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:B','1']]
 #binder.k = 8.48e-20
-binder.p = 1
+binder.p = 0.1
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseA')
 diffuser.VariableReferenceList = [['_', 'Variable:/:A']]
@@ -42,16 +40,12 @@ diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseB')
 diffuser.VariableReferenceList = [['_', 'Variable:/:B']]
 diffuser.D = 10e-12
 
-diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseC')
-diffuser.VariableReferenceList = [['_', 'Variable:/:C']]
-diffuser.D = 10e-12
-
 log = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
 log.VariableReferenceList = [['_', 'Variable:/:A']]
 log.Iterations = 100
 log.LogEnd = 0.0001
 log.LogInterval = 1e-6
-log.FileName = "log%db.csv" %(N)
+log.FileName = "log%dirl3.csv" %(N)
 
 #life = theSimulator.createEntity('LifetimeLogProcess', 'Process:/:lifetime')
 #life.VariableReferenceList = [['_', 'Variable:/:A']]

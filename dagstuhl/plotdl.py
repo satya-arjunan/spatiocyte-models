@@ -15,14 +15,13 @@ N = [0, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 1
 
 filenames = []
 for i in N:
-  filenames.append('log%drl.csv' %(i))
+  filenames.append('log%ddl.csv' %(i))
 
 k = []
 L = 50e-9
 V = L*L*L
 n_A = 100.0
 n_B = 100.0
-const = V/(n_A*n_B)
 k = []
 for name in filenames:
   f = open(name, 'r')
@@ -30,15 +29,23 @@ for name in filenames:
   kt = 0.0
   for i in range(90):
     second = f.readline().strip().split(',')
-    dn_A = float(first[1])-float(second[1])
+    n_At = float(second[1])
+    dn_A = float(first[1])-n_At
     dt = float(second[0])-float(first[0])
-    kt = kt+const*dn_A/dt
+    kt = kt+V/(n_At*n_B)*dn_A/dt
     first = second
   k.append(kt/90.0)
+
+rv = 0.5e-9
+total_voxels = 199680
+V_actual = 4.0*math.pow(2,0.5)*math.pow(rv,3)*total_voxels
+r_effective = 2.0*(math.pow(3,0.5)-1)*rv
+V_crowder = 4.0/3.0*math.pi*math.pow(r_effective,3)
 
 max_occupancy = (4.0/3.0*math.pi)/(4*math.pow(2.0,0.5))
 for i in range(len(N)):
   N[i] = N[i]/199680.0*max_occupancy
+  #N[i] = N[i]*V_crowder/V_actual
 
 print k
 plot(N, k, ls='-', color='b', linewidth=1)
