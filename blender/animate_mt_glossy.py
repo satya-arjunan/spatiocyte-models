@@ -374,17 +374,16 @@ if __name__ == "__main__":
   plane_scale = 5
   background_strength = 0.1
   visible_planes = [1, 1, 1, 0, 0, 0]
-  camera_rotation = (66*math.pi/180.0,0*math.pi/180.0,131*math.pi/180.0)
-  camera_location = (107.9, 60, 40.36)
-  time_location = (86.6, 15.87, 31.15)
-  #plane_disp = [1.0, 1.25, 1.5]
-  plane_disp = [0.5, 0, 0.5]
+  camera_rotation = (62*math.pi/180.0,0*math.pi/180.0,140*math.pi/180.0)
+  camera_location = (107.4,84.0,61.4)
+  time_location = (87.85, 15.87, 43.9)
+  plane_disp = [1.0, 1.25, 1.5]
+  #plane_disp = [0.5, 0, 0.5]
   bpy.data.scenes['Scene'].render.tile_x = 256
   bpy.data.scenes['Scene'].render.tile_y = 256
   plane_material_name = 'White'
   filename = 'CoordinateLog.csv'
-  species_material_names = ['Red_glossy', 'DarkOrange_glossy',
-          'DarkOrange_glossy', 'Yellow_glossy','Blue_glossy']
+  species_material_names = ['Red_glossy', 'DarkOrange_glossy', 'DarkOrange_glossy', 'Yellow_glossy','Blue_glossy', 'Blue_glossy']
   #Uncomment the following if you have a discrete GPU device
   bpy.data.scenes['Scene'].cycles.device = 'GPU'
   bpy.data.scenes['Scene'].render.tile_x = 512
