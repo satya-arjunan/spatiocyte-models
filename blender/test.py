@@ -319,7 +319,7 @@ def save(filename):
   bpy.ops.wm.save_as_mainfile(filepath=filename)
 
 def render(filename):
-  bpy.data.scenes['Scene'].render.filepath = filename
+  bpy.data.scenes[0].render.filepath = filename
   bpy.ops.render.render(write_still=True)
 
 def remove_molecules_old():
@@ -380,8 +380,8 @@ if __name__ == "__main__":
   set_background(background_strength)
   set_lamp(world_vec, lamp_shadow_size, lamp_strength)
   spheres = init_spheres(species_size, species_material_names)
-  bpy.context.scene.render.resolution_percentage = 100
-  bpy.context.scene.cycles.samples = 100
+  bpy.context.scene.render.resolution_percentage = 10
+  bpy.context.scene.cycles.samples = 5
   bpy.data.scenes['Scene'].cycles.device = 'GPU'
   bpy.data.scenes['Scene'].render.tile_x = 512
   bpy.data.scenes['Scene'].render.tile_y = 768
@@ -403,11 +403,17 @@ if __name__ == "__main__":
           print_sphere((c[k*3],c[k*3+1],c[k*3+2]), spheres[j], materials[j])
         print('done sphere.................:', len(c)/3)
     print("update time")
-    update_time(time)
+    #update_time(time)
+    print("done update time")
     bpy.context.scene.update()
-    #render('/home/satya/wrk/blender/image%04d.png' %i)
-    print("removing mols")
-    remove_molecules()
+    print("add new")
+    bpy.ops.scene.new(type='EMPTY')
+    print("delete")
+    print(list(bpy.data.scenes))
+    next_scene_name = bpy.data.scenes[1].name
+    #bpy.ops.scene.delete()
+    bpy.data.scenes.remove(bpy.data.scenes[0])
+    render('/home/satya/wrk/blender/test%04d.png' %i)
     print("done removing mols")
 
   #save('/home/satya/wrk/blender/test.blend')

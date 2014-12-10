@@ -366,7 +366,8 @@ def print_time(time, location, rotation):
 if __name__ == "__main__": 
   #Edit the following parameters
   #START
-  total_frames = 1000
+  start_frame = 734
+  end_frame = 1000
   resolution_percentage = 100
   render_samples = 100
   lamp_shadow_size = 0.08
@@ -402,7 +403,10 @@ if __name__ == "__main__":
   set_default_camera_view()
   time = 0
   print_time(time, time_location, camera_rotation)
-  for i in range(total_frames):
+  for i in range(start_frame):
+    for j in range(species_size):
+      time, c = load_coords(f)
+  for i in range(start_frame, end_frame):
     for j in range(species_size):
       time, c = load_coords(f)
       if len(c):
