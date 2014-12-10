@@ -312,7 +312,7 @@ def remove_molecules():
   bpy.ops.object.delete()
 
 if __name__ == "__main__": 
-  filename = '/home/satya/wrk/blender/CoordinateLog.csv'
+  filename = 'CoordinateLog.csv'
   #filename = '/home/satya/wrk/blender/mtcoords.csv'
   f, world_vec, species_size = init_coord_file(filename)
   set_scene()
@@ -322,7 +322,7 @@ if __name__ == "__main__":
   set_camera(world_vec)
   set_default_camera_view()
   bpy.context.scene.render.resolution_percentage = 100
-  for i in range(1000): #number of frames
+  for i in range(1): #number of frames
     for j in range(species_size):
       c = load_coords(f)
       if len(c):

@@ -49,5 +49,8 @@ for i in range(len(N)):
 
 print k
 plot(N, k, ls='-', color='b', linewidth=1)
+ylabel('Reaction rate, k', size=17)
+xlabel('Occupied volume fraction, $\phi$', size=17)
+savefig('crowding_arjunan.pdf', format='pdf', dpi=1000)
 show()
 
