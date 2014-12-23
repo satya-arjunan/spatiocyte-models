@@ -366,8 +366,8 @@ def print_time(time, location, rotation):
 if __name__ == "__main__": 
   #Edit the following parameters
   #START
-  start_frame = 734
-  end_frame = 1000
+  start_frame = 213
+  end_frame = 214
   resolution_percentage = 100
   render_samples = 100
   lamp_shadow_size = 0.08
