@@ -30,8 +30,8 @@
 
 import math
 
-start_frame = 907
-end_frame = 908
+start_frame = 100
+end_frame = 101
 resolution_x = 1400
 resolution_y = 406
 resolution_percentage = 100
