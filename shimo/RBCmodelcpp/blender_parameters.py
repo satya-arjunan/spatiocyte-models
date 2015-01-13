@@ -31,9 +31,9 @@
 import math
 
 start_frame = 212
-end_frame = 220
+end_frame = 213
 resolution_x = 1920
-resolution_y = 1080
+resolution_y = 1920
 resolution_percentage = 100
 render_samples = 200
 lamp_shadow_size = 0.1
@@ -42,8 +42,8 @@ plane_scale = 5
 background_strength = 0.4
 species_radius_delta = 0.001
 visible_planes = [0, 1, 0, 0, 0, 0]
-camera_rotation = (136.78*math.pi/180.0, math.pi, 88.8*math.pi/180.0)
-camera_location = (54.21, 38.0, 131.41)
+camera_rotation = (120*math.pi/180.0, math.pi, 90*math.pi/180.0)
+camera_location = (50, 35, 105)
 time_location = (37.15, 89.48, 125.9)
 lamp_location = (7.88, 37.38, 31.51)
 lamp_rotation = (-70.36*math.pi/180.0, 42.52*math.pi/180.0, -30.1*math.pi/180.0)
@@ -56,7 +56,8 @@ GPU_device = True
 #for GPU device, set tile_x = 512, tile_y = 512
 tile_x = 512
 tile_y = 512
-plane_material_name = 'White'
+plane_material_name = 'Grey'
 time_material_name = 'Black'
 filename = 'CoordinateLog.csv'
-species_material_names = ['DarkBlue_glossy', 'Red_glossy', 'DarkBlue_glossy', 'DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy', 'Yellow_glossy', 'DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy', 'DarkBlue_glossy']
+#species_material_names = ['DarkBlue_glossy', 'Red_glossy', 'DarkBlue_glossy', 'DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkGreen_glossy','DarkGreen_glossy', 'Yellow_glossy', 'DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy', 'DarkGreen_glossy']
+species_material_names = ['DarkBlue', 'DarkRed', 'DarkBlue', 'DarkBlue','DarkBlue','DarkBlue','DarkBlue','DarkBlue','DarkGreen','DarkGreen', 'DarkOrange', 'DarkBlue','DarkBlue','DarkBlue','DarkBlue','DarkBlue','DarkBlue','DarkBlue', 'DarkGreen']
