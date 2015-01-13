@@ -30,33 +30,38 @@
 
 import math
 
-start_frame = 212
-end_frame = 220
-resolution_x = 1920
-resolution_y = 1080
+<<<<<<< HEAD
+#start_frame = 907
+#end_frame = 908
+=======
+>>>>>>> 5fedbbd61839df9d71dfa03d1725e76d3ea7eab3
+start_frame = 100
+end_frame = 101
+resolution_x = 1400
+resolution_y = 406
 resolution_percentage = 100
-render_samples = 200
-lamp_shadow_size = 0.1
-lamp_strength = 0.5
+render_samples = 20
+lamp_shadow_size = 0.08
+lamp_strength = 1
 plane_scale = 5
-background_strength = 0.4
-species_radius_delta = 0.001
-visible_planes = [0, 1, 0, 0, 0, 0]
-camera_rotation = (136.78*math.pi/180.0, math.pi, 88.8*math.pi/180.0)
-camera_location = (54.21, 38.0, 131.41)
-time_location = (37.15, 89.48, 125.9)
-lamp_location = (7.88, 37.38, 31.51)
-lamp_rotation = (-70.36*math.pi/180.0, 42.52*math.pi/180.0, -30.1*math.pi/180.0)
+background_strength = 0.5
+species_radius_delta = 0.01
+visible_planes = [1, 1, 1, 0, 0, 0]
+camera_rotation = (76.02*math.pi/180.0, 0*math.pi/180.0, 125.77*math.pi/180.0)
+camera_location = (303, 239.86, 73.46)
+time_location = (157.39, 217.15, 122.26)
+lamp_location = (7.88, 37.38, 73.27)
+lamp_rotation = (-7.82*math.pi/180.0,0.69*math.pi/180.0,92.31*math.pi/180.0)
 #lamp_location = (4.08, 1.0, 5.9)
 #lamp_rotation = (37.26*math.pi/180.0,3.16*math.pi/180.0,106.94*math.pi/180.0)
-plane_disp = [12.4, 1.25, 0.0]
-#plane_disp = [0.5, 0, 0.5]
+#plane_disp = [1.0, 1.25, 1.5]
+plane_disp = [0.5, 0, 0.4]
 #set True if using GPU device to render
 GPU_device = True
 #for GPU device, set tile_x = 512, tile_y = 512
 tile_x = 512
 tile_y = 512
-plane_material_name = 'White'
 time_material_name = 'Black'
+plane_material_name = 'White'
 filename = 'CoordinateLog.csv'
-species_material_names = ['DarkBlue_glossy', 'Red_glossy', 'DarkBlue_glossy', 'DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy', 'Yellow_glossy', 'DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy','DarkBlue_glossy', 'DarkBlue_glossy']
+species_material_names = ['DarkRed_glossy', 'DarkRed_glossy', 'DarkGreen_glossy', 'DarkGreen_glossy','DarkGreen_glossy', 'DarkGreen']
