@@ -1,5 +1,11 @@
 import math
-from pylab import *
+from matplotlib.pylab import *
+
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+rc('text', usetex=True)
+matplotlib.rcParams['text.latex.preamble'].append(r'\usepackage{amsmath}')
+matplotlib.rcParams['text.latex.preamble'].append(r'\usepackage[helvet]{sfmath}')
+
 
 #A+B -> C (with rate k)
 #d[A]/dt = -k[A][B]
@@ -21,13 +27,22 @@ Np = []
 for i in range(len(N)):
   Np.append(N[i]/199680.0*max_occupancy)
 
-R = ['dl','lrl','irl','rl']
+#dl = diffusion limited
+#lrl = low reaction limited
+#irl = intermediate reaction limited
+#rl = reaction limited
 
+R = ['dl','lrl','irl','rl']
+species = [r'$k_0=84.9\ \mathrm{nm}^3/\mu s^{-1}$ (diffusion-limited)', r'$k_0=42.5\ \mathrm{nm}^3/\mu s^{-1}$', r'$k_0=8.49\ \mathrm{nm}^3/\mu s^{-1}$', r'$k_0=0.85\ \mathrm{nm}^3/\mu s^{-1}$ (activation-limited)']
+colors = ['y', 'r', 'b', 'm', 'c', 'g']
+lineCnt = 0
+
+markers = []
 for s in R:
+  max_k= 0
   filenames = []
   for i in N:
     filenames.append('log%d%s.csv' %(i,s))
-  print filenames
   k = []
   for name in filenames:
     f = open(name, 'r')
@@ -39,9 +54,22 @@ for s in R:
       dt = float(second[0])-float(first[0])
       kt = kt+const*dn_A/dt
       first = second
-    k.append(kt/90.0)
-  print k
-  plot(Np, k, ls='-', linewidth=1)
+    val = kt/90.0
+    if (val > max_k):
+      max_k = val
+    k.append(val)
+  #normalize
+  for i in range(len(k)):
+    k[i] = k[i]/max_k
+  plot(Np, k, ls='-', color=colors[lineCnt], linewidth=1)
+  markers.append(Rectangle((0, 0), 1, 1, fc=colors[lineCnt]))
+  lineCnt = lineCnt + 1
+
+legend(markers, species, loc='upper center', labelspacing=0.2, handletextpad=0.2, fancybox=True)
+ylim(0,1.4)
+ylabel('Normalized simulated reaction rate, k', size=17)
+xlabel('Occupied volume fraction, $\phi$', size=17)
+savefig('spatiocyte.eps', format='eps', dpi=1000)
 
 show()
 
