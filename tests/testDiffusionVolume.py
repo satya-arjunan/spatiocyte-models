@@ -23,7 +23,6 @@ populator.VariableReferenceList = [['_', 'Variable:/:A']]
 diffuser = theSimulator.createEntity('PeriodicBoundaryDiffusionProcess', 'Process:/:diffuse')
 diffuser.VariableReferenceList = [['_', 'Variable:/:A']]
 diffuser.D = 7.5757e-14
-diffuser.Origins = 1
 
 iterator = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iterate')
 iterator.VariableReferenceList = [['_', 'Variable:/:A']]
