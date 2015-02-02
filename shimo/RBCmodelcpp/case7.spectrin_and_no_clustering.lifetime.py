@@ -16,7 +16,7 @@ import random
 log_file = "logged_variables.dat"
 duration_beforediamide = 10
 #duration = 21600                                                             
-duration = 7200                                                             
+duration = 101                                                             
 
 N_A        = 6.02214e+23      # avogadro nr               
 SA_actual  = 1.4e-10          # actual RBC surface area      
@@ -414,8 +414,20 @@ log.VariableReferenceList = [['_', 'Variable:/Surface:Band3'],
                              ['_', 'Variable:/Surface:Band3oxi'],
                              ['_', 'Variable:/Surface:Band3phos'],
                              ['_', 'Variable:/Surface:Band3cluster']]
-log.LogInterval = 0.1
-log.FileName = "tmp.dat"
+log.LogInterval = 0.5
+
+iterator = theSimulator.createEntity('LifetimeLogProcess', 'Process:/:iterate')
+iterator.VariableReferenceList = [['_', 'Variable:/Surface:Band3'],
+                                  ['_', 'Variable:/Surface:Band3oxi']]
+                                 # ['_', 'Variable:/Surface:V_Band3cluster'],
+                                 # ['_', 'Variable:/Surface:E_Band3cluster'],
+                                 # ['_', 'Variable:/Surface:Band3cluster']]
+iterator.Iterations = 1
+iterator.LogStart = 0
+iterator.LogEnd = 100
+iterator.LogInterval = 1
+iterator.FileName = "case7.spectrin_and_no_clustering.lifetime.csv"
+
 
 separator = theSimulator.createEntity('ErythrocyteProcess', 'Process:/Surface:separ')
 separator.VariableReferenceList = [['_', 'Variable:/Surface:Edge', '-1']]
