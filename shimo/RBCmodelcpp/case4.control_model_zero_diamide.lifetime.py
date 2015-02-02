@@ -349,32 +349,16 @@ log.VariableReferenceList = [['_', 'Variable:/Surface:Band3'],
                              ['_', 'Variable:/Surface:hemiBand3oxi'],
                              ['_', 'Variable:/Surface:hemiBand3phos'],
                              ['_', 'Variable:/Surface:hemiBand3cluster'],
-                             ['_', 'Variable:/Surface:Band3cluster'],
-                             ['_', 'Variable:/Surface:GFP']]
+                             ['_', 'Variable:/Surface:Band3cluster']]
 log.LogInterval = 0.5
 
-GFP = theSimulator.createEntity('Variable', 'Variable:/Surface:GFP')
-GFP.Value = 0
-
-tagger = theSimulator.createEntity('TagProcess', 'Process:/:tagger')
-tagger.VariableReferenceList = [['_', 'Variable:/Surface:GFP', '-1' ]]
-tagger.VariableReferenceList = [['_', 'Variable:/Surface:Band3', '%s' %(vBand3) ]]
-tagger.VariableReferenceList = [['_', 'Variable:/Surface:Band3oxi']]
-tagger.VariableReferenceList = [['_', 'Variable:/Surface:Band3phos']]
-tagger.VariableReferenceList = [['_', 'Variable:/Surface:Band3cluster']]
-tagger.VariableReferenceList = [['_', 'Variable:/Surface:hemiBand3']]
-tagger.VariableReferenceList = [['_', 'Variable:/Surface:hemiBand3oxi']]
-tagger.VariableReferenceList = [['_', 'Variable:/Surface:hemiBand3phos']]
-tagger.VariableReferenceList = [['_', 'Variable:/Surface:hemiBand3cluster']]
-
-iterator = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iterate')
-iterator.VariableReferenceList = [['_', 'Variable:/Surface:GFP']]
+iterator = theSimulator.createEntity('LifetimeLogProcess', 'Process:/:iterate')
+iterator.VariableReferenceList = [['_', 'Variable:/Surface:Band3']]
 iterator.Iterations = 1
-iterator.LogEnd = 1000
 iterator.LogStart = 10
+iterator.LogEnd = 1000
 iterator.LogInterval = 0.05
-iterator.Diffusion = 1
-iterator.FileName = "case4.control_model_zero_diamide.csv"
+iterator.FileName = "case4.control_model_zero_diamide.lifetime.csv"
 
 
 dif = theSimulator.createEntity('PeriodicBoundaryDiffusionProcess', 'Process:/Surface:diffBand3')

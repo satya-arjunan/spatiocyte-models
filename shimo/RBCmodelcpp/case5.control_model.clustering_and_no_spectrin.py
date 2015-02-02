@@ -30,7 +30,7 @@ vMgADP    = 6900782 * Vol_scaled/Vol_actual
 vPi       = 61215118.9307 * Vol_scaled/Vol_actual
 vGSH      = 195606916 * Vol_scaled/Vol_actual
 vGSSG     = 278134 *  Vol_scaled/Vol_actual
-vDia_ext  = 0 * 1.0e+3 * Vol_scaled * N_A * 7.0/3.0
+vDia_ext  = 0.25e-3 * 1.0e+3 * Vol_scaled * N_A * 7.0/3.0
 vNADP     = 3902.83468684 * Vol_scaled/Vol_actual
 vNADPH    = 3931348.80531 * Vol_scaled/Vol_actual
 vE_GSSGR  = 7528.0 * Vol_scaled/Vol_actual
@@ -371,10 +371,10 @@ iterator = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iterate')
 iterator.VariableReferenceList = [['_', 'Variable:/Surface:GFP']]
 iterator.Iterations = 1
 iterator.LogEnd = 1000
-iterator.LogStart = 10
+iterator.LogStart = 2000
 iterator.LogInterval = 0.05
 iterator.Diffusion = 1
-iterator.FileName = "case4.control_model_zero_diamide.csv"
+iterator.FileName = "case5.control_model.clustering_and_no_spectrin.csv"
 
 
 dif = theSimulator.createEntity('PeriodicBoundaryDiffusionProcess', 'Process:/Surface:diffBand3')
