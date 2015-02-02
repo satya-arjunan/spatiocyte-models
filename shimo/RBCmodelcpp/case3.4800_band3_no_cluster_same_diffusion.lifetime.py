@@ -206,7 +206,7 @@ iterator.VariableReferenceList = [['_', 'Variable:/Surface:Band3']]
 iterator.Iterations = 1
 iterator.LogStart = 1
 iterator.LogEnd = 1000
-iterator.LogInterval = 0.05
+iterator.LogInterval = 1
 iterator.FileName = "case3.4800_band3_no_cluster_same_diffusion.lifetime.csv"
 
 run(1001)

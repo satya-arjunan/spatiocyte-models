@@ -30,7 +30,7 @@ iterator.VariableReferenceList = [['_', 'Variable:/Surface:Band3']]
 iterator.Iterations = 100
 iterator.LogStart = 1
 iterator.LogEnd = 100
-iterator.LogInterval = 0.05
+iterator.LogInterval = 1
 iterator.FileName = "case1.5_band3.lifetime.csv"
 
 #iterator = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iterate')

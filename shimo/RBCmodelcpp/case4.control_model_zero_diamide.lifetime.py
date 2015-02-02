@@ -357,7 +357,7 @@ iterator.VariableReferenceList = [['_', 'Variable:/Surface:Band3']]
 iterator.Iterations = 1
 iterator.LogStart = 10
 iterator.LogEnd = 1000
-iterator.LogInterval = 0.05
+iterator.LogInterval = 1
 iterator.FileName = "case4.control_model_zero_diamide.lifetime.csv"
 
 
