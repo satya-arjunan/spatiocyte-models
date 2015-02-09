@@ -2,16 +2,14 @@ import math
 
 Filaments = 13
 RotateAngle = math.pi
-MTRadius = 12.5e-9
+MTradius = 12.5e-9
 KinesinRadius = 0.4e-8
 neuriteRadius = 0.2e-6
 neuriteLength = 5e-6
-Radius = 1.3e-6
-MTLength = 5e-6
 
-comp_length = 30e-6
-comp_width = 4e-6
-comp_depth = 500e-9
+comp_x = 30e-6
+comp_y = 3.4e-6
+comp_z = 500e-9
 VoxelRadius = 0.8e-8
 
 singleMTVolumeVoxels = 717256.0
@@ -23,10 +21,15 @@ theSimulator.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 
 # Create the root container compartment using the default Cuboid geometry:
 theSimulator.rootSystem.StepperID = 'SS'
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = comp_length
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = comp_width
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = comp_depth
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = comp_x
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = comp_y
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = comp_z
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
+
+theSimulator.createEntity('System', 'System:/:Surface').StepperID = 'SS'
+theSimulator.createEntity('Variable', 'Variable:/Surface:DIMENSION').Value = 2
+theSimulator.createEntity('Variable', 'Variable:/Surface:VACANT')
+
 
 theSimulator.createEntity('Variable', 'Variable:/:Kinesin').Value = 25
 theSimulator.createEntity('Variable', 'Variable:/:MTKinesin' ).Value = 0
@@ -128,38 +131,49 @@ visualLogger.VariableReferenceList = [['_', 'Variable:/:Kinesin', '10600']]
 visualLogger.VariableReferenceList = [['_', 'Variable:/:actTubulin']]
 visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesin', '10600']]
 visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP', '10600']]
+visualLogger.VariableReferenceList = [['_', 'Variable:/Surface:VACANT']]
 visualLogger.LogInterval = 10
 
-for i in range(MTs):
-  for j in range(3):
-    startAngle = math.pi/3.3
-    OriginZ = 0.0
-    if(j != 0):
-      startAngle = math.pi/2
-      if(j == 1):
-        OriginZ = 0.5 
-      else:
-        OriginZ = -0.5 
-    Microtubule = theSimulator.createEntity('MicrotubuleProcess', 'Process:/:Microtubule%d%d' %(i,j))
-    P = rotatePointAlongVector(MTorigin, MTvectorZpoint, MTvectorZ, MTrotateAngle*i+startAngle)
-    Microtubule.OriginX = P[0]
-    Microtubule.OriginY = P[1]
-    Microtubule.OriginZ = OriginZ
-    Microtubule.RotateX = 0
-    Microtubule.RotateY = 0
-    Microtubule.RotateZ =  MTrotateAngle*i+startAngle
-    Microtubule.Radius = MTRadius
-    Microtubule.SubunitRadius = KinesinRadius
-    Microtubule.Length = Radius*0.7
-    Microtubule.Filaments = Filaments
-    Microtubule.Periodic = 0
-    Microtubule.VariableReferenceList = [['_', 'Variable:/:MTKinesin' ]]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP' ]]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/:actTubulin' ]]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/:Tubulin' , '-1']]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/:TubulinM' , '-2']]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/:TubulinP' , '-3']]
+MTn = 30
+MTlength_x = 5e-6
+MTlength_y = MTradius*2
+MTlength_z = MTradius*2
+MTn_z = 1
+MTinterval_min_x = 0.4e-6
+MTn_x = int(comp_x/(MTlength_x+MTinterval_min_x))
+MTn_y = MTn/MTn_z/MTn_x
+print "MTn_x:",MTn_x,"MTn_y:",MTn_y,"MTn_z:",MTn_z
+MTinterval_x = (comp_x-MTn_x*MTlength_x)/MTn_x
+MTinterval_y = (comp_y-MTn_y*MTlength_y)/MTn_y
+MTinterval_z = (comp_z-MTn_z*MTlength_z)/MTn_z
 
-run(180000)
+print "MTinterval_x:",MTinterval_x,"MTinterval_y:",MTinterval_y,"MTinterval_z:",MTinterval_z
+
+for i in range(MTn_x):
+  for j in range(MTn_y):
+    for k in range(MTn_z):
+      Microtubule = theSimulator.createEntity('MicrotubuleProcess', 'Process:/:Microtubule%d%d%d' %(i,j,k))
+      X = ((MTlength_x+MTinterval_x)/2+(MTinterval_x+MTlength_x)*i)/comp_x*2-1
+      Y = ((MTlength_y+MTinterval_y)/2+(MTinterval_y+MTlength_y)*j)/comp_y*2-1
+      Z = ((MTlength_z+MTinterval_z)/2+(MTinterval_z+MTlength_z)*k)/comp_z*2-1
+      Microtubule.OriginX = X
+      Microtubule.OriginY = Y
+      Microtubule.OriginZ = Z
+      Microtubule.RotateX = 0
+      Microtubule.RotateY = 0
+      Microtubule.RotateZ = 0
+      Microtubule.Radius = MTradius
+      Microtubule.SubunitRadius = KinesinRadius
+      Microtubule.Length = MTlength_x
+      Microtubule.Filaments = Filaments
+      Microtubule.Periodic = 0
+      Microtubule.VariableReferenceList = [['_', 'Variable:/:MTKinesin' ]]
+      Microtubule.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP' ]]
+      Microtubule.VariableReferenceList = [['_', 'Variable:/:actTubulin' ]]
+      Microtubule.VariableReferenceList = [['_', 'Variable:/:Tubulin' , '-1']]
+      Microtubule.VariableReferenceList = [['_', 'Variable:/:TubulinM' , '-2']]
+      Microtubule.VariableReferenceList = [['_', 'Variable:/:TubulinP' , '-3']]
+
+run(10)
 
 
