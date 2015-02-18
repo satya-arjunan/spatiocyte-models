@@ -1,5 +1,14 @@
 import math
 
+try:
+  T
+except NameError:
+  T = 2000
+  K1 = 1
+  K6 = 1
+  K4 = 50
+  K8 = 50
+
 Filaments = 13
 RotateAngle = math.pi
 MTradius = 12.5e-9
@@ -11,11 +20,7 @@ comp_x = 30e-6
 comp_y = 3.2e-6
 comp_z = 500e-9
 VoxelRadius = 0.8e-8
-
-singleMTVolumeVoxels = 717256.0
-singleNeuriteVolumeVoxels = 48325789.0
 totalKinesins = 100
-print "totalKinesins:", totalKinesins
 
 theSimulator.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 
@@ -65,7 +70,7 @@ react.VariableReferenceList = [['_', 'Variable:/:Kinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','1']]
 #react.k = 2.5863133e-22
-react.p = 1
+react.p = K6
 #react.k = 1.69706e-20
 
 react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:explicitAttach_k1')
@@ -73,7 +78,7 @@ react.VariableReferenceList = [['_', 'Variable:/:Kinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:Tubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','1']]
 #react.k = 2.5863133e-24
-react.p = 0.005
+react.p = K1
 #react.k = 6.78823e-24
 
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:detach_k4')
@@ -81,7 +86,14 @@ react.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','1']]
 react.VariableReferenceList = [['_', 'Variable:/:Kinesin','1']]
 react.SearchVacant = 1
-react.k = 15
+react.k = K4
+
+react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:detach_k8')
+react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','-1']]
+react.VariableReferenceList = [['_', 'Variable:/:actTubulin','1']]
+react.VariableReferenceList = [['_', 'Variable:/:Kinesin','1']]
+react.SearchVacant = 1
+react.k = K8
 
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:inactive_k7')
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','-1']]
@@ -123,15 +135,23 @@ diffuse.D = 0.04e-12
 #life.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP', '-1']]
 #life.VariableReferenceList = [['_', 'Variable:/:Kinesin', '1']]
 
+his = theSimulator.createEntity('HistogramLogProcess', 'Process:/:his')
+his.VariableReferenceList = [['_', 'Variable:/:Kinesin']]
+his.Length = comp_x
+his.Radius = comp_y
+his.Bins = 10
+his.LogInterval = 10
+
+radiusScale = 10600
 visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:visualLogger')
-visualLogger.VariableReferenceList = [['_', 'Variable:/:Tubulin']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/:Tubulin']]
 #visualLogger.VariableReferenceList = [['_', 'Variable:/:TubulinM']]
 #visualLogger.VariableReferenceList = [['_', 'Variable:/:TubulinP']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/:Kinesin', '10600']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/:actTubulin']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesin', '10600']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP', '10600']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Surface:VACANT']]
+visualLogger.VariableReferenceList = [['_', 'Variable:/:Kinesin', '%d' %(radiusScale)]]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/:actTubulin']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesin', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Surface:VACANT']]
 visualLogger.LogInterval = 10
 
 MTn = 60
@@ -175,6 +195,6 @@ for i in range(MTn_x):
       #Microtubule.VariableReferenceList = [['_', 'Variable:/:TubulinM' , '-2']]
       #Microtubule.VariableReferenceList = [['_', 'Variable:/:TubulinP' , '-3']]
 
-run(15)
+run(T)
 
 

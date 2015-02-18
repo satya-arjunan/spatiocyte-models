@@ -8,7 +8,7 @@ neuriteRadius = 0.2e-6
 neuriteLength = 5e-6
 
 comp_x = 30e-6
-comp_y = 3.4e-6
+comp_y = 3.2e-6
 comp_z = 500e-9
 VoxelRadius = 0.8e-8
 
