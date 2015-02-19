@@ -6,8 +6,9 @@ except NameError:
   T = 2000
   K1 = 1
   K6 = 1
-  K4 = 50
-  K8 = 50
+  K4 = 100
+  K8 = 100
+  filename = "HistogramLog.csv"
 
 Filaments = 13
 RotateAngle = math.pi
@@ -17,7 +18,7 @@ neuriteRadius = 0.2e-6
 neuriteLength = 5e-6
 
 comp_x = 30e-6
-comp_y = 3.2e-6
+comp_y = 3e-6
 comp_z = 500e-9
 VoxelRadius = 0.8e-8
 totalKinesins = 100
@@ -139,8 +140,9 @@ his = theSimulator.createEntity('HistogramLogProcess', 'Process:/:his')
 his.VariableReferenceList = [['_', 'Variable:/:Kinesin']]
 his.Length = comp_x
 his.Radius = comp_y
-his.Bins = 10
+his.Bins = 3
 his.LogInterval = 10
+his.FileName = filename
 
 radiusScale = 10600
 visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:visualLogger')
