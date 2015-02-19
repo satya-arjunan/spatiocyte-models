@@ -8,7 +8,7 @@ def run_single(T, K1, K6, K4, K8):
   print param
   os.system("ecell3-session " + param + " edge_nocooperativity_iterate.py")
 
-T = 10
+T = 4000
 K1 = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
 K6 = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
 K4 = [1e-3, 1e-1, 1e-0, 1e+1, 1e+2, 1e+3]
