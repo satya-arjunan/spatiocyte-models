@@ -21,7 +21,7 @@ comp_x = 30e-6
 comp_y = 3e-6
 comp_z = 500e-9
 VoxelRadius = 0.8e-8
-totalKinesins = 300
+totalKinesins = 500
 
 theSimulator.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 
