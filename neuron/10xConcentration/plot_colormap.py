@@ -2,7 +2,6 @@ import glob
 import numpy as np
 
 filenames = glob.glob("HistogramCooperativity_7*.csv")
-print filenames
 
 bins = 3
 
