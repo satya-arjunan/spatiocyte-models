@@ -2,8 +2,12 @@ import glob
 import numpy as np
 
 filenames = glob.glob("HistogramCooperativity_7*.csv")
+#filenames = glob.glob("HistogramCooperativity_7.500000e-06_1.000000e+00_5.000000e-04_1.000000e+03.csv")
 
 bins = 3
+end_rows = 50
+max_diff = 0
+max_file = ""
 
 for i in range(len(filenames)):
   f = filenames[i].split("_")
@@ -15,7 +19,12 @@ for i in range(len(filenames)):
   rows,cols = data.shape
   simple = data[0:rows, cols-1:cols].reshape(rows/bins, bins)
   rows,cols = simple.shape
-  ave = np.mean(simple[rows-100:rows], axis=0)
-  if(ave[0] < ave[2]):
-    print ave[2]/ave[0], ave
+  simple = simple[rows-end_rows:rows] #only get the last 50 rows
+  ave = np.mean(simple, axis=0) #average along the column
+  if(ave[2] > 10 and ave[2] > ave[0]):
+    if(ave[2]-ave[0] > max_diff):
+      max_diff = ave[2]-ave[0]
+      max_file = filenames[i]
+
+print max_file,max_diff
   
