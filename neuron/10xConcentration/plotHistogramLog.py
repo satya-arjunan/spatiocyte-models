@@ -7,7 +7,7 @@ tickFontSize = 14
 legendFontSize = 14
 lineFontSize = 14
 
-fileNames = ["HistogramCooperativity_7.500000e-06_1.000000e+00_1.000000e-05_5.000000e+03.csv"]
+fileNames = ["HistogramLog.csv"]
 legendTitles = []
 lines = ['-', '-', '-', '-']
 colors = ['r', 'g', 'b', 'k', 'c', 'y']
