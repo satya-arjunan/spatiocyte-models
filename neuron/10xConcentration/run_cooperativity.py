@@ -36,38 +36,44 @@ if __name__ == '__main__':
       for k in range(len(K8)):
         params.append(get_param(T, K1[i], K6, K7[j], K8[k]))
 
-  SLICE_IN_SECONDS = 1
-  param = get_param(10, K1[0], K6, K7[0], K8[0])
+  SLICE_IN_SECONDS = 0.1
+  param = get_param(1, K1[0], K6, K7[0], K8[0])
   subproc = add_job(param)
   resultTable = []
+  startTime = time.time()
   while subproc.poll() == None:
-    resultTable.append(psutil.Process(subproc.pid).memory_info().rss)
+    resultTable.append(psutil.Process(subproc.pid).memory_info().vms)
     time.sleep(SLICE_IN_SECONDS)
-  print max(resultTable)/1024/1024
+  duration = time.time()-startTime
+  typicalMemory = max(resultTable)*1.7
 
-  jobStart = 3
-  jobEnd = 5
+  jobStart = 10
+  jobEnd = 20
   print "total jobs:",len(params), "start:", jobStart, "end:", jobEnd
   jobCnt = jobStart
   cpuCnt = psutil.cpu_count()
   availableMemory = psutil.virtual_memory().available
   poller = select.epoll()
   subprocs = {}
-  for i in xrange(2):
+  doneCnt = 0
+  while (jobCnt != jobEnd and psutil.virtual_memory().available > typicalMemory and jobCnt-jobStart-doneCnt < cpuCnt): 
+    #print "avail:",psutil.virtual_memory().available/1024/1024,"req:",typicalMemory/1024/1024
     subproc = add_job(params[jobCnt])
     register_job(params[jobCnt], subproc, subprocs, poller, jobCnt) 
     jobCnt = jobCnt + 1
-  doneCnt = 0
+    time.sleep(duration)
   while True:
     for fd, flags in poller.poll(timeout=1):
       done_proc = subprocs[fd]
       poller.unregister(fd)
       doneCnt = doneCnt + 1
       print "done id:",fd
-      if (jobCnt != jobEnd):
+      while (jobCnt != jobEnd and psutil.virtual_memory().available > typicalMemory and jobCnt-jobStart-doneCnt < cpuCnt): 
+        #print "avail:",psutil.virtual_memory().available/1024/1024,"req:",typicalMemory/1024/1024
         subproc = add_job(params[jobCnt])
         register_job(params[jobCnt], subproc, subprocs, poller, jobCnt) 
         jobCnt = jobCnt + 1
+        time.sleep(duration)
     if (doneCnt == jobEnd-jobStart):
       break
 
