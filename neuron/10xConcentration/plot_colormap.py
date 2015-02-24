@@ -6,7 +6,7 @@ filenames = glob.glob("HistogramCooperativity_*.csv")
 
 bins = 3
 end_rows = 50
-max_diff = 10
+max_diff = 15
 max_file = ""
 
 for i in range(len(filenames)):
