@@ -3,11 +3,11 @@ import math
 try:
   T
 except NameError:
-  T = 2000
-  K1 = 1
+  T = 1000
+  K1 = 7.5e-4
   K6 = 1
-  K8 = 100
-  K7 = 0.055
+  K7 = 1e-1
+  K8 = 5e+0
   filename = "HistogramLog.csv"
 
 Filaments = 13
@@ -17,11 +17,19 @@ KinesinRadius = 0.4e-8
 neuriteRadius = 0.2e-6
 neuriteLength = 5e-6
 
+#from bestTranslocatingSmallNeuron.py
+smallNeuronVolumeVoxels = 1822273.0
+smallNeuronTubulins = 15339168.0
+smallNeuronKinesins = 25.0
+
+thisVolumeVoxels = 5179004.0
+thisNeuronTubulins = 49156250
+
 comp_x = 30e-6
-comp_y = 3e-6
+comp_y = 1e-6
 comp_z = 500e-9
 VoxelRadius = 0.8e-8
-totalKinesins = 500
+totalKinesins = 1000
 
 theSimulator.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 
@@ -145,22 +153,22 @@ his.LogInterval = 10
 his.FileName = filename
 
 radiusScale = 10600
-#visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:visualLogger')
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:Tubulin']]
+visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:visualLogger')
+visualLogger.VariableReferenceList = [['_', 'Variable:/:Tubulin']]
 #visualLogger.VariableReferenceList = [['_', 'Variable:/:TubulinM']]
 #visualLogger.VariableReferenceList = [['_', 'Variable:/:TubulinP']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:Kinesin', '%d' %(radiusScale)]]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:actTubulin']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesin', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
+visualLogger.VariableReferenceList = [['_', 'Variable:/:Kinesin', '%d' %(radiusScale)]]
+visualLogger.VariableReferenceList = [['_', 'Variable:/:actTubulin']]
+visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesin', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
+visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
 #visualLogger.VariableReferenceList = [['_', 'Variable:/Surface:VACANT']]
-#visualLogger.LogInterval = 10
+visualLogger.LogInterval = 10
 
-MTn = 60
+MTn = 55
 MTlength_x = 10e-6
 MTlength_y = MTradius*2
 MTlength_z = MTradius*2
-MTn_z = 3
+MTn_z = 5
 MTinterval_min_x = 0.2e-6
 len_x = comp_x/2
 MTn_x = int(len_x/(MTlength_x+MTinterval_min_x))

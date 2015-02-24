@@ -12,6 +12,7 @@ MTLength = neuriteLength*0.95
 
 singleMTVolumeVoxels = 717256.0
 singleNeuriteVolumeVoxels = 48325789.0
+thisSmallNeuronVolumeVoxels = 1822273.0
 totalKinesins = 1000*singleMTVolumeVoxels/singleNeuriteVolumeVoxels
 print "totalKinesins:", totalKinesins
 
