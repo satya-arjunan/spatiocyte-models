@@ -23,7 +23,7 @@ def register_job(param, subproc, subprocs, poller, jobCnt):
   print "started job:", jobCnt, "id:", fd, param
 
 N = 500
-T = 30
+T = 300
 K6 = 1.0
 #K1 = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.09, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.02, 0.01, 0.009, 0.008, 0.007, 0.006, 0.005, 0.004, 0.003, 0.002, 0.001, 0.0009, 0.0008, 0.0007, 0.0006, 0.0005, 0.0004, 0.0003, 0.0002, 0.0001, 0.00009, 0.00008, 0.00007, 0.00006, 0.00005, 0.00004, 0.00003, 0.00002, 0.00001, 0.00009, 0.000008, 0.000007, 0.000006, 0.000005, 0.000004, 0.000003, 0.000002, 0.000001]
 K1 = [7.5e-1, 5e-1, 2.5e-1, 1e-1, 7.5e-2, 5e-2, 2.5e-2, 1e-2, 7.5e-3, 5e-3, 2.5e-3, 1e-3, 7.5e-4, 5e-4, 2.5e-4, 1e-4, 7.5e-5, 5e-5, 2.5e-5, 1e-5, 7.5e-6, 5e-6, 2.5e-6, 1e-6]
@@ -52,6 +52,8 @@ if __name__ == '__main__':
   print "total jobs:",len(params), "start:", jobStart, "end:", jobEnd
   jobCnt = jobStart
   cpuCnt = psutil.cpu_count()
+  #cpuCnt = 70
+  print "cpuCnt:",cpuCnt
   availableMemory = psutil.virtual_memory().available
   poller = select.epoll()
   subprocs = {}
