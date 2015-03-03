@@ -158,17 +158,14 @@ his.Bins = 3
 his.LogInterval = 10
 his.FileName = filename
 
-radiusScale = 10100
-visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:visualLogger')
-visualLogger.VariableReferenceList = [['_', 'Variable:/:Tubulin']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:TubulinM']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:TubulinP']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/:Kinesin', '%d' %(radiusScale)]]
-visualLogger.VariableReferenceList = [['_', 'Variable:/:actTubulin']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesin', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
-visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Surface:VACANT']]
-visualLogger.LogInterval = 1e-2
+#radiusScale = 10100
+#visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:visualLogger')
+#visualLogger.VariableReferenceList = [['_', 'Variable:/:Tubulin']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/:Kinesin', '%d' %(radiusScale)]]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/:actTubulin']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesin', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
+#visualLogger.LogInterval = 1e-2
 
 MTn = 9
 MTlength_x = 8e-6
