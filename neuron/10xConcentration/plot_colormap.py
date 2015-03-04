@@ -21,7 +21,7 @@ for i in range(len(filenames)):
   rows,cols = simple.shape
   simple = simple[rows-end_rows:rows] #only get the last 50 rows
   ave = np.mean(simple, axis=0) #average along the column
-  if(ave[2] > 10 and ave[2] > ave[0]):
+  if(ave[2] > 10 and ave[2] > ave[0] and ave[2]-ave[0] > 10):
     if(ave[2]-ave[0] > max_diff):
       print "\n"
       print filenames[i],ave[2]-ave[0], ave
