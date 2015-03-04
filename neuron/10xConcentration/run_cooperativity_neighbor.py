@@ -6,15 +6,18 @@ import select
 import shlex
 import time
 
-def get_param(T, K1, K6, K7, K8):
+def get_param(T, K1, K6, K7, K8, cnt):
   filename = ('HistogramCooperativity_%e_%e_%e_%e.csv' %(K1,K6,K7,K8))
+  #if (filename == "HistogramCooperativity_1.000000e-02_1.000000e+00_1.000000e-01_1.000000e+03.csv"):
+  #  print "jobCnt:",cnt
+  #  exit()
   param = ("--parameters=\"{'T':%e, 'K1':%e, 'K6':%e, 'K7':%e, 'K8':%e, 'filename':'%s'}\"" %(T, K1, K6, K7, K8, filename))
   return param
 
 def add_job(param):
   command_line = "ecell3-session " + param + " edge_cooperativity_neighbor_iterate.py"
   args = shlex.split(command_line)
-  return subprocess.Popen(args, stdout=subprocess.PIPE)
+  return subprocess.Popen(args, stdout=subprocess.PIPE, close_fds=True)
 
 def register_job(param, subproc, subprocs, poller, jobCnt):
   fd = subproc.stdout.fileno()
@@ -30,13 +33,15 @@ K7 = [5e+2, 1e+2, 5e+1, 1e+1, 5e+0, 1e+0, 5e-1, 1e-1, 5e-2, 1e-2, 5e-3, 1e-3, 5e
 K8 = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1, 5e-1, 1e-0, 5e-0, 1e+1, 5e+1, 1e+2, 5e+1, 1e+3, 5e+3]
 if __name__ == '__main__':
   params = []
+  cnt = 0
   for i in range(len(K1)):
     for j in range(len(K7)):
       for k in range(len(K8)):
-        params.append(get_param(T, K1[i], K6, K7[j], K8[k]))
+        cnt = cnt + 1
+        params.append(get_param(T, K1[i], K6, K7[j], K8[k], cnt))
 
   SLICE_IN_SECONDS = 0.1
-  param = get_param(0.001, K1[0], K6, K7[0], K8[0])
+  param = get_param(0.001, K1[0], K6, K7[0], K8[0], 0)
   subproc = add_job(param)
   resultTable = []
   startTime = time.time()
@@ -46,7 +51,8 @@ if __name__ == '__main__':
   duration = time.time()-startTime
   typicalMemory = max(resultTable)*1.7
 
-  jobStart = 0
+  #jobStart = 0
+  jobStart = 930
   jobEnd = len(params)/2
   print "total jobs:",len(params), "start:", jobStart, "end:", jobEnd
   jobCnt = jobStart
