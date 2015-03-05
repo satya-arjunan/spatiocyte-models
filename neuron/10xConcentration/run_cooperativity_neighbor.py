@@ -19,10 +19,10 @@ def add_job(param):
   args = shlex.split(command_line)
   return subprocess.Popen(args, stdout=subprocess.PIPE, close_fds=True)
 
-def register_job(param, subproc, subprocs, poller, jobCnt):
-  fd = subproc.stdout.fileno()
-  subprocs[fd] = subproc
-  poller.register(subproc.stdout, select.EPOLLHUP)
+def register_job(param, obj, fdmap, epoll, jobCnt):
+  fd = obj.fileno()
+  fdmap[fd] = obj
+  epoll.register(obj, select.EPOLLHUP)
   print "started job:", jobCnt, "id:", fd, param
 
 N = 500
@@ -52,7 +52,7 @@ if __name__ == '__main__':
   typicalMemory = max(resultTable)*1.7
 
   #jobStart = 0
-  jobStart = 930
+  jobStart = 1900
   jobEnd = len(params)/2
   print "total jobs:",len(params), "start:", jobStart, "end:", jobEnd
   jobCnt = jobStart
@@ -60,14 +60,14 @@ if __name__ == '__main__':
   #cpuCnt = 70
   print "cpuCnt:",cpuCnt
   availableMemory = psutil.virtual_memory().available
-  poller = select.epoll()
-  subprocs = {}
+  epoll = select.epoll()
+  fdmap = {}
   doneCnt = 0
   skipCnt = 1
   while (jobCnt != jobEnd and jobCnt-jobStart-doneCnt < cpuCnt and psutil.virtual_memory().available > typicalMemory):
     #print "avail:",psutil.virtual_memory().available/1024/1024,"req:",typicalMemory/1024/1024
     subproc = add_job(params[jobCnt])
-    register_job(params[jobCnt], subproc, subprocs, poller, jobCnt) 
+    register_job(params[jobCnt], subproc.stdout, fdmap, epoll, jobCnt) 
     jobCnt = jobCnt + 1
     if (psutil.virtual_memory().available > skipCnt*typicalMemory):
       skipCnt = skipCnt + 1
@@ -77,15 +77,15 @@ if __name__ == '__main__':
       print "sleep:",skipCnt,"virt:",psutil.virtual_memory().available/1024/1024,"typ:",skipCnt*typicalMemory/1024/1024
       time.sleep(duration)
   while True:
-    for fd, flags in poller.poll(timeout=1):
-      done_proc = subprocs[fd]
-      poller.unregister(fd)
+    for fd, flags in epoll.poll(timeout=1):
+      del fdmap[fd]
+      epoll.unregister(fd)
       doneCnt = doneCnt + 1
       print "done id:",fd
       while (jobCnt != jobEnd and psutil.virtual_memory().available > typicalMemory and jobCnt-jobStart-doneCnt < cpuCnt): 
         #print "avail:",psutil.virtual_memory().available/1024/1024,"req:",typicalMemory/1024/1024
         subproc = add_job(params[jobCnt])
-        register_job(params[jobCnt], subproc, subprocs, poller, jobCnt) 
+        register_job(params[jobCnt], subproc.stdout, fdmap, epoll, jobCnt) 
         jobCnt = jobCnt + 1
         if (psutil.virtual_memory().available > skipCnt*typicalMemory):
           skipCnt = skipCnt + 1
