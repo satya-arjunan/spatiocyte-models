@@ -46,17 +46,19 @@ if __name__ == '__main__':
   resultTable = []
   startTime = time.time()
   while subproc.poll() == None:
-    resultTable.append(psutil.Process(subproc.pid).memory_info().vms)
+    #resultTable.append(psutil.Process(subproc.pid).memory_info().vms)
+    resultTable.append(psutil.Process(subproc.pid).get_memory_info().vms)
     time.sleep(SLICE_IN_SECONDS)
   duration = time.time()-startTime
   typicalMemory = max(resultTable)*1.7
 
   #jobStart = 0
-  jobStart = 1900
-  jobEnd = len(params)/2
+  jobStart = 4300
+  jobEnd = len(params)
   print "total jobs:",len(params), "start:", jobStart, "end:", jobEnd
   jobCnt = jobStart
-  cpuCnt = psutil.cpu_count()
+  #cpuCnt = psutil.cpu_count()
+  cpuCnt = psutil.NUM_CPUS
   #cpuCnt = 70
   print "cpuCnt:",cpuCnt
   availableMemory = psutil.virtual_memory().available
