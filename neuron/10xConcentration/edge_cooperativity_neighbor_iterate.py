@@ -3,11 +3,11 @@ import math
 try:
   T
 except NameError:
-  T = 1000
-  K1 = 7.5e-4
+  T = 4000
+  K1 = 7.5e-6
   K6 = 1
-  K7 = 1e-1
-  K8 = 5e+0
+  K7 = 1e-4
+  K8 = 5e+3
   filename = "HistogramLog.csv"
 
 Filaments = 13
@@ -158,14 +158,14 @@ his.Bins = 3
 his.LogInterval = 10
 his.FileName = filename
 
-#radiusScale = 10100
-#visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:visualLogger')
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:Tubulin']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:Kinesin', '%d' %(radiusScale)]]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:actTubulin']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesin', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
-#visualLogger.LogInterval = 1e-2
+radiusScale = 10600
+visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:visualLogger')
+visualLogger.VariableReferenceList = [['_', 'Variable:/:Tubulin']]
+visualLogger.VariableReferenceList = [['_', 'Variable:/:Kinesin', '%d' %(radiusScale)]]
+visualLogger.VariableReferenceList = [['_', 'Variable:/:actTubulin']]
+visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesin', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
+visualLogger.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP', '%d' %((radiusScale-10000)*VoxelRadius/KinesinRadius+10000)]]
+visualLogger.LogInterval = 5
 
 MTn = 9
 MTlength_x = 8e-6
