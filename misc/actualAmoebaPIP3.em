@@ -48,6 +48,15 @@ System System( / )
                             [_ Variable:/Membrane:VACANT];
       LogInterval 20;
     }
+  Process CoordinateLogProcess(coord)
+    {
+      VariableReferenceList [_ Variable:/Cell/Surface:PIP2m]
+                            [_ Variable:/Cell/Surface:PTENm]
+                            [_ Variable:/Cell/Surface:PIP3m]
+                            [_ Variable:/Cell/Surface:PIP3a]
+                            [_ Variable:/Cell/Surface:PI3Km];
+      LogInterval 20;
+    }
   Process MoleculePopulateProcess( populate )
     {
       VariableReferenceList [_ Variable:/Cell/Surface:PIP2m]
@@ -207,7 +216,7 @@ System System( /Cell/Surface )
                               [_ Variable:/Cell/Surface:PIP3m -1]
                               [_ Variable:/Cell/Surface:PIP3a 1]
                               [_ Variable:/Cell/Surface:PIP3a 1];
-      p 0.65;
+      p 0.8;
     }
   Process DiffusionInfluencedReactionProcess(PIP2toPIP3)
     {
@@ -215,7 +224,7 @@ System System( /Cell/Surface )
                               [_ Variable:/Cell/Surface:PI3Km -1]
                               [_ Variable:/Cell/Surface:PIP3m 1]
                               [_ Variable:/Cell/Surface:PI3Km 1];
-      p 0.17;
+      p 0.15;
     }
 
 

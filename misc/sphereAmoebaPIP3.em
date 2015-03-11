@@ -208,7 +208,7 @@ System System( /Cell/Surface )
                               [_ Variable:/Cell/Surface:PIP3m -1]
                               [_ Variable:/Cell/Surface:PIP3a 1]
                               [_ Variable:/Cell/Surface:PIP3a 1];
-      p 0.65;
+      p 0.8;
     }
   Process DiffusionInfluencedReactionProcess(PIP2toPIP3)
     {
@@ -216,7 +216,7 @@ System System( /Cell/Surface )
                               [_ Variable:/Cell/Surface:PI3Km -1]
                               [_ Variable:/Cell/Surface:PIP3m 1]
                               [_ Variable:/Cell/Surface:PI3Km 1];
-      p 0.17;
+      p 0.15;
     }
 
 
