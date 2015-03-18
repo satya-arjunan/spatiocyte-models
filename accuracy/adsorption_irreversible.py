@@ -1,5 +1,5 @@
 sim = theSimulator.createStepper('SpatiocyteStepper', 'SS')
-sim.VoxelRadius = 20e-9 
+sim.VoxelRadius = 100e-9 
 sim.SearchVacant = 0
 
 theSimulator.rootSystem.StepperID = 'SS'
@@ -27,10 +27,10 @@ populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop'
 populator.VariableReferenceList = [['_', 'Variable:/:A']]
 
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:reaction1')
-binder.VariableReferenceList = [['_', 'Variable:/:A','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/Surface:VACANT','-1']]
+binder.VariableReferenceList = [['_', 'Variable:/:A','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/Surface:A','1']]
-binder.k = 5e-6
+binder.p = 1
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseA')
 diffuser.VariableReferenceList = [['_', 'Variable:/Surface:A']]
