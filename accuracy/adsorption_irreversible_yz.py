@@ -43,5 +43,6 @@ logger.VariableReferenceList = [['_', 'Variable:/Surface:A']]
 logger.LogInterval = 1
 logger.LogEnd = 200
 logger.Iterations = 10
+logger.FileName = "IterateLogYZ.csv"
 
 run(201)

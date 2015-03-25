@@ -9,8 +9,8 @@ theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 100e-6
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 100e-6
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 5
-theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
-theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 4
+theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 4
+theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 5
 
 # Create the surface compartment:
 theSimulator.createEntity('System', 'System:/:Surface').StepperID = 'SS'
@@ -43,5 +43,6 @@ logger.VariableReferenceList = [['_', 'Variable:/Surface:A']]
 logger.LogInterval = 1
 logger.LogEnd = 200
 logger.Iterations = 10
+logger.FileName = "IterateLogXZ.csv"
 
 run(201)
