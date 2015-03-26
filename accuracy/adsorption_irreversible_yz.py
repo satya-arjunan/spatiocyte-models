@@ -1,5 +1,5 @@
 sim = theSimulator.createStepper('SpatiocyteStepper', 'SS')
-sim.VoxelRadius = 200e-9 
+sim.VoxelRadius = 100e-9 
 sim.SearchVacant = 0
 
 theSimulator.rootSystem.StepperID = 'SS'
@@ -42,6 +42,7 @@ logger = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
 logger.VariableReferenceList = [['_', 'Variable:/Surface:A']]
 logger.LogInterval = 1
 logger.LogEnd = 200
-logger.Iterations = 2
+logger.Iterations = 10
+logger.FileName = "IterateLogYZ.csv"
 
 run(201)
