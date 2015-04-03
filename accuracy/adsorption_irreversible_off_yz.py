@@ -17,18 +17,16 @@ theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 5
 # Create the surface compartment:
 s = theSimulator.createEntity('Variable', 'Variable:/:sA')
 s.Value = 0
-#s.Name = "HD"
+s.Name = "HD"
 theSimulator.createEntity('Variable', 'Variable:/:A').Value = 10000
 
 logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
 logger.VariableReferenceList = [['_', 'Variable:/:A']]
-logger.VariableReferenceList = [['_', 'Variable:/:sA']]
 logger.VariableReferenceList = [['_', 'Variable:/:Vacant']]
 logger.LogInterval = 0.01
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop')
 populator.VariableReferenceList = [['_', 'Variable:/:A']]
-populator.VariableReferenceList = [['_', 'Variable:/:sA']]
 
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:reaction1')
 binder.VariableReferenceList = [['_', 'Variable:/:A','-1']]
