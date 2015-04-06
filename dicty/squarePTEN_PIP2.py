@@ -52,6 +52,11 @@ diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffusePTEN'
 diffuser.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
 diffuser.D = 1e-13
 
+#Abbreviations
+#c = cluster
+#p2 = PIP2
+#p3 = PIP3
+
 #Reaction-driven diffusion probabilities
 Vac2PIP = 1.0
 PIP2Vac = 0.08
@@ -194,10 +199,10 @@ binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2c','1']]
 binder.p = ExtendClusterPTEN
-#---------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 #Deoligomerization--------------------------------------------------------------
-#PIP2c -> PIP2
+#PIP2c => PIP2
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:r15')
 react.VariableReferenceList = [['_', 'Variable:/Surface:PIP2c', '-1']]
 react.VariableReferenceList = [['_', 'Variable:/Surface:PIP2', '1']]
@@ -205,7 +210,7 @@ react.Deoligomerize = 6
 react.SearchVacant = 1
 react.k = 1e+1
 
-#PTENp2c -> PTENp2
+#PTENp2c => PTENp2
 react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/:r16')
 react.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2c', '-1']]
 react.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2', '1']]
