@@ -21,7 +21,10 @@ nFiles = len(fileNames)
 nSpecies = len(speciesList)
 data = []
 for n in range(nFiles):
-  data.append(genfromtxt(fileNames[n], delimiter=',').T)
+  if(n == 0):
+    data.append(genfromtxt(fileNames[n], delimiter=',').T)
+  else:
+    data.append(genfromtxt(fileNames[n], delimiter=',', skip_header=2).T)
   colSize = len(data[n])-1
   for i in range(colSize):
     if(n):

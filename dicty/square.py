@@ -91,8 +91,9 @@ logger.VariableReferenceList = [['_', 'Variable:/Surface:PI3Kp3c']]
 logger.VariableReferenceList = [['_', 'Variable:/Surface:PI3K']]
 logger.VariableReferenceList = [['_', 'Variable:/Surface:PTENh']]
 logger.VariableReferenceList = [['_', 'Variable:/Surface:PI3Kh']]
-logger.LogInterval = 1e-1
-logger.LogEnd = 999
+logger.LogInterval = 1e-4
+logger.LogEnd = 9
+logger.Iterations = 2000
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop')
 populator.VariableReferenceList = [['_', 'Variable:/Surface:ANIO']]
@@ -1686,7 +1687,7 @@ react.k = DeoligomerizePI3K
 #-------------------------------------------------------------------------------
 
 
-run(200)
+run(10)
 
 
 

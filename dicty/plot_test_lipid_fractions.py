@@ -29,13 +29,13 @@ for i in range(len(legendTitles)-5):
   speciesRadii.append(float(legendTitles[i+5].split("=")[1]))
 speciesSize = len(speciesNames)
 
-data = np.genfromtxt('anio.csv', delimiter=',', skip_header=1).T
+data = np.genfromtxt('pip2_pi3k.csv', delimiter=',', skip_header=1).T
 
 colSize = len(data)-1
 for i in range(colSize):
   P.plot(data[0], data[i+1], label=speciesNames[i], color='k', linewidth=1.5)
 
-data = np.genfromtxt('anio_pip2_pip3.csv', delimiter=',', skip_header=1)
+data = np.genfromtxt('anio_pi3k.csv', delimiter=',', skip_header=1)
 rows,cols = data.shape
 t = data[0:rows,0:1].ravel()
 P.plot(t, (data[0:rows,1:2]+data[0:rows,3:4]+data[0:rows,5:6]).ravel(), label='a', color='y', ls='-', linewidth=1.5)
