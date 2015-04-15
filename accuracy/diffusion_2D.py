@@ -34,6 +34,10 @@ iterator.FileName = "diffusion_2D.csv"
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:filam')
 fil.VariableReferenceList = [['_', 'Variable:/:A']]
+fil.PlaneYZ = 1
+fil.RotateY = math.pi/3
+fil.RotateX = math.pi/3
+fil.RotateZ = math.pi/3
 fil.Periodic = 1
 fil.RegularLattice = 1
 

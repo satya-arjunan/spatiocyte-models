@@ -29,7 +29,7 @@ for i in range(len(legendTitles)-5):
   speciesRadii.append(float(legendTitles[i+5].split("=")[1]))
 speciesSize = len(speciesNames)
 
-data = np.genfromtxt('pip2_pi3k.csv', delimiter=',', skip_header=1).T
+data = np.genfromtxt('IterateLog.csv', delimiter=',', skip_header=1).T
 
 colSize = len(data)-1
 for i in range(colSize):
