@@ -1,22 +1,91 @@
+#Abbreviations
+#c = cluster
+#p2 = PIP2
+#p3 = PIP3
+#a = ANIO (eg. PS)
+#v = Vacant
+
+#Reaction-driven diffusion probabilities
+v_to_a = 1.0
+v_to_p2 = 1.0
+v_to_p3 = 1.0
+a_to_v = 1.0
+a_to_a = 1.0
+a_to_p2 = 1.0
+a_to_p3 = 1.0
+p2_to_v = 0
+p2_to_a = 0.2
+p2_to_p2 = 1.0
+p2_to_p3 = 1.0
+p3_to_v = 0.08
+p3_to_a = 1.0
+p3_to_p2 = 1.0
+p3_to_p3 = 1.0
+
+#Reaction probabilities
+NucleateCluster = 0.003
+NucleateClusterPTEN = 1
+NucleateClusterPI3K = 1
+ExtendCluster = 0.003
+ExtendClusterPTEN = 1
+ExtendClusterPI3K = 1
+
+#1st Order reaction rates
+Deoligomerize = 1e+1
+DeoligomerizePTEN = 1e+1
+DeoligomerizePI3K = 1e+1
+
+#Diffusion coefficients
+LipidDiffusion = 0
+ProteinDiffusion = 0
+PTENaDiffusion = 0.69e-12
+PTENDiffusion = 0.69e-12
+
+#Origins
+ANIOOrigins = 0
+PIP2Origins = 0
+PIP3Origins = 0
+PTENOrigins = 1
+PI3KOrigins = 0
+ANIOcOrigins = 0
+PIP2cOrigins = 0
+PIP3cOrigins = 0
+PTENaOrigins = 1
+PTENacOrigins = 1
+PTENp2Origins = 0
+PTENp2cOrigins = 0
+PTENp3Origins = 0
+PTENp3cOrigins = 0
+PI3KaOrigins = 0
+PI3KacOrigins = 0
+PI3Kp2Origins = 0
+PI3Kp2cOrigins = 0
+PI3Kp3Origins = 0
+PI3Kp3cOrigins = 0
+
+#Simulation
+LogTime = 100
+RunTime = 101
+
 sim = theSimulator.createStepper('SpatiocyteStepper', 'SS')
 sim.VoxelRadius = 10e-9 
 sim.SearchVacant = 0
 
 theSimulator.rootSystem.StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 1e-8
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 2.5e-6
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 2.5e-6
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 7e-6
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 7e-6
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 2e-8
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 4
 
 theSimulator.createEntity('Variable', 'Variable:/:ANIO').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 2100
-theSimulator.createEntity('Variable', 'Variable:/:PIP3').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/:PIP3').Value = 0 #1419
 theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 200
+theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:ANIOc').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP2c').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP3c').Value = 0
@@ -37,23 +106,41 @@ theSimulator.createEntity('Variable', 'Variable:/:PI3Kp3c').Value = 0
 #a.Name = 'HD'
 #a.Value = 0
 
-#a = theSimulator.createEntity('Variable', 'Variable:/:PTENh')
-#a.Name = 'HD'
-#a.Value = 0
+a = theSimulator.createEntity('Variable', 'Variable:/:PTENh')
+a.Name = 'HD'
+a.Value = 2000
+
+life = theSimulator.createEntity('LifetimeLogProcess', 'Process:/:lifetime')
+life.VariableReferenceList = [['_', 'Variable:/:PTEN']]
+life.Iterations = 1
+life.LogEnd = LogTime
+life.FileName = "LifetimeLog.csv"
+life.Verbose = 0
+
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:snrp1')
+react.VariableReferenceList = [['_', 'Variable:/:PTENh', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:PTEN', '1']]
+react.k = 1e-5
+
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:snrp2')
+react.VariableReferenceList = [['_', 'Variable:/:PTEN', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:PTENh', '1']]
+react.k = 1e+4
+
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:Surface')
+fil.VariableReferenceList = [['_', 'Variable:/:PTEN']]
 fil.VariableReferenceList = [['_', 'Variable:/:ANIO']]
 fil.VariableReferenceList = [['_', 'Variable:/:PIP2']]
-fil.VariableReferenceList = [['_', 'Variable:/:PIP3']]
-fil.VariableReferenceList = [['_', 'Variable:/:PTEN']]
-fil.VariableReferenceList = [['_', 'Variable:/:PI3K']]
 fil.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
 fil.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
-fil.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
 fil.VariableReferenceList = [['_', 'Variable:/:PTENa']]
 fil.VariableReferenceList = [['_', 'Variable:/:PTENac']]
 fil.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
 fil.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
+fil.VariableReferenceList = [['_', 'Variable:/:PIP3']]
+fil.VariableReferenceList = [['_', 'Variable:/:PI3K']]
+fil.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
 fil.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
 fil.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
 fil.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]
@@ -62,26 +149,22 @@ fil.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
 fil.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
 fil.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]
 fil.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
-fil.PlaneYZ = -1
-fil.Filaments = 142
-fil.Subunits = 123
-fil.Periodic = 0
-fil.RegularLattice = 1
+fil.Periodic = 1
 
-#logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
-#logger.VariableReferenceList = [['_', 'Variable:/:ANIO']]
-#logger.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
+logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
+logger.VariableReferenceList = [['_', 'Variable:/:ANIO']]
+logger.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PIP2']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
-#logger.VariableReferenceList = [['_', 'Variable:/:PIP3']]
-#logger.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
-#logger.VariableReferenceList = [['_', 'Variable:/:PTENa']]
-#logger.VariableReferenceList = [['_', 'Variable:/:PTENac']]
+logger.VariableReferenceList = [['_', 'Variable:/:PTEN']]
+logger.VariableReferenceList = [['_', 'Variable:/:PTENa']]
+logger.VariableReferenceList = [['_', 'Variable:/:PTENac']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PIP3']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
-#logger.VariableReferenceList = [['_', 'Variable:/:PTEN']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
@@ -89,34 +172,34 @@ fil.RegularLattice = 1
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3K']]
-#logger.LogInterval = 1e-1
+logger.LogInterval = 1e-1
 
 logger = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
 logger.VariableReferenceList = [['_', 'Variable:/:ANIO']]
 logger.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
-logger.VariableReferenceList = [['_', 'Variable:/:PIP2']]
-logger.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
-logger.VariableReferenceList = [['_', 'Variable:/:PIP3']]
-logger.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PIP2']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
 logger.VariableReferenceList = [['_', 'Variable:/:PTEN']]
 logger.VariableReferenceList = [['_', 'Variable:/:PTENa']]
 logger.VariableReferenceList = [['_', 'Variable:/:PTENac']]
-logger.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
-logger.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
-logger.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
-logger.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
-logger.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]
-logger.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
-logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
-logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
-logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]
-logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
-logger.VariableReferenceList = [['_', 'Variable:/:PI3K']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PIP3']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PI3K']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTENh']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Kh']]
-logger.LogInterval = 1e-4
-logger.LogEnd = 9
-logger.Iterations = 50
+logger.LogInterval = 1e-1
+logger.LogEnd = LogTime
+logger.Iterations = 1
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop')
 populator.VariableReferenceList = [['_', 'Variable:/:ANIO']]
@@ -128,121 +211,101 @@ populator.VariableReferenceList = [['_', 'Variable:/:PI3K']]
 #Diffusion----------------------------------------------------------------------
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dANIO')
 diffuser.VariableReferenceList = [['_', 'Variable:/:ANIO']]
-diffuser.D = 1e-13
+diffuser.Origins = ANIOOrigins
+diffuser.D = LipidDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPIP2')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PIP2']]
-diffuser.D = 1e-13
+diffuser.Origins = PIP2Origins
+diffuser.D = LipidDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPIP3')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PIP3']]
-diffuser.D = 1e-13
+diffuser.Origins = PIP3Origins
+diffuser.D = LipidDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTEN')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTEN']]
-diffuser.D = 1e-13
+diffuser.Origins = PTENOrigins
+diffuser.D = PTENDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3K')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3K']]
-diffuser.D = 1e-13
+diffuser.Origins = PI3KOrigins
+diffuser.D = ProteinDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENa')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENa']]
+diffuser.Origins = PTENaOrigins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = PTENaDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENac')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENac']]
+diffuser.Origins = PTENacOrigins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = PTENaDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENp2')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
+diffuser.Origins = PTENp2Origins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = ProteinDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENp2c')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
+diffuser.Origins = PTENp2cOrigins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = ProteinDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENp3')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
+diffuser.Origins = PTENp3Origins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = ProteinDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENp3c')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
+diffuser.Origins = PTENp3cOrigins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = ProteinDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Ka')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]
+diffuser.Origins = PI3KaOrigins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = ProteinDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kac')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
+diffuser.Origins = PI3KacOrigins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = ProteinDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kp2')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
+diffuser.Origins = PI3Kp2Origins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = ProteinDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kp2c')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
+diffuser.Origins = PI3Kp2cOrigins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = ProteinDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kp3')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]
+diffuser.Origins = PI3Kp3Origins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = ProteinDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kp3c')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
+diffuser.Origins = PI3Kp3cOrigins
 diffuser.WalkReact = 1
-diffuser.D = 1e-13
+diffuser.D = ProteinDiffusion
 #-------------------------------------------------------------------------------
-
-#Abbreviations
-#c = cluster
-#p2 = PIP2
-#p3 = PIP3
-#a = ANIO (eg. PS)
-#v = Vacant
-
-#Reaction-driven diffusion probabilities
-v_to_a = 1.0
-v_to_p2 = 1.0
-v_to_p3 = 1.0
-a_to_v = 0.08
-a_to_a = 1.0
-a_to_p2 = 1.0
-a_to_p3 = 1.0
-p2_to_v = 0.08
-p2_to_a = 1.0
-p2_to_p2 = 1.0
-p2_to_p3 = 1.0
-p3_to_v = 0.08
-p3_to_a = 1.0
-p3_to_p2 = 1.0
-p3_to_p3 = 1.0
-
-#Reaction probabilities
-NucleateCluster = 0.01
-NucleateClusterPTEN = 1
-NucleateClusterPI3K = 1
-ExtendCluster = 0.01
-ExtendClusterPTEN = 1
-ExtendClusterPI3K = 1
-
-#1st Order reaction rates
-Deoligomerize = 0.9168e+1
-DeoligomerizePTEN = 1.8337e+0
-DeoligomerizePI3K = 1.8337e+0
 
 #Reaction-driven diffusion------------------------------------------------------
 #PTEN to other voxels
@@ -1343,7 +1406,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:ANIO','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:ANIOc','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendCluster
 
 #PTENa + PTENac => PTENac + PTENac 
@@ -1352,7 +1414,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENa','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENac','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENac','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENac','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPTEN
 
 #PI3Ka + PI3Kac => PI3Kac + PI3Kac
@@ -1361,7 +1422,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PI3Ka','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPI3K
 
 #Not implemented:
@@ -1376,7 +1436,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:ANIO','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendCluster
 
 #PTENa + PTENp2c => PTENac + PTENp2c
@@ -1385,7 +1444,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENa','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENac','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp2c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPTEN
 
 #PI3Ka + PI3Kp2c => PI3Kac + PI3Kp2c
@@ -1394,7 +1452,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PI3Ka','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPI3K
 
 #Not implemented:
@@ -1409,7 +1466,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:ANIO','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP3c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP3c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendCluster
 
 #PTENa + PTENp3c => PTENac + PTENp3c
@@ -1418,7 +1474,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENa','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp3c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENac','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp3c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPTEN
 
 #PI3Ka + PI3Kp3c => PI3Kac + PI3Kp3c
@@ -1427,7 +1482,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PI3Ka','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPI3K
 
 #Not implemented:
@@ -1443,7 +1497,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PIP2','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:ANIOc','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendCluster
 
 #PTENp2 + PTENac => PTENp2c + PTENac
@@ -1452,7 +1505,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENp2','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENac','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp2c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENac','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPTEN
 
 #PI3Kp2 + PI3Kac => PI3Kp2c + PI3Kac
@@ -1461,7 +1513,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPI3K
 
 #Not implemented:
@@ -1476,7 +1527,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PIP2','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendCluster
 
 #PTENp2 + PTENp2c => PTENp2c + PTENp2c 
@@ -1485,7 +1535,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENp2','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp2c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp2c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPTEN
 
 #PI3Kp2 + PI3Kp2c => PI3Kp2c + PI3Kp2c
@@ -1494,7 +1543,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPI3K
 
 #Not implemented:
@@ -1509,7 +1557,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PIP2','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP3c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP3c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendCluster
 
 #PTENp2 + PTENp3c => PTENp2c + PTENp3c
@@ -1518,7 +1565,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENp2','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp3c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp2c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp3c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPTEN
 
 #PI3Kp2 + PI3Kp3c => PI3Kp2c + PI3Kp3c
@@ -1527,7 +1573,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPI3K
 
 #Not implemented:
@@ -1543,7 +1588,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PIP3','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:ANIOc','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP3c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendCluster
 
 #PTENp3 + PTENac => PTENp3c + PTENac
@@ -1552,7 +1596,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENac','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp3c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENac','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPTEN
 
 #PI3Kp3 + PI3Kac => PI3Kp3c + PI3Kac
@@ -1561,7 +1604,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPI3K
 
 #Not implemented:
@@ -1576,7 +1618,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PIP3','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP3c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendCluster
 
 #PTENp3 + PTENp2c => PTENp3c + PTENp2c
@@ -1585,7 +1626,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp3c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp2c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPTEN
 
 #PI3Kp3 + PI3Kp2c => PI3Kp3c + PI3Kp2c
@@ -1594,7 +1634,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPI3K
 
 #Not implemented:
@@ -1609,7 +1648,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PIP3','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP3c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP3c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PIP3c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendCluster
 
 #PTENp3 + PTENp3c => PTENp3c + PTENp3c
@@ -1618,7 +1656,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp3c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp3c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp3c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPTEN
 
 #PI3Kp3 + PI3Kp3c => PI3Kp3c + PI3Kp3c
@@ -1627,7 +1664,6 @@ binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','1']]
-binder.ForcedSequence = 1
 binder.p = ExtendClusterPI3K
 
 #Not implemented:
@@ -1712,7 +1748,15 @@ react.k = DeoligomerizePI3K
 #-------------------------------------------------------------------------------
 
 
-run(10)
+import time
+run(1e-6)
+print "Done stirring. Now running..."
+start = time.time()
+run(RunTime)
+end = time.time()
+duration = end-start
+print duration
+
 
 
 

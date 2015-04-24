@@ -62,11 +62,9 @@ fil.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
 fil.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
 fil.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]
 fil.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
-fil.PlaneYZ = -1
 fil.Filaments = 142
 fil.Subunits = 123
-fil.Periodic = 0
-fil.RegularLattice = 1
+fil.Periodic = 1
 
 #logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
 #logger.VariableReferenceList = [['_', 'Variable:/:ANIO']]
