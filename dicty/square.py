@@ -9,7 +9,7 @@
 v_to_a = 1.0
 v_to_p2 = 1.0
 v_to_p3 = 1.0
-a_to_v = 1.0
+a_to_v = 0.3
 a_to_a = 1.0
 a_to_p2 = 1.0
 a_to_p3 = 1.0
@@ -36,9 +36,9 @@ DeoligomerizePTEN = 1e+1
 DeoligomerizePI3K = 1e+1
 
 #Diffusion coefficients
-LipidDiffusion = 0
+LipidDiffusion = 0.69e-12
 ProteinDiffusion = 0
-PTENaDiffusion = 0.69e-12
+PTENaDiffusion = 0.3e-12
 PTENDiffusion = 0.69e-12
 
 #Origins
@@ -81,10 +81,10 @@ theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 4
 
-theSimulator.createEntity('Variable', 'Variable:/:ANIO').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/:ANIO').Value = 14140
 theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP3').Value = 0 #1419
-theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 980
 theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:ANIOc').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP2c').Value = 0
@@ -108,24 +108,24 @@ theSimulator.createEntity('Variable', 'Variable:/:PI3Kp3c').Value = 0
 
 a = theSimulator.createEntity('Variable', 'Variable:/:PTENh')
 a.Name = 'HD'
-a.Value = 2000
+a.Value = 0
 
-life = theSimulator.createEntity('LifetimeLogProcess', 'Process:/:lifetime')
-life.VariableReferenceList = [['_', 'Variable:/:PTEN']]
-life.Iterations = 1
-life.LogEnd = LogTime
-life.FileName = "LifetimeLog.csv"
-life.Verbose = 0
+#life = theSimulator.createEntity('LifetimeLogProcess', 'Process:/:lifetime')
+#life.VariableReferenceList = [['_', 'Variable:/:PTEN']]
+#life.Iterations = 1
+#life.LogEnd = LogTime
+#life.FileName = "LifetimeLog.csv"
+#life.Verbose = 0
 
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:snrp1')
 react.VariableReferenceList = [['_', 'Variable:/:PTENh', '-1']]
 react.VariableReferenceList = [['_', 'Variable:/:PTEN', '1']]
-react.k = 1e-5
+react.k = 0
 
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:snrp2')
 react.VariableReferenceList = [['_', 'Variable:/:PTEN', '-1']]
 react.VariableReferenceList = [['_', 'Variable:/:PTENh', '1']]
-react.k = 1e+4
+react.k = 0
 
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:Surface')
