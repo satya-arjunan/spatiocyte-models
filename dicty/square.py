@@ -77,9 +77,6 @@ theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 7e-6
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 7e-6
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 2e-8
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
-theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 5
-theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
-theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 4
 
 theSimulator.createEntity('Variable', 'Variable:/:ANIO').Value = 14140
 theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 0
@@ -110,12 +107,12 @@ a = theSimulator.createEntity('Variable', 'Variable:/:PTENh')
 a.Name = 'HD'
 a.Value = 0
 
-#life = theSimulator.createEntity('LifetimeLogProcess', 'Process:/:lifetime')
-#life.VariableReferenceList = [['_', 'Variable:/:PTEN']]
-#life.Iterations = 1
-#life.LogEnd = LogTime
-#life.FileName = "LifetimeLog.csv"
-#life.Verbose = 0
+life = theSimulator.createEntity('LifetimeLogProcess', 'Process:/:lifetime')
+life.VariableReferenceList = [['_', 'Variable:/:PTEN']]
+life.Iterations = 1
+life.LogEnd = LogTime
+life.FileName = "LifetimeLog.csv"
+life.Verbose = 0
 
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:snrp1')
 react.VariableReferenceList = [['_', 'Variable:/:PTENh', '-1']]
