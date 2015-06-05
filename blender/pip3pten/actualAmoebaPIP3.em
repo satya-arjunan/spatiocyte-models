@@ -40,31 +40,31 @@ System System( / )
     } 
   Process VisualizationLogProcess(loggerMean)
     {
-      VariableReferenceList [_ Variable:/Cell/Surface:PIP2m]
-                            [_ Variable:/Cell/Surface:PTENm]
-                            [_ Variable:/Cell/Surface:PIP3m]
-                            [_ Variable:/Cell/Surface:PIP3a]
-                            [_ Variable:/Cell/Surface:PI3Km]
+      VariableReferenceList [_ Variable:/Cell/Surface:PIP2m 10050]
+                            [_ Variable:/Cell/Surface:PTENm 10050]
+                            [_ Variable:/Cell/Surface:PIP3m 10050]
+                            [_ Variable:/Cell/Surface:PIP3a 10050]
+                            [_ Variable:/Cell/Surface:PI3Km 10050]
                             [_ Variable:/Membrane:VACANT];
       LogInterval 20;
     }
-  Process MicroscopyTrackingProcess(track)
-    {
-      VariableReferenceList [_ Variable:/Cell/Surface:PIP2m 1]
-                            [_ Variable:/Cell/Surface:PTENm 1]
-                            [_ Variable:/Cell/Surface:PIP3m 1]
-                            [_ Variable:/Cell/Surface:PIP3a 1]
-                            [_ Variable:/Cell/Surface:PI3Km 1]
-                            [_ Variable:/Membrane:VACANT 1]
-                            [_ Variable:/Cell/Surface:PIP2m -1]
-                            [_ Variable:/Cell/Surface:PTENm -1]
-                            [_ Variable:/Cell/Surface:PIP3m -1]
-                            [_ Variable:/Cell/Surface:PIP3a -1]
-                            [_ Variable:/Cell/Surface:PI3Km -1]
-                            [_ Variable:/Membrane:VACANT -1];
-      ExposureTime 20;
-      LogInterval 1;
-    }
+#  Process MicroscopyTrackingProcess(track)
+#    {
+#      VariableReferenceList [_ Variable:/Cell/Surface:PIP2m 1]
+#                            [_ Variable:/Cell/Surface:PTENm 1]
+#                            [_ Variable:/Cell/Surface:PIP3m 1]
+#                            [_ Variable:/Cell/Surface:PIP3a 1]
+#                            [_ Variable:/Cell/Surface:PI3Km 1]
+#                            [_ Variable:/Membrane:VACANT 1]
+#                            [_ Variable:/Cell/Surface:PIP2m -1]
+#                            [_ Variable:/Cell/Surface:PTENm -1]
+#                            [_ Variable:/Cell/Surface:PIP3m -1]
+#                            [_ Variable:/Cell/Surface:PIP3a -1]
+#                            [_ Variable:/Cell/Surface:PI3Km -1]
+#                            [_ Variable:/Membrane:VACANT -1];
+#      ExposureTime 20;
+#      LogInterval 1;
+#    }
   Process CoordinateLogProcess(coord)
     {
       VariableReferenceList [_ Variable:/Cell/Surface:PIP2m]
