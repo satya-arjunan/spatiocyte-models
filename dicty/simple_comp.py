@@ -10,7 +10,7 @@ theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 2e-6
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 3e-6
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:A').Value = 10
-theSimulator.createEntity('Variable', 'Variable:/:B').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/:B').Value = 1000
 
 logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
 logger.VariableReferenceList = [['_', 'Variable:/:Vacant']]
@@ -27,8 +27,5 @@ diffuser.D = 1e-12
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:filam')
 fil.VariableReferenceList = [['_', 'Variable:/:A']]
-fil.Periodic = 1
-fil.RegularLattice = 1
-
 
 run(1)
