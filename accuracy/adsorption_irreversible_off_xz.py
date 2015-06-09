@@ -26,7 +26,8 @@ diffuser.D = 1e-12
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:filam')
 fil.VariableReferenceList = [['_', 'Variable:/:sA']]
-fil.PlaneXY = 1
+fil.PlaneXZ = 1
+fil.PlaneXY = 0
 
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:reaction1')
 binder.VariableReferenceList = [['_', 'Variable:/:A','-1']]
@@ -39,6 +40,6 @@ logger.VariableReferenceList = [['_', 'Variable:/:sA']]
 logger.LogInterval = 1
 logger.LogEnd = 200
 logger.Iterations = 10
-logger.FileName = "IterateLogOffXY.csv"
+logger.FileName = "IterateLogOffXZ.csv"
 
 run(201)
