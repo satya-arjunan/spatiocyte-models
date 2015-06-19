@@ -32,14 +32,14 @@ filenames = ['IterateLogOffXY.csv', 'IterateLogOffXZ.csv', 'IterateLogOffYZ.csv'
 #filenames = ['IterateLogXYo.csv','IterateLogXZo.csv','IterateLogYZo.csv']
 #filenames = ['IterateLogXY.csv','IterateLogXZ.csv','IterateLogYZ.csv']
 legendTitles = []
-lines = ['--', '--', '--', '-', '-', '-', '-', '-']
+lines = ['--', '--', '--', '--', '--', '--', '-', '-']
 colors = ['y', 'r', 'b', 'm', 'c', 'g', '#6b420c']
 
 P.xticks(fontsize=tickFontSize)
 P.yticks(fontsize=tickFontSize)
 
 #data = np.loadtxt('off_lattice.csv', delimiter=",")
-data = np.loadtxt('data-mathematica-ori.csv', delimiter=",")
+data = np.loadtxt('surface_adsorption.csv', delimiter=",")
 rows,cols = data.shape
 col0 = data[0:rows, cols-2:cols-1]
 col1 = data[0:rows, cols-1:cols]
