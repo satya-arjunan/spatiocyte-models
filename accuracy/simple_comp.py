@@ -46,10 +46,12 @@ diffuser.D = 0
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:filam')
 fil.VariableReferenceList = [['_', 'Variable:/:A']]
 fil.VariableReferenceList = [['_', 'Variable:/:C']]
-fil.PlaneXY = 1
+fil.PlaneXY = 0
 fil.PlaneYZ = 0
-fil.PlaneXZ = 0
+fil.PlaneXZ = 1
 #fil.OriginX = -1.1
+#fil.OriginY = -0.3
+#fil.OriginZ = -0.3
 #fil.RotateZ = 0.3
 #fil.RotateY = 0.3
 

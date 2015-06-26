@@ -9,8 +9,8 @@ theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 1e-6
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 2e-6
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 3e-6
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
-theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 5
-theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 4
+theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 4
+theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
 
 
