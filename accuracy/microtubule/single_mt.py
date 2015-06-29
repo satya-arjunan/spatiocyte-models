@@ -140,6 +140,8 @@ Microtubule.VariableReferenceList = [['_', 'Variable:/:MTKinesin' ]]
 Microtubule.VariableReferenceList = [['_', 'Variable:/:MTKinesinATP' ]]
 Microtubule.VariableReferenceList = [['_', 'Variable:/:actTubulin' ]]
 Microtubule.VariableReferenceList = [['_', 'Variable:/:Tubulin' , '-1']]
+Microtubule.VariableReferenceList = [['_', 'Variable:/:TubulinM' , '-2']]
+Microtubule.VariableReferenceList = [['_', 'Variable:/:TubulinP' , '-3']]
 
 run(0.01)
 
