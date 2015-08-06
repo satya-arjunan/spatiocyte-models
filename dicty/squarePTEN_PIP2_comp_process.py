@@ -39,7 +39,7 @@ theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 4
 theSimulator.createEntity('Variable', 'Variable:/:Vacant').Value = 0
 
 theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 2000
-theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 2000
+theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 200
 theSimulator.createEntity('Variable', 'Variable:/:PIP2c').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTENp2').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTENp2c').Value = 0
@@ -243,7 +243,7 @@ import time
 run(1e-6)
 print "Done stirring. Now running..."
 start = time.time()
-run(10)
+run(100)
 end = time.time()
 duration = end-start
 print duration
