@@ -100,13 +100,13 @@ binder.ForcedSequence = 1
 binder.p = PIP2Vac
 
 #PTENp2 + PIP2 => PIP2 + PTENp2
-binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r2')
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PIP2','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PIP2','1']]
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2','1']]
-binder.ForcedSequence = 1
-binder.p = PIP2PIP
+#binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r2')
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2','-1']]
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PIP2','-1']]
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PIP2','1']]
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2','1']]
+#binder.ForcedSequence = 1
+#binder.p = PIP2PIP
 
 #PTENp2 + PIP2c => PIP2 + PTENp2c
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r3')
@@ -120,22 +120,22 @@ binder.p = PIP2PIP
 
 #PTENp2c to other voxels
 #PTENp2c + VACANT => PIP2c + PTEN
-binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r4')
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2c','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/Surface:VACANT','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PIP2c','1']]
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PTEN','1']]
-binder.ForcedSequence = 1
-binder.p = PIP2Vac
+#binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r4')
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2c','-1']]
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:VACANT','-1']]
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PIP2c','1']]
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PTEN','1']]
+#binder.ForcedSequence = 1
+#binder.p = PIP2Vac
 
 #PTENp2c + PIP2 => PIP2c + PTENp2
-binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r5')
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2c','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PIP2','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PIP2c','1']]
-binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2','1']]
-binder.ForcedSequence = 1
-binder.p = PIP2PIP
+#binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r5')
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2c','-1']]
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PIP2','-1']]
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PIP2c','1']]
+#binder.VariableReferenceList = [['_', 'Variable:/Surface:PTENp2','1']]
+#binder.ForcedSequence = 1
+#binder.p = PIP2PIP
 
 #PTENp2c + PIP2c => PIP2c + PTENp2c
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r6')

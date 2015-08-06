@@ -286,7 +286,7 @@ for i in range(4):
     Microtubule.Length = MTLength
     Microtubule.Filaments = Filaments
     Microtubule.Periodic = 0
-    Microtubule.Verbose = 1
+    Microtubule.Verbose = 0
     Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin' ]]
     Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP' ]]
     Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin' ]]

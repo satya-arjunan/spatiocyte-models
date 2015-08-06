@@ -53,6 +53,7 @@ theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 4
+theSimulator.createEntity('Variable', 'Variable:/:Vacant').Value = 0
 
 theSimulator.createEntity('Variable', 'Variable:/:ANIO').Value = 14140
 theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 3000
@@ -84,6 +85,7 @@ theSimulator.createEntity('Variable', 'Variable:/:PI3Kp3c').Value = 0
 #a.Value = 0
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:Surface')
+fil.VariableReferenceList = [['_', 'Variable:/:Vacant', '-1']]
 fil.VariableReferenceList = [['_', 'Variable:/:PTEN']]
 fil.VariableReferenceList = [['_', 'Variable:/:ANIO']]
 fil.VariableReferenceList = [['_', 'Variable:/:PIP2']]
