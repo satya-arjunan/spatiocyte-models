@@ -23,6 +23,7 @@ theSimulator.createEntity('Variable', 'Variable:/Surface:ANIO_PTEN').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Surface:ANIOs_PTEN').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Surface:PTEN').Value = 80
+theSimulator.createEntity('Variable', 'Variable:/Surface:Vacant')
 
 logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
 logger.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN']]
@@ -41,8 +42,8 @@ populator.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN']]
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop2')
 populator.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
-populator.UniformRadiusY = 0.99
-populator.UniformRadiusZ = 0.99
+populator.UniformLengthY = 0.99
+populator.UniformLengthZ = 0.99
 
 #react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:adsorp')
 #react.VariableReferenceList = [['_', 'Variable:/:PTEN', '-1']]
@@ -180,6 +181,7 @@ multi.VariableReferenceList = [['_', 'Variable:/Surface:PTEN', '1']]
 #iterator.FileName = "stpl.csv"
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:filam')
+fil.VariableReferenceList = [['_', 'Variable:/Surface:Vacant', '-1']]
 fil.VariableReferenceList = [['_', 'Variable:/Surface:PTEN']]
 fil.VariableReferenceList = [['_', 'Variable:/Surface:ANIO_PTEN', '1']]
 fil.VariableReferenceList = [['_', 'Variable:/Surface:ANIOs_PTEN', '1']]
