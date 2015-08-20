@@ -10,7 +10,7 @@ theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 0.96e-6
 theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 1
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:MinDatp').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:MinDadp').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/:MinDadp').Value = 2600
 theSimulator.createEntity('Variable', 'Variable:/:MinEE').Value = 0
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseMinDatp')
@@ -45,7 +45,7 @@ pop.VariableReferenceList = [['_', 'Variable:/Surface:MinD']]
 theSimulator.createEntity('System', 'System:/:Surface').StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/Surface:DIMENSION').Value = 2
 theSimulator.createEntity('Variable', 'Variable:/Surface:VACANT')
-theSimulator.createEntity('Variable', 'Variable:/Surface:MinD').Value = 2600
+theSimulator.createEntity('Variable', 'Variable:/Surface:MinD').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Surface:MinEE').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Surface:MinDEE').Value = 1400
 theSimulator.createEntity('Variable', 'Variable:/Surface:MinDEED').Value = 0

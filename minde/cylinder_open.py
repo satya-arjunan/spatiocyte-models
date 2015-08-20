@@ -30,6 +30,7 @@ logger.VariableReferenceList = [['_', 'Variable:/Surface:MinEE']]
 logger.VariableReferenceList = [['_', 'Variable:/Surface:MinDEE']]
 logger.VariableReferenceList = [['_', 'Variable:/Surface:MinDEED']]
 logger.VariableReferenceList = [['_', 'Variable:/Surface:MinD']]
+logger.VariableReferenceList = [['_', 'Variable:/Surface:VACANT']]
 logger.LogInterval = 0.5
 
 pop = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop')
