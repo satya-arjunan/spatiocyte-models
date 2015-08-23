@@ -72,9 +72,9 @@ sim.SearchVacant = 0
 
 theSimulator.rootSystem.StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 7e-6
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 7e-6
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 0.5e-6
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 4.5e-6
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 2.7e-6
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 0.27e-6
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
@@ -85,10 +85,10 @@ theSimulator.createEntity('Variable', 'Variable:/:PTENvol').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PI3Kvol').Value = 0
 
 theSimulator.createEntity('Variable', 'Variable:/:ANIO').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 3000
+theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 500
 theSimulator.createEntity('Variable', 'Variable:/:PIP3').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 4000
-theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 4000
+theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 500
+theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 500
 theSimulator.createEntity('Variable', 'Variable:/:ANIOc').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP2c').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP3c').Value = 0
