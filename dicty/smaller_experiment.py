@@ -9,7 +9,7 @@
 duration = 1000
 
 #Reaction-driven diffusion probabilities
-charged_to_v = 0.4
+charged_to_v = 0.3
 v_to_a = 1.0
 v_to_p2 = 1.0
 v_to_p3 = 1.0
@@ -35,17 +35,24 @@ PI3Kvol_to_p2 = 0.05
 PI3Kvol_to_p3 = 0.05
 
 #Reaction probabilities
-NucleateCluster = 0.01
+#NucleateCluster = 0.01
+#NucleateClusterPTEN = 1
+#NucleateClusterPI3K = 1
+#ExtendCluster = 0.01
+#ExtendClusterPTEN = 1
+#ExtendClusterPI3K = 1
+
+NucleateCluster = 0
 NucleateClusterPTEN = 1
-NucleateClusterPI3K = 1
-ExtendCluster = 0.01
+NucleateClusterPI3K = 0
+ExtendCluster = 0
 ExtendClusterPTEN = 1
-ExtendClusterPI3K = 1
+ExtendClusterPI3K = 0
 
 #1st Order reaction rates
-Deoligomerize = 0.9168e+1
-DeoligomerizePTEN = 5e+0
-DeoligomerizePI3K = 5e+0
+Deoligomerize = 9
+DeoligomerizePTEN = 9
+DeoligomerizePI3K = 9
 
 PTEN_to_vol = 12.5
 PTENa_to_vol = 4
@@ -74,7 +81,7 @@ sim.SearchVacant = 0
 theSimulator.rootSystem.StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 4.5e-6
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 2.7e-6
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 1.35e-6
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 0.27e-6
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 5
@@ -86,10 +93,10 @@ theSimulator.createEntity('Variable', 'Variable:/:PTENvol').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PI3Kvol').Value = 0
 
 theSimulator.createEntity('Variable', 'Variable:/:ANIO').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 700
+theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 344
 theSimulator.createEntity('Variable', 'Variable:/:PIP3').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 500
-theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 500
+theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 344
+theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 200
 theSimulator.createEntity('Variable', 'Variable:/:ANIOc').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP2c').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP3c').Value = 0
