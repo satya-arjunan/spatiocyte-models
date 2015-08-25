@@ -27,14 +27,14 @@ p3_to_p2 = 1.0
 p3_to_p3 = 1.0
 
 
-PTENvol_to_v = 1.8e-5
-PTENvol_to_a = 1.8e-5
-PTENvol_to_p2 = 0.088
-PTENvol_to_p3 = 1.8e-5
+PTENvol_to_v = 0.00225 #0.18/8*0.1
+PTENvol_to_a = 0.075 #6/8*0.1
+PTENvol_to_p2 = 0.1 #8/8*0.1
+PTENvol_to_p3 = 0.075 #should increase
 PI3Kvol_to_v = 1.8e-5
 PI3Kvol_to_a = 1.8e-5
-PI3Kvol_to_p2 = 1.8e-5
-PI3Kvol_to_p3 = 0.1
+PI3Kvol_to_p2 = 1.8e-5 #should increase
+PI3Kvol_to_p3 = 0.09
 
 #Reaction probabilities
 #NucleateCluster = 0.01
@@ -57,27 +57,30 @@ ExtendClusterPI3K = 0
 #DeoligomerizePTEN = 0.5e+2
 #DeoligomerizePI3K = 0.5e+2
 isDeoligomerize = 0
-Deoligomerize = 5
-DeoligomerizePTEN = 5
-DeoligomerizePI3K = 5
+Deoligomerize = 3
+DeoligomerizePTEN = 3
+DeoligomerizePI3K = 3
 
-PTEN_to_vol = 4
+PTEN_to_vol = 12.52
 PTENa_to_vol = 4
-PTENp2_to_vol = 4
+PTENp2_to_vol = 0.04
 #PTENp3_to_vol = 4
-
-PI3K_to_vol = 4
-PI3Ka_to_vol = 4
-#PI3Kp2_to_vol = 0.04
-PI3Kp3_to_vol = 4
-
-Phosphorylate = 10
 Dephosphorylate = 5
+
+PI3K_to_vol = 100
+PI3Ka_to_vol = 100
+PI3Kp3_to_vol = 1
+#PI3Kp2_to_vol = 0.04
+Phosphorylate = 5
+
 
 #Diffusion coefficients
 LipidDiffusion = 0.5e-12
-ProteinDiffusion = 0.7e-12
-ProteinDiffusionVol = 16e-12
+ProteinDiffusion_a = 0.13e-12
+ProteinDiffusion_p3 = 0.13e-12
+ProteinDiffusion_p2 = 0.035e-12
+ProteinDiffusion_v = 0.69e-12
+ProteinDiffusion_vol = 16e-12
 
 
 
@@ -99,11 +102,11 @@ theSimulator.createEntity('Variable', 'Variable:/:Vacant').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTENvol').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PI3Kvol').Value = 0
 
-theSimulator.createEntity('Variable', 'Variable:/:ANIO').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 750
+theSimulator.createEntity('Variable', 'Variable:/:ANIO').Value = 1732 #10%
+theSimulator.createEntity('Variable', 'Variable:/:PIP2').Value = 350 #3%
 theSimulator.createEntity('Variable', 'Variable:/:PIP3').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 750
-theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 262
+theSimulator.createEntity('Variable', 'Variable:/:PTEN').Value = 500
+theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:ANIOc').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP2c').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP3c').Value = 0
@@ -146,32 +149,32 @@ fil.Periodic = 0
 
 logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
 #logger.VariableReferenceList = [['_', 'Variable:/:ANIO']]
-#logger.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
+logger.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PIP2']]
 logger.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTEN']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTENa']]
-#logger.VariableReferenceList = [['_', 'Variable:/:PTENac']]
+logger.VariableReferenceList = [['_', 'Variable:/:PTENac']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
 logger.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PIP3']]
-logger.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
-logger.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
-logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]
-logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
+#logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3Kvol']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3K']]
 logger.LogInterval = 1e-1
 
 logger = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
-##logger.VariableReferenceList = [['_', 'Variable:/:ANIO']]
-##logger.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
+#logger.VariableReferenceList = [['_', 'Variable:/:ANIO']]
+#logger.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
 logger.VariableReferenceList = [['_', 'Variable:/:PIP2']]
 logger.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
@@ -194,6 +197,18 @@ logger.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
 #logger.VariableReferenceList = [['_', 'Variable:/:PI3K']]
 logger.LogInterval = 1e-1
 logger.LogEnd = duration
+logger.Iterations = 1
+
+logger = theSimulator.createEntity('IteratingLogProcess', 'Process:/:pten')
+logger.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
+logger.VariableReferenceList = [['_', 'Variable:/:PTEN']]
+logger.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
+logger.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
+logger.VariableReferenceList = [['_', 'Variable:/:PTENa']]
+logger.VariableReferenceList = [['_', 'Variable:/:PTENac']]
+logger.LogInterval = 1e-1
+logger.LogEnd = duration
+logger.FileName = "pten.csv"
 logger.Iterations = 1
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop')
@@ -220,79 +235,79 @@ diffuser.D = LipidDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTEN')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTEN']]
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_v
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3K')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3K']]
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_v
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENa')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENa']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_a
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENac')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENac']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_a
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENp2')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_p2
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENp2c')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_p2
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENp3')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_p3
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENp3c')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_p3
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Ka')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_a
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kac')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_a
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kp2')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_p2
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kp2c')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_p2
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kp3')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_p3
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kp3c')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
 diffuser.WalkReact = 1
-diffuser.D = ProteinDiffusion
+diffuser.D = ProteinDiffusion_p3
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPTENvol')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
-diffuser.D = ProteinDiffusionVol
+diffuser.D = ProteinDiffusion_vol
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPI3Kvol')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PI3Kvol']]
-diffuser.D = ProteinDiffusionVol
+diffuser.D = ProteinDiffusion_vol
 #-------------------------------------------------------------------------------
 
 #Membrane recruitment-----------------------------------------------------------
@@ -384,6 +399,7 @@ binder.p = PI3Kvol_to_p3
 #Membrane dissociation----------------------------------------------------------
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:vd1')
 react.VariableReferenceList = [['_', 'Variable:/:PTEN', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
 react.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
 react.k = PTEN_to_vol
 
@@ -425,6 +441,7 @@ react.k = PTENp2_to_vol
 
 react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:vd8')
 react.VariableReferenceList = [['_', 'Variable:/:PI3K', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
 react.VariableReferenceList = [['_', 'Variable:/:PI3Kvol', '1']]
 react.k = PI3K_to_vol
 
