@@ -24,7 +24,7 @@ r.Value = 80
 r.Name = "HD"
 
 r = theSimulator.createEntity('Variable', 'Variable:/:V')
-r.Value = 1967
+r.Value = 1966
 r.Name = "HD"
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r12')
@@ -84,6 +84,6 @@ l.VariableReferenceList = [['_', 'Variable:/:S3']]
 l.VariableReferenceList = [['_', 'Variable:/:V']]
 l.LogInterval = 5e-1
 l.LogEnd = duration
-l.Iterations = 500
+l.Iterations = 1000
 
 run(duration+0.1)
