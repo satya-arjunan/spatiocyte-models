@@ -76,8 +76,8 @@ Phosphorylate = 5
 
 #Diffusion coefficients
 LipidDiffusion = 0.5e-12
-ProteinDiffusion_a = 0.13e-12
-ProteinDiffusion_p3 = 0.13e-12
+ProteinDiffusion_a = 0.133e-12
+ProteinDiffusion_p3 = 0.133e-12
 ProteinDiffusion_p2 = 0.035e-12
 ProteinDiffusion_v = 0.69e-12
 ProteinDiffusion_vol = 16e-12
