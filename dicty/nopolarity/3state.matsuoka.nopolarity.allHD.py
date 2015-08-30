@@ -26,9 +26,10 @@ k23 = 0.406
 k32 = 0.029
 
 #your parameters
-PTENvol_frac = 0.3
+PTENvol_frac = 0.5
 nVacant_total = 17325
-nVolumeVacant_total = 279864
+nInterface = 21175
+nVolumeVacant = 279864-nInterface
 nANIO_frac = 0.1 # 10%
 nPIP2_frac = 0.03 # 3%
 nPTEN_total = 500
