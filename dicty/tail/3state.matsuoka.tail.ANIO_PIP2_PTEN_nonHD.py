@@ -1,6 +1,6 @@
 
-duration = 15
-Iterations = 200
+duration = 100
+Iterations = 1
 VoxelRadius = 10e-9
 LogEvent = 0
 LengthX = 4.5e-6
@@ -180,7 +180,7 @@ l.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
 ##l.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
 ##l.VariableReferenceList = [['_', 'Variable:/:PI3Kvol']]
 ##l.VariableReferenceList = [['_', 'Variable:/:PI3K']]
-l.LogInterval = 1e+1
+l.LogInterval = 1e-1
 #
 #logger = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
 ##logger.VariableReferenceList = [['_', 'Variable:/:ANIO']]
@@ -430,12 +430,17 @@ r.p = a/Ze
 r.LogEvent = LogEvent
 r.LogStart = 5
 
+a = kV1*nPTENvol_ss*nPIP2_ss 
+b = kV2*nPTENvol_ss*nANIO_ss 
+c = kV3*nPTENvol_ss*nVacant_ss 
+print a/(a+b+c), b/(a+b+c), c/(a+b+c)
+
 l = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
 l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
 l.VariableReferenceList = [['_', 'Variable:/:PTENa']]
 l.VariableReferenceList = [['_', 'Variable:/:PTEN']]
 l.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
-l.LogInterval = 5e-1
+l.LogInterval = 5e-2
 l.LogEnd = duration
 l.Iterations = Iterations
 l.FileName = "back.csv"

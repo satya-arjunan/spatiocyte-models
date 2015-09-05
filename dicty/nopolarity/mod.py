@@ -39,9 +39,10 @@ nPIP2_frac = 0.03 # 3%
 nPTEN_total = 500
 
 #PTEN fractions, PTEN volume state => 4
-f1 = p1*(1-PTENvol_frac)
-f2 = p2*(1-PTENvol_frac)
-f3 = p3*(1-PTENvol_frac)
+f7 = PTENvol_frac
+f1 = p1*(1-f7)
+f2 = p2*(1-f7)
+f3 = p3*(1-f7)
 
 nPIP2_total = nPIP2_frac*nVacant_total
 nANIO_total = nANIO_frac*nVacant_total
@@ -55,25 +56,50 @@ nANIO_ss = nANIO_total-nPTENa_ss
 nVacant_ss = nVacant_total-nANIO_total-nPIP2_total
 Volume = LengthX*LengthY*LengthZ
 
+k41*f4 = f1*k14 + f1*k12 - f2*k21
+k52*f5 = f2*k25 + f2*k21 + f2*k23 - f1*k12 - f3*k32
+k63*f6 = f3*k36 + f3*k32 - f2*k23
+f4+f5+f6 = f7
+q1 = k41*f4*nPTEN_total*nPIP2_ss
+q2 = k52*f5*nPTEN_total*nANIO_ss
+q3 = k63*f6*nPTEN_total*nVacant_ss
+q1+q2+q3 = 1
+
+
+#S1
+#f1*k14 + f1*k12          = f4*k41 + f2*k21
+#x = f1*k14 + f1*k12 - f2*k21
+#S2
+#f2*k25 + f2*k21 + f2*k23 = f5*k52 + f1*k12 + f3*k32
+#y = f2*k25 + f2*k21 + f2*k23 - f1*k12 - f3*k32
+#S3
+#f3*k36 + f3*k32          = f6*k63 + f2*k23
+#z = f3*k36 + f3*k32 - f2*k23
+#S4
+f4*k41 + f4*k45 + f4*k46 = f1*k14 + f5*k54 + f6*k64
+#S5
+f5*k52 + f5*k54 + f5*k56 = f2*k25 + f4*k45 + f6*k65
+#S6
+f6*k63 + f6*k65 + f6*k64 = f3*k36 + f4*k46 + f5*k56
+
+
 v1 = nPIP2_ss/(nPIP2_ss + nANIO_ss + nVacant_ss)
 v2 = nANIO_ss/(nPIP2_ss + nANIO_ss + nVacant_ss)
 v3 = nVacant_ss/(nPIP2_ss + nANIO_ss + nVacant_ss)
 
-q1 = k41*f4*v1
+uq1 = kk41*f4*nPIP2_ss
+uq2 = kk52*f5*nANIO_ss
+uq3 = kk63*f6*nVacant_ss
 
-#S1
-f1*k14 + f1*k12          = f4*k41 + f2*k21
-#S2
-f2*k25 + f2*k23 + f2*k21 = f5*k52 + f1*k12 + f3*k32
-#S3
-f3*k36 + f3*k32          = f6*k63 + f2*k23
-#S4
-f4*k41 + f4*k42 + f4*k43 = f1*k14 + f5*k51 + f6*k61
-#S5
-f5*k52 + f5*k51 + f5*k53 = f2*k25 + f4*k42 + f6*k62
-#S6
-f6*k63 + f6*k62 + f6*k61 = f3*k36 + f4*k43 + f5*k53
-
+#ax/(ax + by + cz) = q1
+#ax - ax(q1) - by(q1) - cz(q1) = 0
+#a(x-x(q1)) = by(q1) + cz(q1)
+a = (b*y*q1 + c*z*q1)/(x - x*q1)
+#by/(ax + by + cz) = q2
+#by - ax(q2) - by(q2) - cz(q2) = 0
+#b(y-y(q2)) = ax(q2) + cz(q2)
+b = (a*x*q2 + c*z*q2)/(y - y*q2)
+c = (a*x*q3 + b*y*q3)/(z - z*q3)
 
 
 
