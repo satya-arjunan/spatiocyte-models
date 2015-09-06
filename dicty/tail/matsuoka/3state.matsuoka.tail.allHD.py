@@ -1,6 +1,6 @@
 
-duration = 1
-Iterations = 1
+duration = 10
+Iterations = 100
 VoxelRadius = 10e-9
 LogEvent = 0
 LengthX = 4.5e-6
@@ -8,113 +8,68 @@ LengthY = 1.35e-6
 LengthZ = 0.26e-6
 
 #parameters from 2013.matsuoka.pcb
-D1 = 0.035e-12
-D2 = 0.133e-12
-D3 = 0.693e-12
-p1 = 0.479
-p2 = 0.480
+D1 = 0.034e-12
+D2 = 0.150e-12
+D3 = 0.722e-12
+p1 = 0.639
+p2 = 0.331
 p3 = 1-p1-p2
-q1 = 0.238
-q2 = 0.606
-q3 = 0.157
-l1 = 0.037
-l2 = 3.995
-l3 = 12.525
-k12 = 6.289
-k21 = 2.896
-k23 = 0.406
-k32 = 0.029
+q1 = 0.298
+q2 = 0.581
+q3 = 0.121
+l1 = 0.010
+l2 = 4.708
+l3 = 13.919
+k12 = 4.663
+k21 = 4.187
+k23 = 0.414
+k32 = 0.028
+PTEN_cytosol = 20000.0
+PTEN_membrane = 20000.0
+#PTEN_membrane = 15200.0
 
-#q1 = 0.237524284976795
-#q2 = 0.605689082115426
-#q3 = 0.156786632907779
-#l1 = 0.0371083460085474
-#l2 = 3.99533611676107
-#l3 = 12.5246469927403
-#k12 = 6.28908951033160
-#k21 = 2.89587518051729
-#k23 = 0.405469954974635
-#k32 = 0.0288340937175279
-R = 0.762 # PTEN_membrane_ss/PTEN_cytosol_ss
-#R = 1 # PTEN_membrane_ss/PTEN_cytosol_ss
-p0 = 1
-
-
-m4=(k21*l1*(k32+l3)+(k12+l1)*(k32*l2+(k23+l2)*l3))
-m1=(k32*l2+k23*l3+l2*l3+k21*(k32+l3)+k12*(k23+k32+l3))/m4
-m2=(k21*(k32+l3)+k12*(k23+k32+l3)+l1*(k23+k32+l3))/m4
-m3=(k21*(k32+l1)+k12*(k23+k32+l2)+l1*(k23+k32+l2))/m4
-
-
-p1=((k32*l2+(k23+l2)*l3)*mu1*p01+k21*(k32*mu1*p01+l3*mu1*p01+k32*mu2*p02+l3*mu2*p02+k32*mu3*p03))/(k21*l1*(k32+l3)+(k12+l1)*(k32*l2+(k23+l2)*l3))
-p2=(l1*(k32*mu2*p02+l3*mu2*p02+k32*mu3*p03)+k12*(k32*mu1*p01+l3*mu1*p01+k32*mu2*p02+l3*mu2*p02+k32*mu3*p03))/(k21*l1*(k32+l3)+(k12+l1)*(k32*l2+(k23+l2)*l3));
-p3=(l1*((k21+l2)*mu3*p03+k23*(mu2*p02+mu3*p03))+k12*(l2*mu3*p03+k23*(mu1*p01+mu2*p02+mu3*p03)))/(k21*l1*(k32+l3)+(k12+l1)*(k32*l2+(k23+l2)*l3));
-
-
-
-
-
-
-
-
-
-
-
-
-
+#Uncomment the following to correct the final PTEN ratio to the correct 
+#p1, p2 and p3
+k12 = 3.063
+k21 = 4.100
+k23 = 0.574
 
 m4=(k12+l1)*(k21+k23+l2)*(k32+l3)-k12*k21*(k32+l3)-k23*k32*(k12+l1)
 m1=((k21+k23+l2)*(k32+l3)-k23*k32+k12*(k32+l3)+k12*k23)/m4
 m2=(k21*(k32+l3)+(k32+l3)*(k12+l1)+k23*(k12+l1))/m4
 m3=(k21*k32+k32*(k12+l1)+(k21+k23+l2)*(k12+l1)-k12*k21)/m4
 
-print "first:", m1, m2, m3, m4
-
-m4=(k21*l1*(k32+l3)+(k12+l1)*(k32*l2+(k23+l2)*l3))
-m1=(k32*l2+k23*l3+l2*l3+k21*(k32+l3)+k12*(k23+k32+l3))/m4
-m2=(k21*(k32+l3)+k12*(k23+k32+l3)+l1*(k23+k32+l3))/m4
-m3=(k21*(k32+l1)+k12*(k23+k32+l2)+l1*(k23+k32+l2))/m4
-
-print "mine:", m1, m2, m3, m4
-
-mu=R/(m1*q1+m2*q2+m3*q3)
+#Here mu1 does not include PTEN_cytosol in its term
+#PTEN_membrane = PTEN_cytosol*(m1*mu1+m2*mu2+m3*mu3)
+#              = PTEN_cytosol*mu*(m1*q1+m2*q2+m3*q3)
+mu = PTEN_membrane/(PTEN_cytosol*(m1*q1+m2*q2+m3*q3))
 
 mu1=q1*mu
-mu2=q2*mu;
-mu3=q3*mu;
+mu2=q2*mu
+mu3=q3*mu
 
+#print "ori:", p1, p2, p3
 p1=(mu1*((k21+k23+l2)*(k32+l3)-k23*k32)+mu2*k21*(k32+l3)+mu3*k21*k32)/m4
 p2=(mu1*k12*(k32+l3)+mu2*(k32+l3)*(k12+l1)+mu3*k32*(k12+l1))/m4
 p3=(mu1*k12*k23+mu2*k23*(k12+l1)+mu3*((k21+k23+l2)*(k12+l1)-k12*k21))/m4
-print p1, p2, p3
 
-#Solve the p1,p2,p3 differential equations using mathematica:
-p1=(((k32*l2+(k23+l2)*l3)*mu1+k21*(l3*(mu1+mu2)+k32*(mu1+mu2+mu3)))*p0)/(k21*l1*(k32+l3)+(k12+l1)*(k32*l2+(k23+l2)*l3))
-p2=((l1*(l3*mu2+k32*(mu2+mu3))+k12*(l3*(mu1+mu2)+k32*(mu1+mu2+mu3)))*p0)/(k21*l1*(k32+l3)+(k12+l1)*(k32*l2+(k23+l2)*l3))
-p3=((l1*((k21+l2)*mu3+k23*(mu2+mu3))+k12*(l2*mu3+k23*(mu1+mu2+mu3)))*p0)/(k21*l1*(k32+l3)+(k12+l1)*(k32*l2+(k23+l2)*l3))
+a = p1+p2+p3
+p1 = p1/a
+p2 = p2/a
+p3 = p3/a
+#print p1, p2, p3
 
-print p1, p2, p3
-
-print m1, m2, m3, m4
-print mu
-print mu1, mu2, mu3, mu1+mu2+mu3
-print p1, p2, p3
-
-#p1+p2+p3
-#p1/(p1+p2+p3)
-#p2/(p1+p2+p3)
-#p3/(p1+p2+p3)
-
-
+kV1 = mu1
+kV2 = mu2
+kV3 = mu3
 
 #your parameters
-PTENvol_frac = 0.56
+PTENvol_frac = PTEN_cytosol/(PTEN_cytosol+PTEN_membrane)
 nVacant_total = 17325
-nInterface = 21175
-nVolumeVacant = 279864-nInterface
+nVolumeVacant_total = 279864
 nANIO_frac = 0.1 # 10%
 nPIP2_frac = 0.03 # 3%
-nPTEN_total = 35200
+nPTEN_total = 500
 
 #PTEN fractions, PTEN volume state => 4
 f4 = PTENvol_frac
@@ -122,23 +77,14 @@ f1 = p1*(1-f4)
 f2 = p2*(1-f4)
 f3 = p3*(1-f4)
 
-mu1 = (f1*l1 + f1*k12 - f2*k21)/f4
-mu2 = (f2*l2 + f2*k23 + f2*k21 - f1*k12 - f3*k32)/f4
-mu3 = (f3*l3 + f3*k32 - f2*k23)/f4
-#mu1 = 0.54
-#mu2 = 1.38
-#mu3 = 0.36
-
+#kV1 = (f1*l1 + f1*k12 - f2*k21)/f4
+#kV2 = (f2*l2 + f2*k23 + f2*k21 - f1*k12 - f3*k32)/f4
+#kV3 = (f3*l3 + f3*k32 - f2*k23)/f4
 nPIP2_total = nPIP2_frac*nVacant_total
 nANIO_total = nANIO_frac*nVacant_total
 PTENp2_frac = f1
 PTENa_frac = f2
 PTEN_frac = f3
-
-a = mu1+mu2+mu3
-#print mu1, mu2, mu3
-#print mu1/a, mu2/a, mu3/a
-
 
 #ss = steady-state
 nPTENvol_ss = PTENvol_frac*nPTEN_total
@@ -208,13 +154,16 @@ s.Name = "HD"
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r12')
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
-r.k = k12
+r.k = k12/nANIO_ss*Volume
 r.LogEvent = LogEvent
 r.LogStart = 5
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r1V')
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
 r.k = l1
 r.LogEvent = LogEvent
@@ -222,13 +171,16 @@ r.LogStart = 5
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r21')
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '1']]
-r.k = k21
+r.k = k21/nPIP2_ss*Volume
 r.LogEvent = LogEvent
 r.LogStart = 5
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r2V')
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
 r.k = l2
 r.LogEvent = LogEvent
@@ -236,6 +188,7 @@ r.LogStart = 5
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r23')
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTEN', '1']]
 r.k = k23
 r.LogEvent = LogEvent
@@ -243,8 +196,9 @@ r.LogStart = 5
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r32')
 r.VariableReferenceList = [['_', 'Variable:/:PTEN', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
-r.k = k32
+r.k = k32/nANIO_ss*Volume
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -257,22 +211,24 @@ r.LogStart = 5
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:rV1')
 r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '1']]
-r.k = mu1
+r.k = kV1/nPIP2_ss*Volume
 r.LogEvent = LogEvent
 r.LogStart = 5
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:rV2')
 r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
-r.k = mu2
+r.k = kV2/nANIO_ss*Volume
 r.LogEvent = LogEvent
 r.LogStart = 5
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:rV3')
 r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTEN', '1']]
-r.k = mu3
+r.k = kV3
 r.LogEvent = LogEvent
 r.LogStart = 5
 
