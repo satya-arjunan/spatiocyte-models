@@ -1,5 +1,5 @@
 
-duration = 1
+duration = 100
 Iterations = 1
 VoxelRadius = 10e-9
 LogEvent = 0
@@ -159,10 +159,14 @@ a = k12*nPTENp2_ss
 p2_to_ac = a/Ze
 
 #Clustering
-cl_a_to_a = 1.0
-#cl_a_to_p2 = 0
-cl_p2_to_p2 = 1.0
-#cl_p2_to_a = 0
+a_to_a = 0
+a_to_p2 = 0
+p2_to_p2 = 0
+p2_to_a = 0
+#a_to_a = 1.0
+#a_to_p2 = 1.0
+#p2_to_p2 = 1.0
+#p2_to_a = 1.0
 
 isDeoligomerize = 0
 Deoligomerize = 3
@@ -418,8 +422,8 @@ diffuser.D = ProteinDiffusion_vol
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r12')
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENac', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
 r.ForcedSequence = 1
 r.p = p2_to_a
 r.LogEvent = LogEvent
@@ -428,7 +432,7 @@ r.LogStart = 5
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r12_c')
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENac', '1']]
 r.ForcedSequence = 1
 r.p = p2_to_ac
@@ -439,7 +443,7 @@ r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENac', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
 r.ForcedSequence = 1
 r.p = p2_to_a
 r.LogEvent = LogEvent
@@ -474,8 +478,8 @@ r.LogStart = 5
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r21')
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '1']]
 r.ForcedSequence = 1
 r.p = a_to_p2
 r.LogEvent = LogEvent
@@ -484,10 +488,10 @@ r.LogStart = 5
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r21_c')
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '1']]
 r.ForcedSequence = 1
-r.p = a_to_p2
+r.p = a_to_p2c
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -495,7 +499,7 @@ r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r
 r.VariableReferenceList = [['_', 'Variable:/:PTENac', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '1']]
 r.ForcedSequence = 1
 r.p = a_to_p2
 r.LogEvent = LogEvent
@@ -507,7 +511,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '1']]
 r.ForcedSequence = 1
-r.p = a_to_p2
+r.p = a_to_p2c
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -635,7 +639,7 @@ r.VariableReferenceList = [['_', 'Variable:/:ANIO','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENac','1']]
 r.ForcedSequence = 1
-r.p = cl_a_to_a
+r.p = a_to_a
 
 #PTENa + ANIOc => ANIOc + PTENac
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:aa2')
@@ -644,7 +648,7 @@ r.VariableReferenceList = [['_', 'Variable:/:ANIOc','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENac','1']]
 r.ForcedSequence = 1
-r.p = cl_a_to_a
+r.p = a_to_a
 
 #PTENac + ANIO => ANIOc + PTENac
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:aa3')
@@ -653,7 +657,7 @@ r.VariableReferenceList = [['_', 'Variable:/:ANIO','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENac','1']]
 r.ForcedSequence = 1
-r.p = cl_a_to_a
+r.p = a_to_a
 
 #PTENac + ANIOc => ANIOc + PTENac
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:aa4')
@@ -662,7 +666,7 @@ r.VariableReferenceList = [['_', 'Variable:/:ANIOc','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENac','1']]
 r.ForcedSequence = 1
-r.p = cl_a_to_a
+r.p = a_to_a
 
 #PTENa + PIP2 => ANIOc + PTENp2c
 #r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:ap1')
@@ -743,7 +747,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PIP2','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c','1']]
 r.ForcedSequence = 1
-r.p = cl_p2_to_p2
+r.p = p2_to_p2
 
 #PTENp2 + PIP2c => PIP2c + PTENp2c
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:pp2')
@@ -752,7 +756,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PIP2c','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c','1']]
 r.ForcedSequence = 1
-r.p = cl_p2_to_p2
+r.p = p2_to_p2
 
 #PTENp2c + PIP2 => PIP2c + PTENp2c
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:pp3')
@@ -761,7 +765,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PIP2','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c','1']]
 r.ForcedSequence = 1
-r.p = cl_p2_to_p2
+r.p = p2_to_p2
 
 #PTENp2c + PIP2c => PIP2c + PTENp2c
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:pp4')
@@ -770,7 +774,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PIP2c','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c','1']]
 r.ForcedSequence = 1
-r.p = cl_p2_to_p2
+r.p = p2_to_p2
 
 
 

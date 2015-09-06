@@ -1,5 +1,5 @@
 
-duration = 1
+duration = 100
 Iterations = 1
 VoxelRadius = 10e-9
 LogEvent = 0
@@ -487,7 +487,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '1']]
 r.ForcedSequence = 1
-r.p = a_to_p2
+r.p = a_to_p2c
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -507,7 +507,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '1']]
 r.ForcedSequence = 1
-r.p = a_to_p2
+r.p = a_to_p2c
 r.LogEvent = LogEvent
 r.LogStart = 5
 
