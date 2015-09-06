@@ -1,6 +1,6 @@
 
-duration = 1
-Iterations = 1
+duration = 10
+Iterations = 2
 VoxelRadius = 10e-9
 LogEvent = 0
 LengthX = 4.5e-6
@@ -26,7 +26,8 @@ k21 = 4.187
 k23 = 0.414
 k32 = 0.028
 PTEN_cytosol = 20000.0
-PTEN_membrane = 15200.0
+#PTEN_membrane = 15200.0
+PTEN_membrane = 20000.0
 
 #Uncomment the following to correct the final PTEN ratio to the correct 
 #p1, p2 and p3 (the were values were adjusted manually by me)
@@ -370,6 +371,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
 Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
 a = k12*nPTENp2_ss
 r.p = a/Ze
+print "p2_to_a:", r.p
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -399,6 +401,7 @@ Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt + (nPTENa_ss/nVacant_total)*n
 #a: total number of events in 1 s
 a = k21*nPTENa_ss
 r.p = a/Ze
+print "a_to_p2:", r.p
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -426,6 +429,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
 Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt + (nPTEN_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
 a = k32*nPTEN_ss
 r.p = a/Ze
+print "v_to_a:", r.p
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -444,6 +448,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '1']]
 Ze = 3.0/12*(nPIP2_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
 a = kV1*nPTENvol_ss
 r.p = a/Ze
+print "PTENvol_to_p2:", r.p
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -455,6 +460,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
 Ze = 3.0/12*(nANIO_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
 a = kV2*nPTENvol_ss
 r.p = a/Ze
+print "PTENvol_to_a:", r.p
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -466,6 +472,7 @@ r.VariableReferenceList = [['_', 'Variable:/:PTEN', '1']]
 Ze = 3.0/12*(nVacant_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt 
 a = kV3*nPTENvol_ss
 r.p = a/Ze
+print "PTENvol_to_v:", r.p
 r.LogEvent = LogEvent
 r.LogStart = 5
 

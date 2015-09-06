@@ -1,6 +1,6 @@
 
-duration = 1
-Iterations = 1
+duration = 10
+Iterations = 2
 VoxelRadius = 10e-9
 LogEvent = 0
 LengthX = 4.5e-6
@@ -26,7 +26,8 @@ k21 = 4.187
 k23 = 0.414
 k32 = 0.028
 PTEN_cytosol = 20000.0
-PTEN_membrane = 15200.0
+#PTEN_membrane = 15200.0
+PTEN_membrane = 20000.0
 
 #Uncomment the following to correct the final PTEN ratio to the correct 
 #p1, p2 and p3 (the were values were adjusted manually by me)
@@ -114,6 +115,38 @@ PTENa_dt = pow(2*VoxelRadius, 2)/(4*ProteinDiffusion_a)
 PTENp2_dt = pow(2*VoxelRadius, 2)/(4*ProteinDiffusion_p2)
 PIP2_dt = pow(2*VoxelRadius, 2)/(4*LipidDiffusion)
 ANIO_dt = pow(2*VoxelRadius, 2)/(4*LipidDiffusion)
+
+
+#DIRP rates
+Ze = 3.0/12*(nANIO_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
+a = kV2*nPTENvol_ss
+PTENvol_to_a = a/Ze
+print "vol_to_a:", PTENvol_to_a
+
+Ze = 3.0/12*(nVacant_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt 
+a = kV3*nPTENvol_ss
+PTENvol_to_v = a/Ze
+print "vol_to_v:", PTENvol_to_v
+
+Ze = 3.0/12*(nPIP2_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
+a = kV1*nPTENvol_ss
+PTENvol_to_p2 = a/Ze
+print "vol_to_p2:", PTENvol_to_p2
+
+Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt + (nPTEN_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
+a = k32*nPTEN_ss
+v_to_a = a/Ze
+print "v_to_a:",v_to_a
+
+Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt + (nPTENa_ss/nVacant_total)*nPIP2_ss*1/PIP2_dt
+a = k21*nPTENa_ss
+a_to_p2 = a/Ze
+print "a_to_p2:",a_to_p2
+
+Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
+a = k12*nPTENp2_ss
+p2_to_a = a/Ze
+print "p2_to_a:",p2_to_a
 
 sim = theSimulator.createStepper('SpatiocyteStepper', 'SS')
 sim.VoxelRadius = VoxelRadius
@@ -366,10 +399,8 @@ r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
-#r.k = 6.289/nANIO_ss*Volume
-Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
-a = k12*nPTENp2_ss
-r.p = a/Ze
+r.ForcedSequence = 1
+r.p = p2_to_a
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -386,19 +417,8 @@ r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '1']]
-#r.k = 2.896/nPIP2_ss*Volume
-#total number of events in 1 s = 2.896*nPTENa_ss
-#DIRP
-#----
-#PTENa_dt: diffusion step interval of PTENa
-#PIP2_dt: diffusion step interval of PIP2
-#Z, total number of collision attempts in 1 s 
-#    = nPTENa_ss*1/PTENa_dt + nPIP2_ss*1/PIP2_dt
-#Ze, total effective PTENa-PIP2 collisions
-Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt + (nPTENa_ss/nVacant_total)*nPIP2_ss*1/PIP2_dt
-#a: total number of events in 1 s
-a = k21*nPTENa_ss
-r.p = a/Ze
+r.ForcedSequence = 1
+r.p = a_to_p2
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -421,11 +441,10 @@ r.LogStart = 5
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r32')
 r.VariableReferenceList = [['_', 'Variable:/:PTEN', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
-#r.k = 0.029/nANIO_ss*Volume
-Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt + (nPTEN_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
-a = k32*nPTEN_ss
-r.p = a/Ze
+r.ForcedSequence = 1
+r.p = v_to_a
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -440,10 +459,7 @@ r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r
 r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '1']]
-#r.k = 1.63959/nPIP2_ss*Volume
-Ze = 3.0/12*(nPIP2_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
-a = kV1*nPTENvol_ss
-r.p = a/Ze
+r.p = PTENvol_to_p2
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -451,10 +467,7 @@ r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r
 r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
-#r.k = 0.48894/nANIO_ss*Volume
-Ze = 3.0/12*(nANIO_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
-a = kV2*nPTENvol_ss
-r.p = a/Ze
+r.p = PTENvol_to_a
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -462,17 +475,9 @@ r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r
 r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:Vacant', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTEN', '1']]
-#r.k = 0.31983
-Ze = 3.0/12*(nVacant_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt 
-a = kV3*nPTENvol_ss
-r.p = a/Ze
+r.p = PTENvol_to_v
 r.LogEvent = LogEvent
 r.LogStart = 5
-
-a = kV1*nPTENvol_ss
-b = kV2*nPTENvol_ss
-c = kV3*nPTENvol_ss
-print "q1,q2,q3:", a/(a+b+c), b/(a+b+c), c/(a+b+c)
 
 l = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
 l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
