@@ -95,7 +95,7 @@ nPTENa_ss = PTENa_frac*nPTEN_total
 nPTENp2_ss = PTENp2_frac*nPTEN_total
 nPTEN_ss = PTEN_frac*nPTEN_total
 nPIP2_ss = nPIP2_total-nPTENp2_ss
-nANIOt_ss = nANIO_total-nPTENa_ss
+nANIO_ss = nANIO_total-nPTENa_ss
 nVacant_ss = nVacant_total-nANIO_total-nPIP2_total
 Volume = LengthX*LengthY*LengthZ
 
@@ -117,10 +117,9 @@ PIP2_dt = pow(2*VoxelRadius, 2)/(4*LipidDiffusion)
 ANIO_dt = pow(2*VoxelRadius, 2)/(4*LipidDiffusion)
 
 #DIRP rates
-Ze = 3.0/12*(nANIOt_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
+Ze = 3.0/12*(nANIO_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
 a = kV2*nPTENvol_ss
 PTENvol_to_a = a/Ze
-
 PTENvol_to_ac = PTENvol_to_a
 
 Ze = 3.0/12*(nVacant_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
@@ -130,14 +129,13 @@ PTENvol_to_v = a/Ze
 Ze = 3.0/12*(nPIP2_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
 a = kV1*nPTENvol_ss
 PTENvol_to_p2 = a/Ze
-
 PTENvol_to_p2c = PTENvol_to_p2
 
-Ze = (nANIOt_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt + (nPTEN_ss/nVacant_total)*nANIOt_ss*1/ANIO_dt
+Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt + (nPTEN_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
 a = k32*nPTEN_ss
 v_to_a = a/Ze
 
-Ze = (nANIOt_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt 
+Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt 
 a = k32*nPTEN_ss
 v_to_ac = a/Ze
 
@@ -153,12 +151,12 @@ Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt
 a = k21*nPTENa_ss
 a_to_p2c = a/Ze
 
-Ze = (nANIOt_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total)*nANIOt_ss*1/ANIO_dt
+Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
 a = k12*nPTENp2_ss
 p2_to_a = a/Ze
 print "p2_to_a:", p2_to_a
 
-Ze = (nANIOt_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt
+Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt
 a = k12*nPTENp2_ss
 p2_to_ac = a/Ze
 print "p2_to_ac:", p2_to_ac
@@ -340,6 +338,10 @@ diffuser.D = 0
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPIP2')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PIP2']]
 diffuser.D = LipidDiffusion
+
+diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPIP2c')
+diffuser.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
+diffuser.D = 0 
 #
 #diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPIP3')
 #diffuser.VariableReferenceList = [['_', 'Variable:/:PIP3']]
@@ -446,7 +448,7 @@ r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENac', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
 r.ForcedSequence = 1
 r.p = p2_to_a
 r.LogEvent = LogEvent
@@ -455,33 +457,17 @@ r.LogStart = 5
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r12cc')
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENac', '1']]
 r.ForcedSequence = 1
 r.p = p2_to_ac
 r.LogEvent = LogEvent
 r.LogStart = 5
 
-r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r1V')
-r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
-r.k = l1
-r.LogEvent = LogEvent
-r.LogStart = 5
-
-r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r1Vc')
-r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
-r.k = l1
-r.LogEvent = LogEvent
-r.LogStart = 5
-
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r21')
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '1']]
 r.ForcedSequence = 1
 r.p = a_to_p2
@@ -491,7 +477,7 @@ r.LogStart = 5
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r21_c')
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '1']]
 r.ForcedSequence = 1
 r.p = a_to_p2c
@@ -518,29 +504,12 @@ r.p = a_to_p2c
 r.LogEvent = LogEvent
 r.LogStart = 5
 
-r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r2V')
+r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r23')
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
-r.k = l2
-r.LogEvent = LogEvent
-r.LogStart = 5
-
-r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r2Vc')
-r.VariableReferenceList = [['_', 'Variable:/:PTENac', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
-r.k = l2
-r.LogEvent = LogEvent
-r.LogStart = 5
-
-r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r23')
-r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:Vacant', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTEN', '1']]
-r.ForcedSequence = 1
-r.p = a_to_v
+#r.ForcedSequence = 1
+r.k = k23
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -571,14 +540,6 @@ r.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENac', '1']]
 r.ForcedSequence = 1
 r.p = v_to_ac
-r.LogEvent = LogEvent
-r.LogStart = 5
-
-r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r3V')
-r.VariableReferenceList = [['_', 'Variable:/:PTEN', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
-r.k = l3
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -621,6 +582,49 @@ r.VariableReferenceList = [['_', 'Variable:/:PTEN', '1']]
 r.p = PTENvol_to_v
 r.LogEvent = LogEvent
 r.LogStart = 5
+
+r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r3V')
+r.VariableReferenceList = [['_', 'Variable:/:PTEN', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
+r.k = l3
+r.LogEvent = LogEvent
+r.LogStart = 5
+
+r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r2V')
+r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
+r.k = l2
+r.LogEvent = LogEvent
+r.LogStart = 5
+
+r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r2Vc')
+r.VariableReferenceList = [['_', 'Variable:/:PTENac', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
+r.k = l2
+r.LogEvent = LogEvent
+r.LogStart = 5
+
+r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r1V')
+r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
+r.k = l1
+r.LogEvent = LogEvent
+r.LogStart = 5
+
+r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r1Vc')
+r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
+r.k = l1
+r.LogEvent = LogEvent
+r.LogStart = 5
+
+
+
 
 l = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
 l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]

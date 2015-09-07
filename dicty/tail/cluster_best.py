@@ -33,7 +33,7 @@ PTEN_membrane = 20000.0
 #p1, p2 and p3 (the were values were adjusted manually by me)
 k12 = 3.063
 k21 = 4.100
-k23 = 0.574
+k23 = 0.7
 
 m4=(k12+l1)*(k21+k23+l2)*(k32+l3)-k12*k21*(k32+l3)-k23*k32*(k12+l1)
 m1=((k21+k23+l2)*(k32+l3)-k23*k32+k12*(k32+l3)+k12*k23)/m4
@@ -105,6 +105,8 @@ ProteinDiffusion_p3 = D2
 ProteinDiffusion_p2 = D1
 ProteinDiffusion_v = D3
 LipidDiffusion = 0.5e-12
+ClusterDiffusion_p2 = ProteinDiffusion_p2
+ClusterDiffusion_a = ProteinDiffusion_p2
 ProteinDiffusion_vol = 0.9e-12
 #ProteinDiffusion_vol = 16e-12
 
@@ -115,6 +117,8 @@ PTENa_dt = pow(2*VoxelRadius, 2)/(4*ProteinDiffusion_a)
 PTENp2_dt = pow(2*VoxelRadius, 2)/(4*ProteinDiffusion_p2)
 PIP2_dt = pow(2*VoxelRadius, 2)/(4*LipidDiffusion)
 ANIO_dt = pow(2*VoxelRadius, 2)/(4*LipidDiffusion)
+PIP2c_dt = pow(2*VoxelRadius, 2)/(4*ClusterDiffusion_p2)
+ANIOc_dt = pow(2*VoxelRadius, 2)/(4*ClusterDiffusion_a)
 
 #DIRP rates
 Ze = 3.0/12*(nANIO_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
@@ -135,7 +139,7 @@ Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt + (nPTEN_ss/nVacant_total)*nANI
 a = k32*nPTEN_ss
 v_to_a = a/Ze
 
-Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt 
+Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt + (nPTEN_ss/nVacant_total)*nANIO_ss*1/ANIOc_dt
 a = k32*nPTEN_ss
 v_to_ac = a/Ze
 
@@ -147,24 +151,22 @@ Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt + (nPTENa_ss/nVacant_total)*n
 a = k21*nPTENa_ss
 a_to_p2 = a/Ze
 
-Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt
+Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt + (nPTENa_ss/nVacant_total)*nPIP2_ss*1/PIP2c_dt
 a = k21*nPTENa_ss
 a_to_p2c = a/Ze
 
 Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
 a = k12*nPTENp2_ss
 p2_to_a = a/Ze
-print "p2_to_a:", p2_to_a
 
-Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt
+Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total)*nANIO_ss*1/ANIOc_dt
 a = k12*nPTENp2_ss
 p2_to_ac = a/Ze
-print "p2_to_ac:", p2_to_ac
 
 #Clustering
-cl_a_to_a = 0
+cl_a_to_a = 1
 #cl_a_to_p2 = 0
-cl_p2_to_p2 = 0
+cl_p2_to_p2 = 1
 #cl_p2_to_a = 0
 
 isDeoligomerize = 0
@@ -333,7 +335,7 @@ diffuser.D = LipidDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dANIOc')
 diffuser.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
-diffuser.D = 0
+diffuser.D = ClusterDiffusion_a
 #
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPIP2')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PIP2']]
@@ -341,7 +343,7 @@ diffuser.D = LipidDiffusion
 
 diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPIP2c')
 diffuser.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
-diffuser.D = 0 
+diffuser.D = ClusterDiffusion_p2
 #
 #diffuser = theSimulator.createEntity('DiffusionProcess', 'Process:/:dPIP3')
 #diffuser.VariableReferenceList = [['_', 'Variable:/:PIP3']]
@@ -427,8 +429,8 @@ diffuser.D = ProteinDiffusion_vol
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r12')
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENac', '1']]
 r.ForcedSequence = 1
 r.p = p2_to_a
 r.LogEvent = LogEvent
@@ -437,7 +439,7 @@ r.LogStart = 5
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r12_c')
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENac', '1']]
 r.ForcedSequence = 1
 r.p = p2_to_ac
@@ -448,7 +450,7 @@ r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIO', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENa', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENac', '1']]
 r.ForcedSequence = 1
 r.p = p2_to_a
 r.LogEvent = LogEvent
@@ -457,7 +459,7 @@ r.LogStart = 5
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r12cc')
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENac', '1']]
 r.ForcedSequence = 1
 r.p = p2_to_ac
@@ -467,7 +469,7 @@ r.LogStart = 5
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r21')
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '1']]
 r.ForcedSequence = 1
 r.p = a_to_p2
@@ -477,7 +479,7 @@ r.LogStart = 5
 r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r21_c')
 r.VariableReferenceList = [['_', 'Variable:/:PTENa', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2c', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '1']]
 r.ForcedSequence = 1
 r.p = a_to_p2c
@@ -488,7 +490,7 @@ r = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r
 r.VariableReferenceList = [['_', 'Variable:/:PTENac', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
-r.VariableReferenceList = [['_', 'Variable:/:PTENp2', '1']]
+r.VariableReferenceList = [['_', 'Variable:/:PTENp2c', '1']]
 r.ForcedSequence = 1
 r.p = a_to_p2
 r.LogEvent = LogEvent
