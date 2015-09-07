@@ -1,8 +1,8 @@
 
-duration = 1
+duration = 1000
 Iterations = 1
 VoxelRadius = 10e-9
-LogEvent = 0
+LogEvent = 1
 LengthX = 4.5e-6
 LengthY = 1.35e-6
 LengthZ = 0.26e-6
