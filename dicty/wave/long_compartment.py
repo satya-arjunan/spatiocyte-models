@@ -30,7 +30,7 @@ PTEN_membrane = 15200.0
 #PTEN_membrane = 20000.0
 
 #Uncomment the following to correct the final PTEN ratio to the correct 
-#p1, p2 and p3 (the values were adjusted manually by me)
+#p1, p2 and p3 (the were values were adjusted manually by me)
 k12 = 3.063
 k21 = 4.100
 k23 = 0.7
@@ -72,6 +72,7 @@ nInterface = 47124
 nVolumeVacant = 620568-nInterface
 nANIO_frac = 0.1 # 10%
 nPIP2_frac = 0.03 # 3%
+nPTEN_total = 500
 
 #PTEN fractions, PTEN volume state => 4
 f4 = PTENvol_frac
@@ -84,7 +85,6 @@ f3 = p3*(1-f4)
 #kV3 = (f3*l3 + f3*k32 - f2*k23)/f4
 nPIP2_total = nPIP2_frac*nVacant_total
 nANIO_total = nANIO_frac*nVacant_total
-nPTEN_total = nPIP2_total*0.7
 PTENp2_frac = f1
 PTENa_frac = f2
 PTEN_frac = f3
@@ -170,9 +170,8 @@ cl_p2_to_p2 = 1
 #cl_p2_to_a = 0
 
 isDeoligomerize = 0
-DeoligomerizeRate = 0.1
-Deoligomerize = DeoligomerizeRate
-DeoligomerizePTEN = DeoligomerizeRate
+Deoligomerize = 3
+DeoligomerizePTEN = 3
 
 #PIP3 parameters
 cl_p2_to_p3 = 1
@@ -183,15 +182,15 @@ a_to_p3c = a_to_p2c*1.93/4.19
 p3_to_a = p2_to_a*5.43/4.66
 p3_to_ac = p2_to_ac*5.43/4.66
 PI3Kvol_to_v = PTENvol_to_a
-PI3Kv_to_p2 = a_to_p2*0.2
-PI3Kv_to_p2c = PI3Kv_to_p2*0.2
+PI3Kv_to_p2 = a_to_p2
+PI3Kv_to_p2c = PI3Kv_to_p2
 l1_PTENp3 = l1
 l3_PI3K = l1
 Dephosphorylate = 3
 Phosphorylate = 3
 PTENvol_to_p3 = PTENvol_to_p2/10.0
 PTENvol_to_p3c = PTENvol_to_p2c/10.0
-DeoligomerizePI3K = DeoligomerizeRate
+DeoligomerizePI3K = 3
 ClusterDiffusion_p3 = ClusterDiffusion_p2
 ProteinDiffusion_p3 = ProteinDiffusion_p2
 
@@ -261,7 +260,7 @@ theSimulator.createEntity('Variable', 'Variable:/:ANIOc').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP2c').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTENac').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTENp2c').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = nPTEN_total
+theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 50
 theSimulator.createEntity('Variable', 'Variable:/:PI3Kvol').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP3c').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTENp3').Value = 0

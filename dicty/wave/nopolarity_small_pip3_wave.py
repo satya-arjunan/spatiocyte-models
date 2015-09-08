@@ -2,8 +2,8 @@
 duration = 1000
 Iterations = 1
 VoxelRadius = 10e-9
-LogEvent = 0
-LengthX = 10e-6
+LogEvent = 1
+LengthX = 4.5e-6
 LengthY = 1.35e-6
 LengthZ = 0.26e-6
 FileName = "IterateLog.csv"
@@ -26,11 +26,11 @@ k21 = 4.187
 k23 = 0.414
 k32 = 0.028
 PTEN_cytosol = 20000.0
-PTEN_membrane = 15200.0
-#PTEN_membrane = 20000.0
+#PTEN_membrane = 15200.0
+PTEN_membrane = 20000.0
 
 #Uncomment the following to correct the final PTEN ratio to the correct 
-#p1, p2 and p3 (the values were adjusted manually by me)
+#p1, p2 and p3 (the were values were adjusted manually by me)
 k12 = 3.063
 k21 = 4.100
 k23 = 0.7
@@ -67,11 +67,12 @@ kV3 = mu3
 
 #your parameters
 PTENvol_frac = PTEN_cytosol/(PTEN_cytosol+PTEN_membrane)
-nVacant_total = 38500
-nInterface = 47124
-nVolumeVacant = 620568-nInterface
+nVacant_total = 17325
+nInterface = 21175
+nVolumeVacant = 279864-nInterface
 nANIO_frac = 0.1 # 10%
 nPIP2_frac = 0.03 # 3%
+nPTEN_total = 500
 
 #PTEN fractions, PTEN volume state => 4
 f4 = PTENvol_frac
@@ -84,7 +85,6 @@ f3 = p3*(1-f4)
 #kV3 = (f3*l3 + f3*k32 - f2*k23)/f4
 nPIP2_total = nPIP2_frac*nVacant_total
 nANIO_total = nANIO_frac*nVacant_total
-nPTEN_total = nPIP2_total*0.7
 PTENp2_frac = f1
 PTENa_frac = f2
 PTEN_frac = f3
@@ -103,10 +103,12 @@ Volume = LengthX*LengthY*LengthZ
 ProteinDiffusion_a = D2
 ProteinDiffusion_p2 = D1
 ProteinDiffusion_v = D3
+ProteinDiffusion_p3 = ProteinDiffusion_p2
 ProteinDiffusion_vol = 0.9e-12
 LipidDiffusion = 0.5e-12
 ClusterDiffusion_p2 = ProteinDiffusion_p2
 ClusterDiffusion_a = ProteinDiffusion_p2
+ClusterDiffusion_p3 = ClusterDiffusion_p2
 #ProteinDiffusion_vol = 16e-12
 
 #diffusion step interval
@@ -119,6 +121,10 @@ ANIO_dt = pow(2*VoxelRadius, 2)/(4*LipidDiffusion)
 PIP2c_dt = pow(2*VoxelRadius, 2)/(4*ClusterDiffusion_p2)
 ANIOc_dt = pow(2*VoxelRadius, 2)/(4*ClusterDiffusion_a)
 
+l1p3 = l1
+l3pi3k = l2
+Dephosphorylate = 3
+Phosphorylate = 3
 
 #DIRP rates
 Ze = 3.0/12*(nANIO_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
@@ -129,11 +135,14 @@ PTENvol_to_ac = PTENvol_to_a
 Ze = 3.0/12*(nVacant_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
 a = kV3*nPTENvol_ss
 PTENvol_to_v = a/Ze
+PI3Kvol_to_v = PTENvol_to_a
 
 Ze = 3.0/12*(nPIP2_ss/nVacant_total*nInterface/nVolumeVacant)*nPTENvol_ss*1/PTENvol_dt
 a = kV1*nPTENvol_ss
 PTENvol_to_p2 = a/Ze
 PTENvol_to_p2c = PTENvol_to_p2
+PTENvol_to_p3 = PTENvol_to_p2
+PTENvol_to_p3c = PTENvol_to_p2c
 
 Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt + (nPTEN_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
 a = k32*nPTEN_ss
@@ -150,70 +159,38 @@ a_to_v = a/Ze
 Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt + (nPTENa_ss/nVacant_total)*nPIP2_ss*1/PIP2_dt
 a = k21*nPTENa_ss
 a_to_p2 = a/Ze
+a_to_p3 = a_to_p2
+PI3Kv_to_p2 = a_to_p2
+PI3Kv_to_p2c = PI3Kv_to_p2
 
 Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt + (nPTENa_ss/nVacant_total)*nPIP2_ss*1/PIP2c_dt
 a = k21*nPTENa_ss
 a_to_p2c = a/Ze
+a_to_p3c = a_to_p2c
 
 Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total)*nANIO_ss*1/ANIO_dt
 a = k12*nPTENp2_ss
 p2_to_a = a/Ze
+p3_to_a = p2_to_a
 
 Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total)*nANIO_ss*1/ANIOc_dt
 a = k12*nPTENp2_ss
 p2_to_ac = a/Ze
+p3_to_ac = p2_to_ac
 
 #Clustering
 cl_a_to_a = 1
 #cl_a_to_p2 = 0
 cl_p2_to_p2 = 1
-#cl_p2_to_a = 0
-
-isDeoligomerize = 0
-DeoligomerizeRate = 0.1
-Deoligomerize = DeoligomerizeRate
-DeoligomerizePTEN = DeoligomerizeRate
-
-#PIP3 parameters
 cl_p2_to_p3 = 1
 cl_p3_to_p3 = 1
 cl_p3_to_p2 = 1
-a_to_p3 = a_to_p2*1.93/4.19
-a_to_p3c = a_to_p2c*1.93/4.19
-p3_to_a = p2_to_a*5.43/4.66
-p3_to_ac = p2_to_ac*5.43/4.66
-PI3Kvol_to_v = PTENvol_to_a
-PI3Kv_to_p2 = a_to_p2*0.2
-PI3Kv_to_p2c = PI3Kv_to_p2*0.2
-l1_PTENp3 = l1
-l3_PI3K = l1
-Dephosphorylate = 3
-Phosphorylate = 3
-PTENvol_to_p3 = PTENvol_to_p2/10.0
-PTENvol_to_p3c = PTENvol_to_p2c/10.0
-DeoligomerizePI3K = DeoligomerizeRate
-ClusterDiffusion_p3 = ClusterDiffusion_p2
-ProteinDiffusion_p3 = ProteinDiffusion_p2
+#cl_p2_to_a = 0
 
-#cl_p2_to_p3 = 1
-#cl_p3_to_p3 = 1
-#cl_p3_to_p2 = 1
-#a_to_p3 = a_to_p2
-#a_to_p3c = a_to_p2c
-#p3_to_a = p2_to_a
-#p3_to_ac = p2_to_ac
-#PI3Kvol_to_v = PTENvol_to_a
-#PI3Kv_to_p2 = a_to_p2
-#PI3Kv_to_p2c = PI3Kv_to_p2
-#l1_PTENp3 = l1
-#l3_PI3K = l2
-#Dephosphorylate = 3
-#Phosphorylate = 3
-#PTENvol_to_p3 = PTENvol_to_p2
-#PTENvol_to_p3c = PTENvol_to_p2c
-#DeoligomerizePI3K = 3
-#ClusterDiffusion_p3 = ClusterDiffusion_p2
-#ProteinDiffusion_p3 = ProteinDiffusion_p2
+isDeoligomerize = 0
+Deoligomerize = 3
+DeoligomerizePTEN = 3
+DeoligomerizePI3K = 3
 
 sim = theSimulator.createStepper('SpatiocyteStepper', 'SS')
 sim.VoxelRadius = VoxelRadius
@@ -261,8 +238,8 @@ theSimulator.createEntity('Variable', 'Variable:/:ANIOc').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PIP2c').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTENac').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTENp2c').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = nPTEN_total
-theSimulator.createEntity('Variable', 'Variable:/:PI3Kvol').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/:PI3K').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/:PI3Kvol').Value = nPTEN_total
 theSimulator.createEntity('Variable', 'Variable:/:PIP3c').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTENp3').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:PTENp3c').Value = 0
@@ -295,7 +272,7 @@ f.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
 #f.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
 #f.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]
 #f.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
-f.Periodic = 0
+#f.Periodic = 0
 
 l = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
 #l.VariableReferenceList = [['_', 'Variable:/:ANIO']]
@@ -762,7 +739,7 @@ r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r3Vpi3
 r.VariableReferenceList = [['_', 'Variable:/:PI3K', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:Vacant', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PI3Kvol', '1']]
-r.k = l3_PI3K
+r.k = l3pi3k
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -794,7 +771,7 @@ r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r1Vp3'
 r.VariableReferenceList = [['_', 'Variable:/:PTENp3', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP3', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
-r.k = l1_PTENp3
+r.k = l1p3
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -810,7 +787,7 @@ r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r1Vp3c
 r.VariableReferenceList = [['_', 'Variable:/:PTENp3c', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/:PIP3c', '1']]
 r.VariableReferenceList = [['_', 'Variable:/:PTENvol', '1']]
-r.k = l1_PTENp3
+r.k = l1p3
 r.LogEvent = LogEvent
 r.LogStart = 5
 
@@ -845,22 +822,18 @@ binder.k = Dephosphorylate
 
 
 l = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
-l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]  #0
-l.VariableReferenceList = [['_', 'Variable:/:PTENp3']]  #1
-l.VariableReferenceList = [['_', 'Variable:/:PTENp2c']] #2
-l.VariableReferenceList = [['_', 'Variable:/:PTENp3c']] #3
-l.VariableReferenceList = [['_', 'Variable:/:PTENa']]   #4
-l.VariableReferenceList = [['_', 'Variable:/:PTENac']]  #5
-l.VariableReferenceList = [['_', 'Variable:/:PTEN']]    #6
-l.VariableReferenceList = [['_', 'Variable:/:PTENvol']] #7
-l.VariableReferenceList = [['_', 'Variable:/:PI3K']]    #8
-l.VariableReferenceList = [['_', 'Variable:/:PI3Kvol']] #9
-l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]  #10
-l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']] #11
-l.VariableReferenceList = [['_', 'Variable:/:PIP3']]    #12
-l.VariableReferenceList = [['_', 'Variable:/:PIP2']]    #13
-l.VariableReferenceList = [['_', 'Variable:/:PIP3c']]   #14
-l.VariableReferenceList = [['_', 'Variable:/:PIP2c']]   #15
+l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
+l.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
+l.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
+l.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
+l.VariableReferenceList = [['_', 'Variable:/:PTENa']]
+l.VariableReferenceList = [['_', 'Variable:/:PTENac']]
+l.VariableReferenceList = [['_', 'Variable:/:PTEN']]
+l.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3K']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3Kvol']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
 l.LogInterval = 1e-1
 l.LogEnd = duration
 l.Iterations = Iterations

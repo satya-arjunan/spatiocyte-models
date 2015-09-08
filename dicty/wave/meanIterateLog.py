@@ -29,4 +29,21 @@ v = mean[1:cols]
 print v
 p_mem = float(v[0]+v[1]+v[2]+v[3]+v[4]+v[5]+v[6])
 print (v[0]+v[1]+v[2]+v[3])/p_mem, (v[4]+v[5])/p_mem, v[6]/p_mem
+print "PTEN_state1:", int(v[0]+v[1]+v[2]+v[3])
+print "PTEN_state2:", int(v[4]+v[5])
+print "PTEN_state3:", int(v[6])
+print "PTEN_membrane:", int(v[0]+v[1]+v[2]+v[3]+v[4]+v[5]+v[6])
+print "PTENvol:", int(v[7])
+print "PTEN_p2:", int(v[0]+v[2])
+print "PTEN_p3:", int(v[1]+v[3])
+print "PI3K_p2:", int(v[10]+v[11])
+print "PI3Kv:", int(v[8])
+print "PI3K_membrane:", int(v[8]+v[10]+v[11])
+print "PI3Kvol:", int(v[9])
+print "PIP3_free:", int(v[12]+v[14])
+print "PIP2_free:", int(v[13]+v[15])
+print "PIP3:", int(v[1]+v[3]+v[12]+v[14])
+print "PIP2:", int(v[0]+v[2]+v[13]+v[15])
+print "PIP_total:", int(v[1]+v[3]+v[12]+v[14])+int(v[0]+v[2]+v[13]+v[15])
+print "PIP3/PIP2:", (v[1]+v[3]+v[12]+v[14])/(v[0]+v[2]+v[13]+v[15])
 
