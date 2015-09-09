@@ -187,7 +187,7 @@ a = k12*nPTENp2_ss
 p12c = a/Ze
 
 #-------------------------------------------------------------------------------
-nPI3K_total = 0
+nPI3K_total = nPTEN_total
 
 #Membrane recruitment first order rates
 PTENvol_to_v = pV3
@@ -198,13 +198,13 @@ PTENvol_to_p2c = pV1*1.5
 PTENvol_to_p3 = pV3 #PIP3 reduces PTEN kon, try pV3 if want lower
 PTENvol_to_p3c = pV2 #PIP3 reduces PTEN kon, try pV3 if want lower
 
-PI3Kvol_to_v = 0.0001
-PI3Kvol_to_a = 0.0001
-PI3Kvol_to_ac = 0.0001
-PI3Kvol_to_p2 = 0.0001
-PI3Kvol_to_p2c = 0.0001
-PI3Kvol_to_p3 = 0.001
-PI3Kvol_to_p3c = 0.8
+PI3Kvol_to_v = 0
+PI3Kvol_to_a = 0
+PI3Kvol_to_ac = 0
+PI3Kvol_to_p2 = 0
+PI3Kvol_to_p2c = 0
+PI3Kvol_to_p3 = 0.1
+PI3Kvol_to_p3c = 0.1
 
 #Membrane dissociation first order rates
 PTENv_to_vol = l3
@@ -212,15 +212,15 @@ PTENa_to_vol = l3
 PTENac_to_vol = l2
 PTENp2_to_vol = l1*10
 PTENp2c_to_vol = l1
-PTENp3_to_vol = 0.0 #handled by dephosphorylatio
+PTENp3_to_vol = 0.0 #handled by dephosphorylation
 PTENp3c_to_vol = 0.0 #handled by dephosphorylation
 
 PI3Kv_to_vol = l3
 PI3Ka_to_vol = l3
-PI3Kac_to_vol = l3
+PI3Kac_to_vol = l2
 PI3Kp2_to_vol = 0.0 #handled by phosphorylation
 PI3Kp2c_to_vol = 0.0 #handled by phosphorylation
-PI3Kp3_to_vol = l1
+PI3Kp3_to_vol = l2
 PI3Kp3c_to_vol = l1
 
 #print "pV3:", pV3, "pV2:", pV2, "pV1:", pV1, "l3:", l3, "l2:", l2, "l1:", l1 
@@ -228,6 +228,20 @@ PI3Kp3c_to_vol = l1
 
 #pV3: 0.00108386622082 pV2: 0.0477087890453 pV1: 0.108928804711 l3: 13.919 l2: 4.708 l1: 0.01
 #p32: 3.38340700042e-05 p32c: 3.9025541063e-05 p21: 0.0641031708302 p21c: 0.104516039397 p12: 0.0197566801631 p12c: 0.0534592522061
+#pi3k 3043
+#pi3km 9317
+#pip2 2060
+#pip2m 4877
+#pip3a 707
+#pip3m 1643
+#pten 3366
+#ptenm 3137
+#vacant_total = 44666
+#pip_total = 2060+4877+707+1643 = 0.20*Vacant
+#pip2 total = 2060+4877 = 0.74*PIP total
+#pip3 total = 707+2643 = 0.25*PIP total
+#pten total = 3366+3137 = 0.70*PIP total
+#pi3k total = 3043+9317 = 1.33*PIP total
 
 #Phosphorylation-dephosphorylation
 Phosphorylate = 3.0
@@ -238,6 +252,10 @@ PTENa_to_PTENv = k23
 PTENac_to_PTENv = k23
 PTENp3_to_PTENv = k23
 PTENp3c_to_PTENv = k23
+PI3Ka_to_PI3Kv = k23
+PI3Kac_to_PI3Kv = k23
+PI3Kp2_to_PI3Kv = k23
+PI3Kp2c_to_PI3Kv = k23
 
 #Reaction-driven state transition of PTEN on membrane
 PTENv_to_a = p32
@@ -338,16 +356,16 @@ PI3Kp2c_to_p3c = p21c
 PI3Kp3_to_v = 0.01
 PI3Kp3_to_a = p12
 PI3Kp3_to_ac = p12c
-PI3Kp3_to_p2 = p12
-PI3Kp3_to_p2c = p12c
+PI3Kp3_to_p2 = p12*10
+PI3Kp3_to_p2c = p12c*10
 PI3Kp3_to_p3 = 1.0
 PI3Kp3_to_p3c = 1.0
 
 PI3Kp3c_to_v = 0.01
 PI3Kp3c_to_a = p12
 PI3Kp3c_to_ac = p12c
-PI3Kp3c_to_p2 = p12
-PI3Kp3c_to_p2c = p12c
+PI3Kp3c_to_p2 = p12*10
+PI3Kp3c_to_p2c = p12c*10
 PI3Kp3c_to_p3 = 1.0
 PI3Kp3c_to_p3c = 1.0
 
@@ -427,28 +445,28 @@ f.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
 f.Periodic = 0
 
 l = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
-l.VariableReferenceList = [['_', 'Variable:/:ANIO']]
+#l.VariableReferenceList = [['_', 'Variable:/:ANIO']]
 l.VariableReferenceList = [['_', 'Variable:/:PTENa']]
 l.VariableReferenceList = [['_', 'Variable:/:PIP2']]
 l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
 l.VariableReferenceList = [['_', 'Variable:/:PTEN']]
-l.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
+#l.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
 l.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
 l.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
 l.VariableReferenceList = [['_', 'Variable:/:PTENac']]
 l.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
-#l.VariableReferenceList = [['_', 'Variable:/:PIP3']]
-#l.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
-#l.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
-#l.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
+l.VariableReferenceList = [['_', 'Variable:/:PIP3']]
+l.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
+l.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
+l.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
 #l.VariableReferenceList = [['_', 'Variable:/:PI3Kvol']]
-#l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
-#l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
-#l.VariableReferenceList = [['_', 'Variable:/:PI3K']]
-#l.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]
-#l.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
-#l.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]
-#l.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3K']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]
+l.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
 l.LogInterval = 1e-1
 
 l = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
@@ -819,6 +837,34 @@ react.VariableReferenceList = [['_', 'Variable:/:PIP3c', '1']]
 react.VariableReferenceList = [['_', 'Variable:/:PTEN', '1']]
 react.SearchVacant = 1
 react.k = PTENp3c_to_PTENv
+
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:tPI3Ka_to_PI3Kv')
+react.VariableReferenceList = [['_', 'Variable:/:PI3Ka', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:ANIO', '1']]
+react.VariableReferenceList = [['_', 'Variable:/:PI3K', '1']]
+react.SearchVacant = 1
+react.k = PI3Ka_to_PI3Kv
+
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:tPI3Kac_to_PI3Kv')
+react.VariableReferenceList = [['_', 'Variable:/:PI3Kac', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:ANIOc', '1']]
+react.VariableReferenceList = [['_', 'Variable:/:PI3K', '1']]
+react.SearchVacant = 1
+react.k = PI3Kac_to_PI3Kv
+
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:tPI3Kp2_to_PI3Kv')
+react.VariableReferenceList = [['_', 'Variable:/:PI3Kp2', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:PIP2', '1']]
+react.VariableReferenceList = [['_', 'Variable:/:PI3K', '1']]
+react.SearchVacant = 1
+react.k = PI3Kp2_to_PI3Kv
+
+react = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:tPI3Kp2c_to_PI3Kv')
+react.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c', '-1']]
+react.VariableReferenceList = [['_', 'Variable:/:PIP2c', '1']]
+react.VariableReferenceList = [['_', 'Variable:/:PI3K', '1']]
+react.SearchVacant = 1
+react.k = PI3Kp2c_to_PI3Kv
 #-------------------------------------------------------------------------------
 
 #Reaction-driven diffusion------------------------------------------------------
