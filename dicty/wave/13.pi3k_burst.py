@@ -1,5 +1,5 @@
 
-duration = 1
+duration = 1000
 Iterations = 1
 VoxelRadius = 10e-9
 LogEvent = 0
@@ -187,32 +187,32 @@ a = k12*nPTENp2_ss
 p12c = a/Ze
 
 #-------------------------------------------------------------------------------
-nPI3K_total = 0
+nPI3K_total = nPTEN_total
 
 #Membrane recruitment first order rates
 PTENvol_to_v = pV3
-PTENvol_to_a = pV2
-PTENvol_to_ac = pV2
-PTENvol_to_p2 = pV1
-PTENvol_to_p2c = pV1
-PTENvol_to_p3 = pV2 #PIP3 reduces PTEN kon, try pV3 if want lower
+PTENvol_to_a = pV3
+PTENvol_to_ac = pV2*1.5
+PTENvol_to_p2 = pV3
+PTENvol_to_p2c = pV1*1.5
+PTENvol_to_p3 = pV3 #PIP3 reduces PTEN kon, try pV3 if want lower
 PTENvol_to_p3c = pV2 #PIP3 reduces PTEN kon, try pV3 if want lower
 
-PI3Kvol_to_v = pV3
-PI3Kvol_to_a = pV2
-PI3Kvol_to_ac = pV2
-PI3Kvol_to_p2 = pV2
-PI3Kvol_to_p2c = pV2
-PI3Kvol_to_p3 = pV1
-PI3Kvol_to_p3c = pV1
+PI3Kvol_to_v = 0.0001
+PI3Kvol_to_a = 0.0001
+PI3Kvol_to_ac = 0.0001
+PI3Kvol_to_p2 = 0.0001
+PI3Kvol_to_p2c = 0.0001
+PI3Kvol_to_p3 = 0.01
+PI3Kvol_to_p3c = 0.8
 
 #Membrane dissociation first order rates
 PTENv_to_vol = l3
-PTENa_to_vol = l2
+PTENa_to_vol = l3
 PTENac_to_vol = l2
-PTENp2_to_vol = l1
+PTENp2_to_vol = l1*10
 PTENp2c_to_vol = l1
-PTENp3_to_vol = 0.0 #handled by dephosphorylation
+PTENp3_to_vol = 0.0 #handled by dephosphorylatio
 PTENp3c_to_vol = 0.0 #handled by dephosphorylation
 
 PI3Kv_to_vol = l3
@@ -234,10 +234,10 @@ Phosphorylate = 3.0
 Dephosphorylate = 3.0
 
 #First order state transition rates
-PTENa_to_PTENv = 0
-PTENac_to_PTENv = 0
-PTENp3_to_PTENv = 0
-PTENp3c_to_PTENv = 0
+PTENa_to_PTENv = k23
+PTENac_to_PTENv = k23
+PTENp3_to_PTENv = k23
+PTENp3c_to_PTENv = k23
 
 #Reaction-driven state transition of PTEN on membrane
 PTENv_to_a = p32
@@ -251,7 +251,7 @@ PTENa_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
 PTENa_to_a = 1.0
 PTENa_to_ac = 1.0
 PTENa_to_p2 = p21
-PTENa_to_p2c = p21
+PTENa_to_p2c = p21c
 PTENa_to_p3 = 1.0
 PTENa_to_p3c = 1.0
 
@@ -259,28 +259,27 @@ PTENac_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
 PTENac_to_a = 1.0
 PTENac_to_ac = 1.0
 PTENac_to_p2 = p21
-PTENac_to_p2c = p21
+PTENac_to_p2c = p21c
 PTENac_to_p3 = 1.0
 PTENac_to_p3c = 1.0
 
 PTENp2_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
 PTENp2_to_a = p12
-PTENp2_to_ac = p12
+PTENp2_to_ac = p12c
 PTENp2_to_p2 = 1.0
 PTENp2_to_p2c = 1.0
 PTENp2_to_p3 = p12
-PTENp2_to_p3c = p12
+PTENp2_to_p3c = p12c
 
 PTENp2c_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
 PTENp2c_to_a = p12
-PTENp2c_to_ac = p12
+PTENp2c_to_ac = p12c
 PTENp2c_to_p2 = 1.0
 PTENp2c_to_p2c = 1.0
 PTENp2c_to_p3 = p12
 PTENp2c_to_p3c = p12c
 
-PTENp3_swap_v = 0
-PTENp3_to_v = 0
+PTENp3_to_v = 0.01
 PTENp3_to_a = 1.0
 PTENp3_to_ac = 1.0
 PTENp3_to_p2 = p21
@@ -288,73 +287,73 @@ PTENp3_to_p2c = p21c
 PTENp3_to_p3 = 1.0
 PTENp3_to_p3c = 1.0
 
-PTENp3c_to_v = 0
-PTENp3c_to_a = 0
-PTENp3c_to_ac = 0
-PTENp3c_to_p2 = 0
-PTENp3c_to_p2c = 0
-PTENp3c_to_p3 = 0
-PTENp3c_to_p3c = 0
+PTENp3c_to_v = 0.01
+PTENp3c_to_a = 1.0
+PTENp3c_to_ac = 1.0
+PTENp3c_to_p2 = p21
+PTENp3c_to_p2c = p21c
+PTENp3c_to_p3 = 1.0
+PTENp3c_to_p3c = 1.0
 
 #Reaction-driven state transition of PI3K on membrane
-PI3Kv_to_a = 0.0
-PI3Kv_to_ac = 0.0
-PI3Kv_to_p2 = 0.0
-PI3Kv_to_p2c = 0.0
+PI3Kv_to_a = p32
+PI3Kv_to_ac = p32c
+PI3Kv_to_p2 = p32
+PI3Kv_to_p2c = p32c
 PI3Kv_to_p3 = 0.0
 PI3Kv_to_p3c = 0.0
 
-PI3Ka_to_v = 0.0
-PI3Ka_to_a = 0.0
-PI3Ka_to_ac = 0.0
-PI3Ka_to_p2 = 0.0
-PI3Ka_to_p2c = 0.0
-PI3Ka_to_p3 = 0.0
-PI3Ka_to_p3c = 0.0
+PI3Ka_to_v = 0.01
+PI3Ka_to_a = 1.0
+PI3Ka_to_ac = 1.0
+PI3Ka_to_p2 = 1.0
+PI3Ka_to_p2c = 1.0
+PI3Ka_to_p3 = p21
+PI3Ka_to_p3c = p21c
 
-PI3Kac_to_v = 0.0
-PI3Kac_to_a = 0.0
-PI3Kac_to_ac = 0.0
-PI3Kac_to_p2 = 0.0
-PI3Kac_to_p2c = 0.0
-PI3Kac_to_p3 = 0.0
-PI3Kac_to_p3c = 0.0
+PI3Kac_to_v = 0.01
+PI3Kac_to_a = 1.0
+PI3Kac_to_ac = 1.0
+PI3Kac_to_p2 = 1.0
+PI3Kac_to_p2c = 1.0
+PI3Kac_to_p3 = p21
+PI3Kac_to_p3c = p21c
 
-PI3Kp2_to_v = 0.0
-PI3Kp2_to_a = 0.0
-PI3Kp2_to_ac = 0.0
-PI3Kp2_to_p2 = 0.0
-PI3Kp2_to_p2c = 0.0
-PI3Kp2_to_p3 = 0.0
-PI3Kp2_to_p3c = 0.0
+PI3Kp2_to_v = 0.01
+PI3Kp2_to_a = 1.0
+PI3Kp2_to_ac = 1.0
+PI3Kp2_to_p2 = 1.0
+PI3Kp2_to_p2c = 1.0
+PI3Kp2_to_p3 = p21
+PI3Kp2_to_p3c = p21c
 
-PI3Kp2c_to_v = 0.0
-PI3Kp2c_to_a = 0.0
-PI3Kp2c_to_ac = 0.0
-PI3Kp2c_to_p2 = 0.0
-PI3Kp2c_to_p2c = 0.0
-PI3Kp2c_to_p3 = 0.0
-PI3Kp2c_to_p3c = 0.0
+PI3Kp2c_to_v = 0.01
+PI3Kp2c_to_a = 1.0
+PI3Kp2c_to_ac = 1.0
+PI3Kp2c_to_p2 = 1.0
+PI3Kp2c_to_p2c = 1.0
+PI3Kp2c_to_p3 = p21
+PI3Kp2c_to_p3c = p21c
 
-PI3Kp3_to_v = 0.0
-PI3Kp3_to_a = 0.0
-PI3Kp3_to_ac = 0.0
-PI3Kp3_to_p2 = 0.0
-PI3Kp3_to_p2c = 0.0
-PI3Kp3_to_p3 = 0.0
-PI3Kp3_to_p3c = 0.0
+PI3Kp3_to_v = 0.01
+PI3Kp3_to_a = p12
+PI3Kp3_to_ac = p12c
+PI3Kp3_to_p2 = p12
+PI3Kp3_to_p2c = p12c
+PI3Kp3_to_p3 = 1.0
+PI3Kp3_to_p3c = 1.0
 
-PI3Kp3c_to_v = 0.0
-PI3Kp3c_to_a = 0.0
-PI3Kp3c_to_ac = 0.0
-PI3Kp3c_to_p2 = 0.0
-PI3Kp3c_to_p2c = 0.0
-PI3Kp3c_to_p3 = 0.0
-PI3Kp3c_to_p3c = 0.0
+PI3Kp3c_to_v = 0.01
+PI3Kp3c_to_a = p12
+PI3Kp3c_to_ac = p12c
+PI3Kp3c_to_p2 = p12
+PI3Kp3c_to_p2c = p12c
+PI3Kp3c_to_p3 = 1.0
+PI3Kp3c_to_p3c = 1.0
 
 #Deoligomerization first order rates
 isDeoligomerize = 0
-kd = 0.01
+kd = 3
 Deoligomerize_ANIOc = kd
 Deoligomerize_PIP2c = kd
 Deoligomerize_PIP3c = kd
@@ -428,20 +427,20 @@ f.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
 f.Periodic = 0
 
 l = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
-l.VariableReferenceList = [['_', 'Variable:/:ANIO']]
-l.VariableReferenceList = [['_', 'Variable:/:PTENa']]
-l.VariableReferenceList = [['_', 'Variable:/:PIP2']]
-l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
-l.VariableReferenceList = [['_', 'Variable:/:PTEN']]
-l.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
-l.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
-l.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
-l.VariableReferenceList = [['_', 'Variable:/:PTENac']]
-l.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
-l.VariableReferenceList = [['_', 'Variable:/:PIP3']]
-l.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
-l.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
-l.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
+#l.VariableReferenceList = [['_', 'Variable:/:ANIO']]
+#l.VariableReferenceList = [['_', 'Variable:/:PTENa']]
+#l.VariableReferenceList = [['_', 'Variable:/:PIP2']]
+#l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
+#l.VariableReferenceList = [['_', 'Variable:/:PTEN']]
+#l.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
+#l.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
+#l.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
+#l.VariableReferenceList = [['_', 'Variable:/:PTENac']]
+#l.VariableReferenceList = [['_', 'Variable:/:PTENp2c']]
+#l.VariableReferenceList = [['_', 'Variable:/:PIP3']]
+#l.VariableReferenceList = [['_', 'Variable:/:PIP3c']]
+#l.VariableReferenceList = [['_', 'Variable:/:PTENp3']]
+#l.VariableReferenceList = [['_', 'Variable:/:PTENp3c']]
 l.VariableReferenceList = [['_', 'Variable:/:PI3Kvol']]
 l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]
 l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']]
@@ -1147,7 +1146,7 @@ binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:Vacant','1']]
 binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','1']]
 binder.ForcedSequence = 1
-binder.p = PTENp3_swap_v
+binder.p = PTENp3_to_v
 
 #binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r35')
 #binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','-1']]
@@ -1339,8 +1338,8 @@ binder.p = PI3Kv_to_p3c
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:ir7')
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Ka','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/:ANIO','1']]
-binder.VariableReferenceList = [['_', 'Variable:/:PI3K','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:Vacant','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:PI3Ka','1']]
 binder.ForcedSequence = 1
 binder.p = PI3Ka_to_v
 
@@ -1404,8 +1403,8 @@ binder.p = PI3Ka_to_p3c
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:ir14')
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/:ANIOc','1']]
-binder.VariableReferenceList = [['_', 'Variable:/:PI3K','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:Vacant','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:PI3Kac','1']]
 binder.ForcedSequence = 1
 binder.p = PI3Kac_to_v
 
@@ -1469,8 +1468,8 @@ binder.p = PI3Kac_to_p3c
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:ir21')
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/:PIP2','1']]
-binder.VariableReferenceList = [['_', 'Variable:/:PI3K','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:Vacant','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2','1']]
 binder.ForcedSequence = 1
 binder.p = PI3Kp2_to_v
 
@@ -1534,8 +1533,8 @@ binder.p = PI3Kp2_to_p3c
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:ir28')
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/:PIP2c','1']]
-binder.VariableReferenceList = [['_', 'Variable:/:PI3K','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:Vacant','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c','1']]
 binder.ForcedSequence = 1
 binder.p = PI3Kp2c_to_v
 
@@ -1599,8 +1598,8 @@ binder.p = PI3Kp2_to_p3c
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:ir35')
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/:PIP3','1']]
-binder.VariableReferenceList = [['_', 'Variable:/:PI3K','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:Vacant','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3','1']]
 binder.ForcedSequence = 1
 binder.p = PI3Kp3_to_v
 
@@ -1664,8 +1663,8 @@ binder.p = PI3Kp3_to_p3c
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:ir42')
 binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
-binder.VariableReferenceList = [['_', 'Variable:/:PIP3c','1']]
-binder.VariableReferenceList = [['_', 'Variable:/:PI3K','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:Vacant','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c','1']]
 binder.ForcedSequence = 1
 binder.p = PI3Kp3c_to_v
 

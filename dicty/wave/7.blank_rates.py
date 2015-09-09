@@ -1,5 +1,5 @@
 
-duration = 1
+duration = 10
 Iterations = 1
 VoxelRadius = 10e-9
 LogEvent = 0
@@ -109,29 +109,30 @@ Volume = LengthX*LengthY*LengthZ
 VolumeDiffusion = 0.9e-12
 LipidDiffusion = D2
 ClusterDiffusion = D1
-D_PTENvol = VolumeDiffusion
-D_PI3Kvol = VolumeDiffusion
-D_ANIO = LipidDiffusion
-D_PIP2 = LipidDiffusion
-D_PIP3 = LipidDiffusion
-D_ANIOc = ClusterDiffusion
-D_PIP2c = ClusterDiffusion
-D_PIP3c = ClusterDiffusion
-D_PTENv = D3
-D_PI3Kv = D3
-DW_PTENa = D2
-DW_PTENac = D2
-DW_PTENp2 = D1
-DW_PTENp2c = D1
-DW_PTENp3 = D2
-DW_PTENp3c = D2
-DW_PI3Ka = D2
-DW_PI3Kac = D2
-DW_PI3Kp2 = D2
-DW_PI3Kp2c = D2
-DW_PI3Kp3 = D1
-DW_PI3Kp3c = D1
 
+#Diffusion rates
+D_PTENvol = 0.9e-12
+D_PI3Kvol = 0.9e-12
+D_ANIO = 0.5e-12
+D_PIP2 = 0.5e-12
+D_PIP3 = 0.5e-12
+D_ANIOc =1e-14
+D_PIP2c = 1e-14
+D_PIP3c = 1e-14
+D_PTENv = 0.7e-12
+D_PI3Kv = 0.7e-12
+DW_PTENa = 1e-14
+DW_PTENac = 1e-14
+DW_PTENp2 = 1e-14
+DW_PTENp2c = 1e-14
+DW_PTENp3 = 1e-14
+DW_PTENp3c = 1e-14
+DW_PI3Ka = 1e-14
+DW_PI3Kac = 1e-14
+DW_PI3Kp2 = 1e-14
+DW_PI3Kp2c = 1e-14
+DW_PI3Kp3 = 1e-14
+DW_PI3Kp3c = 1e-14
 
 #diffusion step interval
 PTENvol_dt = pow(2*VoxelRadius, 2)/(6*D_PTENvol)
@@ -140,8 +141,8 @@ PTENa_dt = pow(2*VoxelRadius, 2)/(4*DW_PTENa)
 PTENp2_dt = pow(2*VoxelRadius, 2)/(4*DW_PTENp2)
 PIP2_dt = pow(2*VoxelRadius, 2)/(4*D_PIP2)
 ANIO_dt = pow(2*VoxelRadius, 2)/(4*D_ANIO)
-PIP2c_dt = pow(2*VoxelRadius, 2)/(4*D_PIP2c)
-ANIOc_dt = pow(2*VoxelRadius, 2)/(4*D_ANIOc)
+#PIP2c_dt = pow(2*VoxelRadius, 2)/(4*D_PIP2c)
+#ANIOc_dt = pow(2*VoxelRadius, 2)/(4*D_ANIOc)
 
 
 #Parameter calculations---------------------------------------------------------
@@ -162,7 +163,7 @@ Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt + (nPTEN_ss/nVacant_total)*nANI
 a = k32*nPTEN_ss
 p32 = a/Ze
 
-Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt + (nPTEN_ss/nVacant_total)*nANIO_ss*1/ANIOc_dt
+Ze = (nANIO_ss/nVacant_total)*nPTEN_ss*1/PTEN_dt #+ (nPTEN_ss/nVacant_total)*nANIO_ss*1/ANIOc_dt
 a = k32*nPTEN_ss
 p32c = a/Ze
 
@@ -174,7 +175,7 @@ Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt + (nPTENa_ss/nVacant_total)*n
 a = k21*nPTENa_ss
 p21 = a/Ze
 
-Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt + (nPTENa_ss/nVacant_total)*nPIP2_ss*1/PIP2c_dt
+Ze = (nPIP2_ss/nVacant_total)*nPTENa_ss*1/PTENa_dt #+ (nPTENa_ss/nVacant_total)*nPIP2_ss*1/PIP2c_dt
 a = k21*nPTENa_ss
 p21c = a/Ze
 
@@ -182,46 +183,9 @@ Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total
 a = k12*nPTENp2_ss
 p12 = a/Ze
 
-Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt + (nPTENp2_ss/nVacant_total)*nANIO_ss*1/ANIOc_dt
+Ze = (nANIO_ss/nVacant_total)*nPTENp2_ss*1/PTENp2_dt #+ (nPTENp2_ss/nVacant_total)*nANIO_ss*1/ANIOc_dt
 a = k12*nPTENp2_ss
 p12c = a/Ze
-
-#-------------------------------------------------------------------------------
-nPI3K_total = 0
-
-#Membrane recruitment first order rates
-PTENvol_to_v = pV3
-PTENvol_to_a = pV2
-PTENvol_to_ac = pV2
-PTENvol_to_p2 = pV1
-PTENvol_to_p2c = pV1
-PTENvol_to_p3 = pV2 #PIP3 reduces PTEN kon, try pV3 if want lower
-PTENvol_to_p3c = pV2 #PIP3 reduces PTEN kon, try pV3 if want lower
-
-PI3Kvol_to_v = pV3
-PI3Kvol_to_a = pV2
-PI3Kvol_to_ac = pV2
-PI3Kvol_to_p2 = pV2
-PI3Kvol_to_p2c = pV2
-PI3Kvol_to_p3 = pV1
-PI3Kvol_to_p3c = pV1
-
-#Membrane dissociation first order rates
-PTENv_to_vol = l3
-PTENa_to_vol = l2
-PTENac_to_vol = l2
-PTENp2_to_vol = l1
-PTENp2c_to_vol = l1
-PTENp3_to_vol = 0.0 #handled by dephosphorylation
-PTENp3c_to_vol = 0.0 #handled by dephosphorylation
-
-PI3Kv_to_vol = l3
-PI3Ka_to_vol = l2
-PI3Kac_to_vol = l2
-PI3Kp2_to_vol = 0.0 #handled by phosphorylation
-PI3Kp2c_to_vol = 0.0 #handled by phosphorylation
-PI3Kp3_to_vol = l1
-PI3Kp3c_to_vol = l1
 
 #print "pV3:", pV3, "pV2:", pV2, "pV1:", pV1, "l3:", l3, "l2:", l2, "l1:", l1 
 #print "p32:", p32, "p32c:", p32c, "p21:", p21, "p21c:", p21c, "p12:", p12, "p12c:", p12c
@@ -229,9 +193,50 @@ PI3Kp3c_to_vol = l1
 #pV3: 0.00108386622082 pV2: 0.0477087890453 pV1: 0.108928804711 l3: 13.919 l2: 4.708 l1: 0.01
 #p32: 3.38340700042e-05 p32c: 3.9025541063e-05 p21: 0.0641031708302 p21c: 0.104516039397 p12: 0.0197566801631 p12c: 0.0534592522061
 
+#-------------------------------------------------------------------------------
+nPIP2_total = 0.2*nVacant_total
+nPTEN_total = 0.14*nVacant_total
+#nPI3K_total = 0.27*nVacant_total
+nPI3K_total = 0
+nANIO_total = 0
+
+#Membrane recruitment first order rates
+PTENvol_to_v = 0
+PTENvol_to_a = 0
+PTENvol_to_ac = 0
+PTENvol_to_p2 = 0.0001
+PTENvol_to_p2c = 0
+PTENvol_to_p3 = 0
+PTENvol_to_p3c = 0
+
+PI3Kvol_to_v = 0
+PI3Kvol_to_a = 0
+PI3Kvol_to_ac = 0
+PI3Kvol_to_p2 = 0
+PI3Kvol_to_p2c = 0
+PI3Kvol_to_p3 = 0
+PI3Kvol_to_p3c = 0
+
+#Membrane dissociation first order rates
+PTENv_to_vol = 0
+PTENa_to_vol = 0
+PTENac_to_vol = 0
+PTENp2_to_vol = 0
+PTENp2c_to_vol = 0
+PTENp3_to_vol = 0
+PTENp3c_to_vol = 0
+
+PI3Kv_to_vol = 0
+PI3Ka_to_vol = 0
+PI3Kac_to_vol = 0
+PI3Kp2_to_vol = 0
+PI3Kp2c_to_vol = 0
+PI3Kp3_to_vol = 0
+PI3Kp3c_to_vol = 0
+
 #Phosphorylation-dephosphorylation
-Phosphorylate = 3.0
-Dephosphorylate = 3.0
+Phosphorylate = 0
+Dephosphorylate = 0
 
 #First order state transition rates
 PTENa_to_PTENv = 0
@@ -240,53 +245,53 @@ PTENp3_to_PTENv = 0
 PTENp3c_to_PTENv = 0
 
 #Reaction-driven state transition of PTEN on membrane
-PTENv_to_a = p32
-PTENv_to_ac = p32c
-PTENv_to_p2 = 0.0
-PTENv_to_p2c = 0.0
-PTENv_to_p3 = PTENv_to_a
-PTENv_to_p3c = PTENv_to_ac
+PTENv_to_a = 0
+PTENv_to_ac = 0
+PTENv_to_p2 = 0
+PTENv_to_p2c = 0
+PTENv_to_p3 = 0
+PTENv_to_p3c = 0
 
-PTENa_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
-PTENa_to_a = 1.0
-PTENa_to_ac = 1.0
-PTENa_to_p2 = p21
-PTENa_to_p2c = p21
-PTENa_to_p3 = 1.0
-PTENa_to_p3c = 1.0
+PTENa_to_v = 0
+PTENa_to_a = 0
+PTENa_to_ac = 0
+PTENa_to_p2 = 0
+PTENa_to_p2c = 0
+PTENa_to_p3 = 0
+PTENa_to_p3c = 0
 
-PTENac_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
-PTENac_to_a = 1.0
-PTENac_to_ac = 1.0
-PTENac_to_p2 = p21
-PTENac_to_p2c = p21
-PTENac_to_p3 = 1.0
-PTENac_to_p3c = 1.0
+PTENac_to_v = 0
+PTENac_to_a = 0
+PTENac_to_ac = 0
+PTENac_to_p2 = 0
+PTENac_to_p2c = 0
+PTENac_to_p3 = 0
+PTENac_to_p3c = 0
 
-PTENp2_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
-PTENp2_to_a = p12
-PTENp2_to_ac = p12
-PTENp2_to_p2 = 1.0
-PTENp2_to_p2c = 1.0
-PTENp2_to_p3 = p12
-PTENp2_to_p3c = p12
+PTENp2_to_v = 0
+PTENp2_to_a = 0
+PTENp2_to_ac = 0
+PTENp2_to_p2 = 0
+PTENp2_to_p2c = 0
+PTENp2_to_p3 = 0
+PTENp2_to_p3c = 0
 
-PTENp2c_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
-PTENp2c_to_a = p12
-PTENp2c_to_ac = p12
-PTENp2c_to_p2 = 1.0
-PTENp2c_to_p2c = 1.0
-PTENp2c_to_p3 = p12
-PTENp2c_to_p3c = p12c
+PTENp2c_to_v = 0
+PTENp2c_to_a = 0
+PTENp2c_to_ac = 0
+PTENp2c_to_p2 = 0
+PTENp2c_to_p2c = 0
+PTENp2c_to_p3 = 0
+PTENp2c_to_p3c = 0
 
 PTENp3_swap_v = 0
 PTENp3_to_v = 0
-PTENp3_to_a = 1.0
-PTENp3_to_ac = 1.0
-PTENp3_to_p2 = p21
-PTENp3_to_p2c = p21c
-PTENp3_to_p3 = 1.0
-PTENp3_to_p3c = 1.0
+PTENp3_to_a = 0
+PTENp3_to_ac = 0
+PTENp3_to_p2 = 0
+PTENp3_to_p2c = 0
+PTENp3_to_p3 = 0
+PTENp3_to_p3c = 0
 
 PTENp3c_to_v = 0
 PTENp3c_to_a = 0
@@ -354,7 +359,7 @@ PI3Kp3c_to_p3c = 0.0
 
 #Deoligomerization first order rates
 isDeoligomerize = 0
-kd = 0.01
+kd = 0
 Deoligomerize_ANIOc = kd
 Deoligomerize_PIP2c = kd
 Deoligomerize_PIP3c = kd
@@ -1149,13 +1154,13 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','1']]
 binder.ForcedSequence = 1
 binder.p = PTENp3_swap_v
 
-#binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r35')
-#binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','-1']]
-#binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
-#binder.VariableReferenceList = [['_', 'Variable:/:PIP3','1']]
-#binder.VariableReferenceList = [['_', 'Variable:/:PTEN','1']]
-#binder.ForcedSequence = 1
-#binder.p = PTENp3_to_v
+binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r35')
+binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','-1']]
+binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
+binder.VariableReferenceList = [['_', 'Variable:/:PIP3','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:PTEN','1']]
+binder.ForcedSequence = 1
+binder.p = PTENp3_to_v
 
 #PTENp3 + ANIO => PIP3c + PTENac
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r36')

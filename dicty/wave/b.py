@@ -1149,13 +1149,13 @@ binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','1']]
 binder.ForcedSequence = 1
 binder.p = PTENp3_swap_v
 
-#binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r35')
-#binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','-1']]
-#binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
-#binder.VariableReferenceList = [['_', 'Variable:/:PIP3','1']]
-#binder.VariableReferenceList = [['_', 'Variable:/:PTEN','1']]
-#binder.ForcedSequence = 1
-#binder.p = PTENp3_to_v
+binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r35')
+binder.VariableReferenceList = [['_', 'Variable:/:PTENp3','-1']]
+binder.VariableReferenceList = [['_', 'Variable:/:Vacant','-1']]
+binder.VariableReferenceList = [['_', 'Variable:/:PIP3','1']]
+binder.VariableReferenceList = [['_', 'Variable:/:PTEN','1']]
+binder.ForcedSequence = 1
+binder.p = PTENp3_to_v
 
 #PTENp3 + ANIO => PIP3c + PTENac
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r36')

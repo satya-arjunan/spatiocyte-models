@@ -1,5 +1,5 @@
 
-duration = 1
+duration = 1000
 Iterations = 1
 VoxelRadius = 10e-9
 LogEvent = 0
@@ -191,11 +191,11 @@ nPI3K_total = 0
 
 #Membrane recruitment first order rates
 PTENvol_to_v = pV3
-PTENvol_to_a = pV2
-PTENvol_to_ac = pV2
-PTENvol_to_p2 = pV1
-PTENvol_to_p2c = pV1
-PTENvol_to_p3 = pV2 #PIP3 reduces PTEN kon, try pV3 if want lower
+PTENvol_to_a = pV3
+PTENvol_to_ac = pV2*1.5
+PTENvol_to_p2 = pV3
+PTENvol_to_p2c = pV1*1.5
+PTENvol_to_p3 = pV3 #PIP3 reduces PTEN kon, try pV3 if want lower
 PTENvol_to_p3c = pV2 #PIP3 reduces PTEN kon, try pV3 if want lower
 
 PI3Kvol_to_v = pV3
@@ -208,11 +208,11 @@ PI3Kvol_to_p3c = pV1
 
 #Membrane dissociation first order rates
 PTENv_to_vol = l3
-PTENa_to_vol = l2
+PTENa_to_vol = l3
 PTENac_to_vol = l2
-PTENp2_to_vol = l1
+PTENp2_to_vol = l1*10
 PTENp2c_to_vol = l1
-PTENp3_to_vol = 0.0 #handled by dephosphorylation
+PTENp3_to_vol = 0.0 #handled by dephosphorylatio
 PTENp3c_to_vol = 0.0 #handled by dephosphorylation
 
 PI3Kv_to_vol = l3
@@ -234,10 +234,10 @@ Phosphorylate = 3.0
 Dephosphorylate = 3.0
 
 #First order state transition rates
-PTENa_to_PTENv = 0
-PTENac_to_PTENv = 0
-PTENp3_to_PTENv = 0
-PTENp3c_to_PTENv = 0
+PTENa_to_PTENv = k23
+PTENac_to_PTENv = k23
+PTENp3_to_PTENv = k23
+PTENp3c_to_PTENv = k23
 
 #Reaction-driven state transition of PTEN on membrane
 PTENv_to_a = p32
@@ -251,7 +251,7 @@ PTENa_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
 PTENa_to_a = 1.0
 PTENa_to_ac = 1.0
 PTENa_to_p2 = p21
-PTENa_to_p2c = p21
+PTENa_to_p2c = p21c
 PTENa_to_p3 = 1.0
 PTENa_to_p3c = 1.0
 
@@ -259,13 +259,13 @@ PTENac_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
 PTENac_to_a = 1.0
 PTENac_to_ac = 1.0
 PTENac_to_p2 = p21
-PTENac_to_p2c = p21
+PTENac_to_p2c = p21c
 PTENac_to_p3 = 1.0
 PTENac_to_p3c = 1.0
 
 PTENp2_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
 PTENp2_to_a = p12
-PTENp2_to_ac = p12
+PTENp2_to_ac = p12c
 PTENp2_to_p2 = 1.0
 PTENp2_to_p2c = 1.0
 PTENp2_to_p3 = p12
@@ -273,7 +273,7 @@ PTENp2_to_p3c = p12
 
 PTENp2c_to_v = 0.01 #maintain diffusion coefficient by swapping with vacant
 PTENp2c_to_a = p12
-PTENp2c_to_ac = p12
+PTENp2c_to_ac = p12c
 PTENp2c_to_p2 = 1.0
 PTENp2c_to_p2c = 1.0
 PTENp2c_to_p3 = p12
@@ -354,7 +354,7 @@ PI3Kp3c_to_p3c = 0.0
 
 #Deoligomerization first order rates
 isDeoligomerize = 0
-kd = 0.01
+kd = 3
 Deoligomerize_ANIOc = kd
 Deoligomerize_PIP2c = kd
 Deoligomerize_PIP3c = kd
