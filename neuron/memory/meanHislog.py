@@ -15,7 +15,6 @@ for row in data:
 logInterval = data[bins][0]-initTime
 startTime = 200
 startRow = int(np.ceil((startTime-initTime)/logInterval))*bins
-print startRow
 
 data = np.loadtxt(filename, delimiter=",", skiprows=startRow+1)
 rows,cols = data.shape
