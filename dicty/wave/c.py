@@ -3,8 +3,8 @@ duration = 1000
 Iterations = 1
 VoxelRadius = 10e-9
 LogEvent = 0
-LengthX = 15e-6
-#LengthX = 4.5e-6
+#LengthX = 15e-6
+LengthX = 4.5e-6
 LengthY = 1.35e-6
 LengthZ = 0.26e-6
 FileName = "IterateLog.csv"
@@ -27,14 +27,14 @@ k21 = 4.187
 k23 = 0.414
 k32 = 0.028
 PTEN_cytosol = 20000.0
-#PTEN_membrane = 15200.0
-PTEN_membrane = 20000.0
+PTEN_membrane = 15200.0
+#PTEN_membrane = 20000.0
 
 #Uncomment the following to correct the final PTEN ratio to the correct 
 #p1, p2 and p3 (the values were adjusted manually by me)
 k12 = 3.45
 k21 = 4.1
-k23 = 0.57
+k23 = 0.45
 
 m4=(k12+l1)*(k21+k23+l2)*(k32+l3)-k12*k21*(k32+l3)-k23*k32*(k12+l1)
 m1=((k21+k23+l2)*(k32+l3)-k23*k32+k12*(k32+l3)+k12*k23)/m4
@@ -191,7 +191,8 @@ a = k12*nPTENp2_ss
 p12c = a/Ze
 
 #-------------------------------------------------------------------------------
-nPI3K_total = nPTEN_total*1.3
+#nPI3K_total = nPTEN_total*1.3
+nPI3K_total = 0
 
 #Membrane recruitment first order rates
 PTENvol_to_v = pV3
@@ -454,7 +455,7 @@ l.VariableReferenceList = [['_', 'Variable:/:PTENa']]
 l.VariableReferenceList = [['_', 'Variable:/:PIP2']]
 l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]
 l.VariableReferenceList = [['_', 'Variable:/:PTEN']]
-#l.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
+l.VariableReferenceList = [['_', 'Variable:/:PTENvol']]
 l.VariableReferenceList = [['_', 'Variable:/:ANIOc']]
 l.VariableReferenceList = [['_', 'Variable:/:PIP2c']]
 l.VariableReferenceList = [['_', 'Variable:/:PTENac']]
@@ -474,26 +475,14 @@ l.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]
 l.LogInterval = 1e-1
 
 l = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
-l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]  #0
-l.VariableReferenceList = [['_', 'Variable:/:PTENp3']]  #1
-l.VariableReferenceList = [['_', 'Variable:/:PTENp2c']] #2
-l.VariableReferenceList = [['_', 'Variable:/:PTENp3c']] #3
-l.VariableReferenceList = [['_', 'Variable:/:PTENa']]   #4
-l.VariableReferenceList = [['_', 'Variable:/:PTENac']]  #5
-l.VariableReferenceList = [['_', 'Variable:/:PTEN']]    #6
-l.VariableReferenceList = [['_', 'Variable:/:PTENvol']] #7
-l.VariableReferenceList = [['_', 'Variable:/:PI3K']]    #8
-l.VariableReferenceList = [['_', 'Variable:/:PI3Kvol']] #9
-l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2']]  #10
-l.VariableReferenceList = [['_', 'Variable:/:PI3Kp2c']] #11
-l.VariableReferenceList = [['_', 'Variable:/:PIP3']]    #12
-l.VariableReferenceList = [['_', 'Variable:/:PIP2']]    #13
-l.VariableReferenceList = [['_', 'Variable:/:PIP3c']]   #14
-l.VariableReferenceList = [['_', 'Variable:/:PIP2c']]   #15
-l.VariableReferenceList = [['_', 'Variable:/:PI3Kp3']]  #16
-l.VariableReferenceList = [['_', 'Variable:/:PI3Kp3c']] #17
-l.VariableReferenceList = [['_', 'Variable:/:PI3Ka']]   #18
-l.VariableReferenceList = [['_', 'Variable:/:PI3Kac']]  #19
+l.VariableReferenceList = [['_', 'Variable:/:PTENvol']] #0
+l.VariableReferenceList = [['_', 'Variable:/:PTEN']]    #1
+l.VariableReferenceList = [['_', 'Variable:/:PTENa']]   #2
+l.VariableReferenceList = [['_', 'Variable:/:PTENac']]  #3
+l.VariableReferenceList = [['_', 'Variable:/:PTENp2']]  #4
+l.VariableReferenceList = [['_', 'Variable:/:PTENp2c']] #5
+l.VariableReferenceList = [['_', 'Variable:/:PIP2']]    #16
+l.VariableReferenceList = [['_', 'Variable:/:PIP2c']]   #17
 l.LogInterval = 1e-1
 l.LogEnd = duration
 l.Iterations = Iterations
