@@ -34,11 +34,11 @@ theSimulator.createEntity('Variable', 'Variable:/Soma:LENGTHY').Value = somaRadi
 theSimulator.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = neuriteRadius*4
 theSimulator.createEntity('Variable', 'Variable:/Soma:VACANT').Value = -1
 theSimulator.createEntity('Variable', 'Variable:/Soma:Kinesin').Value = 25
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerA').Value = 1079
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerB').Value = 1102
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerC').Value = 1102
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerD').Value = 1098
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerE').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerA').Value = 859 #320
+theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerB').Value = 883 #296
+theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerC').Value = 881 #275
+theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerD').Value = 880 #234
+theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerE').Value = 878 #423
 theSimulator.createEntity('Variable', 'Variable:/Soma:MTKinesin' ).Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Soma:MTKinesinATP' ).Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Soma:Tubulin' ).Value = 0
@@ -61,26 +61,28 @@ populator.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin']]
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerA')
 populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerA']]
-populator.OriginX = 0.75
-populator.UniformLength = 0.25
+populator.OriginX = -0.8
+populator.UniformLength = 0.2
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerB')
 populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerB']]
-populator.OriginX = 0.25
-populator.UniformLength = 0.25
+populator.OriginX = -0.4
+populator.UniformLength = 0.2
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerC')
 populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerC']]
-populator.OriginX = -0.25
-populator.UniformLength = 0.25
+populator.OriginX = 0.001
+populator.UniformLength = 0.2
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerD')
 populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerD']]
-populator.OriginX = -0.75
-populator.UniformLength = 0.25
+populator.OriginX = 0.4
+populator.UniformLength = 0.2
 
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerE')
 populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerE']]
+populator.OriginX = 0.8
+populator.UniformLength = 0.2
 
 react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:detachPlus')
 react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','-1']]

@@ -1,6 +1,17 @@
 import math
 
-duration = 100
+
+try:
+  T
+except NameError:
+  T = 100
+  V1 = 1.0
+  V2 = 1.0
+  V3 = 1.0
+  V4 = 1.0
+  filename = "histogram"
+
+duration = T
 Filaments = 13
 RotateAngle = math.pi
 MTRadius = 12.5e-9
@@ -34,10 +45,10 @@ theSimulator.createEntity('Variable', 'Variable:/Soma:LENGTHY').Value = somaRadi
 theSimulator.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = neuriteRadius*4
 theSimulator.createEntity('Variable', 'Variable:/Soma:VACANT').Value = -1
 theSimulator.createEntity('Variable', 'Variable:/Soma:Kinesin').Value = 25
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerA').Value = 1079
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerB').Value = 1102
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerC').Value = 1102
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerD').Value = 1098
+theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerA').Value = V1*1079
+theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerB').Value = V2*1102
+theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerC').Value = V3*1102
+theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerD').Value = V4*1098
 theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerE').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Soma:MTKinesin' ).Value = 0
 theSimulator.createEntity('Variable', 'Variable:/Soma:MTKinesinATP' ).Value = 0
@@ -150,22 +161,22 @@ diffuse.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin']]
 #diffuse.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin', '1']]
 diffuse.D = 0.04e-12
 
-visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/Soma:visualLogger')
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:Tubulin']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:TubulinM']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin', '10600']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerA']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerB']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerC']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerD']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerE']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:Interface']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin']]
-visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP']]
-visualLogger.LogInterval = 1
+#visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/Soma:visualLogger')
+##visualLogger.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:Tubulin']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:TubulinM']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin', '10600']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerA']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerB']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerC']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerD']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerE']]
+##visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin']]
+##visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:Interface']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin']]
+#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP']]
+#visualLogger.LogInterval = 1
 
 #micro = theSimulator.createEntity('MicroscopyTrackingProcess', 'Process:/Soma:micro')
 #micro.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin', '1']]
@@ -284,7 +295,7 @@ for i in range(nNeurites):
   Histogram.Bins = 5
   Histogram.LogInterval = 1
   Histogram.ExposureTime = 60
-  Histogram.FileName = "hislog.Translocating.Neurite%d.csv" %i
+  Histogram.FileName = filename + ("_n%d.csv" %i)
   Histogram.LogEnd = duration-1
   Histogram.Iterations = 1
 
