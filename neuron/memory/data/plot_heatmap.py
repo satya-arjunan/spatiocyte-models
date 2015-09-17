@@ -65,7 +65,8 @@ for file in filenames:
 
 
 fig, ax = plt.subplots()
-heatmap = ax.pcolor(data, cmap=plt.cm.Blues, alpha=0.8)
+#heatmap = ax.pcolor(data, cmap=plt.cm.Blues, alpha=0.8)
+heatmap = ax.pcolor(data)
 
 # Format
 fig = plt.gcf()
