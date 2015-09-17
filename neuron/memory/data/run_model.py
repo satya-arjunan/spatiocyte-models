@@ -25,7 +25,7 @@ def register_job(param, obj, fdmap, epoll, jobCnt):
   epoll.register(obj, select.EPOLLHUP)
   print "started job:", jobCnt, "id:", fd, param
 
-T = 500
+T = 100000
 #V1 = [0.05]
 #V2 = [0.05]
 #V3 = [0.05]
@@ -44,6 +44,7 @@ if __name__ == '__main__':
           cnt = cnt + 1
           params.append(get_param(T, V1[i], V2[j], V3[k], V4[l], cnt))
 
+  params = set(params) #remove duplicates
   SLICE_IN_SECONDS = 0.1
   param = get_param(0.001, V1[0], V2[0], V3[0], V4[0], 0)
   subproc = add_job(param)
