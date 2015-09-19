@@ -19,7 +19,7 @@ name = filename.split("_")
 name = name[1:len(name)-1]
 labels = []
 for i in name:
-  labels.append([i])
+  labels.append(([float(i)]))
 
 def get_mean(file):
   data = np.loadtxt(file, delimiter=",", skiprows=startRow+1)
@@ -35,34 +35,36 @@ for file in filenames:
   vals = file.split("_")
   vals = vals[1:len(vals)-1]
   for i in range(len(vals)):
-    if vals[i] not in labels[i]:
-      labels[i].append(vals[i])
+    if float(vals[i]) not in labels[i]:
+      labels[i].append(float(vals[i]))
 
-col_head_size = len(labels)/2
-row_head_size = len(labels)-col_head_size
+row_head_size = len(labels)-len(labels)/2
 cols = len(labels[0])
-rows = len(labels[col_head_size])
-for i in range(col_head_size-1):
+rows = len(labels[row_head_size])
+for i in range(row_head_size-1):
   cols = cols*len(labels[i+1])
-for i in range(col_head_size, len(labels)-1):
+for i in range(row_head_size, len(labels)-1):
   rows = rows*len(labels[i+1])
 
+for i in range(len(labels)):
+  labels[i].sort()
 
 data = np.zeros((cols, rows))
-col_labels = np.zeros(cols)
-row_labels = np.zeros(rows)
+row_labels = np.zeros(cols).astype(str)
+col_labels = np.zeros(rows).astype(str)
 
 for file in filenames:
-  vals = file.split("_")
-  vals = vals[1:len(vals)-1]
-  col = labels[0].index(vals[0])+1
-  for i in range(col_head_size-1):
-    col = col+(labels[i+1].index(vals[i+1]))*len(labels[i])
-  row = labels[col_head_size].index(vals[col_head_size])+1
-  for i in range(col_head_size, len(labels)-1):
+  vals = np.asarray(file.split("_"))
+  vals = (vals[1:len(vals)-1]).astype(float)
+  row = labels[0].index(vals[0])+1
+  for i in range(row_head_size-1):
     row = row+(labels[i+1].index(vals[i+1]))*len(labels[i])
-  data[col-1][row-1] = get_mean(file)[bins-1]
-
+  col = labels[row_head_size].index(vals[row_head_size])+1
+  for i in range(row_head_size, len(labels)-1):
+    col = col+(labels[i+1].index(vals[i+1]))*len(labels[i])
+  row_labels[row-1] = "%.2f, %.2f" %(vals[0], vals[1])
+  col_labels[col-1] = "%.2f, %.2f" %(vals[2], vals[3])
+  data[row-1][col-1] = get_mean(file)[bins-1]
 
 fig, ax = plt.subplots()
 #heatmap = ax.pcolor(data, cmap=plt.cm.Blues, alpha=0.8)
