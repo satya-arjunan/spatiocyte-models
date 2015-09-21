@@ -90,36 +90,37 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   #ax1 = fig.add_axes(cax)
   ax1 = fig.add_axes([box.x0-(bar_width+bar_space), box.y0, bar_width,
     box.height])
-  heatmap = ax1.pcolormesh(row_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.5,
+  heatmap = ax1.pcolor(row_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.5,
       edgecolors='k')
-  for y in range(row_matrix.shape[0]):
-    for x in range(row_matrix.shape[1]):
-      plt.text(x + 0.5, y + 0.5, '%.2f' % row_matrix[y, x],
-          horizontalalignment='center', verticalalignment='center', rotation=0)
+  #for y in range(row_matrix.shape[0]):
+  #  for x in range(row_matrix.shape[1]):
+  #    plt.text(x + 0.5, y + 0.5, '%.2f' % row_matrix[y, x],
+  #        horizontalalignment='center', verticalalignment='center', rotation=0)
   ax1.set_axis_off()
   ax1.invert_yaxis()
+  show_values(heatmap)
   plt.axis("tight")
-  #show_values(heatmap)
 
 
   col_matrix = np.transpose(col_matrix)
   ax2 = fig.add_axes([box.x0, box.y0+box.height+bar_space, box.width,
     bar_width*1.5])
-  heatmap = ax2.pcolormesh(col_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.5,
+  heatmap = ax2.pcolor(col_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.5,
       edgecolors='k')
-  for y in range(col_matrix.shape[0]):
-    for x in range(col_matrix.shape[1]):
-      plt.text(x + 0.5, y + 0.5, '%.2f' % col_matrix[y, x],
-          horizontalalignment='center', verticalalignment='center', rotation=90)
+  #for y in range(col_matrix.shape[0]):
+  #  for x in range(col_matrix.shape[1]):
+  #    plt.text(x + 0.5, y + 0.5, '%.2f' % col_matrix[y, x],
+  #        horizontalalignment='center', verticalalignment='center', rotation=90)
   ax2.set_axis_off()
   ax2.invert_yaxis()
+  show_values(heatmap)
   plt.axis("tight")
 
 def plot_figure(data, row_labels, col_labels):
   rows, cols = data.shape
   fig, ax = plt.subplots()
   #heatmap = ax.pcolormesh(data, cmap=plt.cm.YlOrBr, alpha=0.8)
-  heatmap = ax.pcolormesh(data, cmap=plt.cm.Blues, alpha=0.8)
+  heatmap = ax.pcolor(data, cmap=plt.cm.Blues, alpha=0.8)
   #heatmap = ax.pcolormesh(data)
   #heatmap = ax.pcolor(data)
   # put the major ticks at the middle of each cell
