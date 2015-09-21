@@ -141,10 +141,33 @@ def plot_figure(data, row_labels, col_labels):
   #cbar = plt.colorbar(heatmap, cax)
   box = ax.get_position()
   padding = 0.005
-  bar_width = 0.02
-  cax = fig.add_axes([box.x0+box.width+padding, box.y0, bar_width, box.height])
-  cbar = plt.colorbar(heatmap, cax=cax)
+  bar_width = 0.03
+  #cax = fig.add_axes([box.x0+box.width+padding, box.y0, bar_width, box.height])
+  cax = fig.add_axes([box.x0, box.y0-bar_width-padding, box.width, bar_width])
+  #rect [left, bottom, width, height]
+  cbar = plt.colorbar(heatmap, cax=cax, orientation='horizontal')
+  cbar.ax.get_xaxis().set_ticks([])
+  vmin, vmax = cbar.get_clim()
+  major_ticks = np.arange(vmin, vmax+1, vmax/4).astype(int)
+  for j, lab in enumerate(major_ticks):
+    color = np.array(heatmap.get_cmap()(major_ticks[j]))
+    if np.all(color[:3] > 0.5):
+      color = (0.0, 0.0, 0.0)
+    else:
+      color = (1.0, 1.0, 1.0)
+    pos = (2*j)/8.0
+    ha = 'center'
+    if(j == 0):
+      pos = (2*j + 0.02)/8.0
+      ha = 'left'
+    elif(j == len(major_ticks)-1):
+      pos = (2*j - 0.02)/8.0
+      ha = 'right'
+    cbar.ax.text(pos, .5, lab, ha=ha, va='center', color=color)
+  #cbar.ax.get_xaxis().labelpad = 15
+  cbar.ax.set_xlabel('Kinesin concentration at tip (% of lowest concentration)')
   ax.set_axis_off()
+  #ax.set_aspect("equal")
   # want a more natural, table-like display
   ax.set_yticklabels([])
   ax.set_xticklabels([])
@@ -219,9 +242,9 @@ def get_data(filenames, labels, start_row, bins):
   return data, row_labels, col_labels
 
 file = "saved_data.csv"
-data, row_labels, col_labels = load_data(file)
-#filenames, labels, start_row, bins = initialize()
-#data, row_labels, col_labels = get_data(filenames, labels, start_row, bins)
-#save_data(file, data, row_labels, col_labels)
+#data, row_labels, col_labels = load_data(file)
+filenames, labels, start_row, bins = initialize()
+data, row_labels, col_labels = get_data(filenames, labels, start_row, bins)
+save_data(file, data, row_labels, col_labels)
 plot_figure(data, row_labels, col_labels)
 
