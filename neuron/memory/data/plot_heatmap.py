@@ -71,10 +71,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   for i in range(len(vals)-1):
     if (vals[i+1] > vals[i] and vals[i+1] - vals[i] < vdelta):
       vdelta = vals[i+1]-vals[i]
-  print col_matrix.shape
-  print row_matrix.shape
 
-  box = ax.get_position()
   #cax = divider.append_axes("left", size="20%", pad=0.05)
   #rect [left, bottom, width, height]
   #ax1 = fig.add_axes([0.80, 0.05, 0.05, 0.8])
@@ -85,34 +82,39 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   #cmap = mpl.cm.OrRd
   cmap = mpl.cm.YlGn
   bar_width = 0.04
-  bar_space = 0
-  i = 0
+  padding = 0
   #ax1 = fig.add_axes(cax)
-  ax1 = fig.add_axes([box.x0-(bar_width+bar_space), box.y0, bar_width,
+  box = ax.get_position()
+  ax1 = fig.add_axes([box.x0-(bar_width+padding), box.y0, bar_width,
     box.height])
-  heatmap = ax1.pcolor(row_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.5,
+  heatmap = ax1.pcolor(row_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.0,
       edgecolors='k')
-  #for y in range(row_matrix.shape[0]):
-  #  for x in range(row_matrix.shape[1]):
-  #    plt.text(x + 0.5, y + 0.5, '%.2f' % row_matrix[y, x],
-  #        horizontalalignment='center', verticalalignment='center', rotation=0)
-  ax1.set_axis_off()
+  #ax1.set_axis_off()
+  #ax1.xaxis.tick_top()
   ax1.invert_yaxis()
+  #put major ticks at the middle of each cell
+  ax1.set_xticks(np.arange(row_matrix.shape[1]) + 0.5, minor=False)
+  ax1.set_xticklabels(['V0', 'V1'])
+  ax1.set_yticklabels([])
+  major_ticks = np.arange(0, 37, 6)
+  ax1.set_yticks(major_ticks)
   show_values(heatmap)
   plt.axis("tight")
 
-
   col_matrix = np.transpose(col_matrix)
-  ax2 = fig.add_axes([box.x0, box.y0+box.height+bar_space, box.width,
+  ax2 = fig.add_axes([box.x0, box.y0+box.height+padding, box.width,
     bar_width*1.5])
-  heatmap = ax2.pcolor(col_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.5,
+  heatmap = ax2.pcolor(col_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.0,
       edgecolors='k')
-  #for y in range(col_matrix.shape[0]):
-  #  for x in range(col_matrix.shape[1]):
-  #    plt.text(x + 0.5, y + 0.5, '%.2f' % col_matrix[y, x],
-  #        horizontalalignment='center', verticalalignment='center', rotation=90)
-  ax2.set_axis_off()
-  ax2.invert_yaxis()
+  ax2.set_yticks(np.arange(col_matrix.shape[1]) + 0.5, minor=False)
+  ax2.set_yticklabels(['V2', 'V3'])
+  ax2.set_xticklabels([])
+  ax2.set_xticks(major_ticks)
+  #ax2.yaxis.tick_right()
+  #for tic in ax2.xaxis.get_major_ticks():
+  #  tic.tick1On = tic.tick2On = False
+  #ax2.set_axis_off()
+  #ax2.invert_yaxis()
   show_values(heatmap)
   plt.axis("tight")
 
@@ -120,42 +122,40 @@ def plot_figure(data, row_labels, col_labels):
   rows, cols = data.shape
   fig, ax = plt.subplots()
   #heatmap = ax.pcolormesh(data, cmap=plt.cm.YlOrBr, alpha=0.8)
-  heatmap = ax.pcolor(data, cmap=plt.cm.Blues, alpha=0.8)
-  #heatmap = ax.pcolormesh(data)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.hot)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.afmhot, alpha=0.8)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.gist_heat, alpha=0.8)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.gist_heat, alpha=0.8)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.Oranges, alpha=0.8)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.Blues, alpha=0.8)
+  heatmap = ax.pcolor(data, cmap=plt.cm.Blues)
   #heatmap = ax.pcolor(data)
   # put the major ticks at the middle of each cell
   #ax.set_yticks(np.arange(data.shape[0]) + 0.5, minor=False)
   #ax.set_xticks(np.arange(data.shape[1]) + 0.5, minor=False)
   plt.gca().set_xlim((0, cols))
   plt.gca().set_ylim((0, rows))
-  #annotate
-  #for y in range(data.shape[0]):
-  #  for x in range(data.shape[1]):
-  #    plt.text(x + 0.5, y + 0.5, '%d' % int(data[y, x]),
-  #        horizontalalignment='center', verticalalignment='center', rotation=90)
   show_values(heatmap, fmt="%d")
   #divider = make_axes_locatable(ax)
   #cax = divider.append_axes("right", size="5%", pad=0.05)
   #cbar = plt.colorbar(heatmap, cax)
-  cbar = plt.colorbar(heatmap)
+  box = ax.get_position()
+  padding = 0.005
+  bar_width = 0.02
+  cax = fig.add_axes([box.x0+box.width+padding, box.y0, bar_width, box.height])
+  cbar = plt.colorbar(heatmap, cax=cax)
   ax.set_axis_off()
   # want a more natural, table-like display
+  ax.set_yticklabels([])
+  ax.set_xticklabels([])
+  for tic in ax.xaxis.get_major_ticks():
+    tic.tick1On = tic.tick2On = False
+  for tic in ax.yaxis.get_major_ticks():
+    tic.tick1On = tic.tick2On = False
   ax.invert_yaxis()
   #ax.xaxis.tick_top()
-  #ax.set_xticklabels(col_labels, minor=False)
-  #ax.set_yticklabels(row_labels, minor=False)
   plt.xticks(rotation=90)
-  #ax.grid(False)
-  ## Turn off all the ticks
-  #ax = plt.gca()
-  #for t in ax.xaxis.get_major_ticks():
-  #    t.tick1On = False
-  #    t.tick2On = False
-  #for t in ax.yaxis.get_major_ticks():
-  #    t.tick1On = False
-  #    t.tick2On = False
   plot_colorbars(row_labels, col_labels, fig, ax)
-  print ax.get_position()
   plt.show()
 
 def initialize():
