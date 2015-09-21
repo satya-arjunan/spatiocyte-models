@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib as mpl
 import glob
 import numpy as np
@@ -31,38 +32,23 @@ def save_data(file, data, row_labels, col_labels):
   savedata[0:1, 1:cols+1] = col_labels.reshape(savedata[0:1, 1:cols+1].shape)
   np.savetxt(file, savedata, delimiter=",", fmt="%s")
 
-def plot_figure(data, row_labels, col_labels):
-  rows, cols = data.shape
-  fig, ax = plt.subplots()
-  #heatmap = ax.pcolor(data, cmap=plt.cm.Blues, alpha=0.8)
-  heatmap = ax.pcolor(data)
-  cbar = plt.colorbar(heatmap)
-  # put the major ticks at the middle of each cell
-  ax.set_yticks(np.arange(data.shape[0]) + 0.5, minor=False)
-  ax.set_xticks(np.arange(data.shape[1]) + 0.5, minor=False)
-  plt.gca().set_xlim((0, cols))
-  plt.gca().set_ylim((0, rows))
-  #annotate
-  for y in range(data.shape[0]):
-    for x in range(data.shape[1]):
-      plt.text(x + 0.5, y + 0.5, '%d' % int(data[y, x]),
-          horizontalalignment='center', verticalalignment='center', rotation=90)
-  # want a more natural, table-like display
-  ax.invert_yaxis()
-  ax.xaxis.tick_top()
-  ax.set_xticklabels(col_labels, minor=False)
-  ax.set_yticklabels(row_labels, minor=False)
-  plt.xticks(rotation=90)
-  ax.grid(False)
-  # Turn off all the ticks
-  ax = plt.gca()
-  for t in ax.xaxis.get_major_ticks():
-      t.tick1On = False
-      t.tick2On = False
-  for t in ax.yaxis.get_major_ticks():
-      t.tick1On = False
-      t.tick2On = False
-  
+def show_values(pc, fmt="%.2f", **kw):
+  from itertools import izip
+  pc.update_scalarmappable()
+  ax = pc.get_axes()
+  for p, color, value in izip(pc.get_paths(), pc.get_facecolors(), pc.get_array()):
+    x, y = p.vertices[:-2, :].mean(0)
+    if np.all(color[:3] > 0.5):
+      color = (0.0, 0.0, 0.0)
+    else:
+      color = (1.0, 1.0, 1.0)
+    ax.text(x, y, fmt % value, ha="center", va="center", color=color, **kw)
+  #for y in range(row_matrix.shape[0]):
+  #  for x in range(row_matrix.shape[1]):
+  #    plt.text(x + 0.5, y + 0.5, '%.2f' % row_matrix[y, x],
+  #        horizontalalignment='center', verticalalignment='center', rotation=0)
+
+def plot_colorbars(row_labels, col_labels, fig, ax):
   vmin = float('inf')
   vmax = -1.0
   vdelta = float('inf')
@@ -85,33 +71,90 @@ def plot_figure(data, row_labels, col_labels):
   for i in range(len(vals)-1):
     if (vals[i+1] > vals[i] and vals[i+1] - vals[i] < vdelta):
       vdelta = vals[i+1]-vals[i]
-  print col_matrix
-  print row_matrix
+  print col_matrix.shape
+  print row_matrix.shape
 
   box = ax.get_position()
+  #cax = divider.append_axes("left", size="20%", pad=0.05)
   #rect [left, bottom, width, height]
   #ax1 = fig.add_axes([0.80, 0.05, 0.05, 0.8])
-  bar_width = 0.02
-  bar_space = 0.01
-  ax1 = fig.add_axes([box.x0-bar_width-bar_space, box.y0, bar_width, box.height])
+  #cmap = mpl.cm.YlOrRd
+  #cmap = mpl.cm.YlOrBr
+  #cmap = mpl.cm.Reds
+  #cmap = mpl.cm.Oranges
+  #cmap = mpl.cm.OrRd
+  cmap = mpl.cm.YlGn
+  bar_width = 0.04
+  bar_space = 0
+  i = 0
+  #ax1 = fig.add_axes(cax)
+  ax1 = fig.add_axes([box.x0-(bar_width+bar_space), box.y0, bar_width,
+    box.height])
+  heatmap = ax1.pcolormesh(row_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.5,
+      edgecolors='k')
+  for y in range(row_matrix.shape[0]):
+    for x in range(row_matrix.shape[1]):
+      plt.text(x + 0.5, y + 0.5, '%.2f' % row_matrix[y, x],
+          horizontalalignment='center', verticalalignment='center', rotation=0)
+  ax1.set_axis_off()
+  ax1.invert_yaxis()
+  plt.axis("tight")
+  #show_values(heatmap)
 
-  cmap = mpl.cm.Blues
-  master_bounds = np.zeros((vmax+vdelta-vmin)/vdelta+1)
-  for i in range(len(master_bounds)):
-    master_bounds[i] = i*vdelta-vdelta
-  bounds = [-0.05, 0.05, 0.15, 0.45, 0.55, 1.45]
-  ticks = [0.0, 0.1, 0.3, 0.5, 1.0]
-#norm = mpl.colors.BoundaryNorm(nbounds, cmap.N)
-#cb3 = mpl.colorbar.ColorbarBase(ax3, cmap=cmap,
-#                                     norm=norm,
-#                                     boundaries=bounds,
-#                                     spacing='uniform',
-#                                     orientation='horizontal')
-#cb3.set_label('Custom extension lengths, some other units')
-#cb3.ax.get_yaxis().set_ticks([])
-#for j, lab in enumerate(ticks):
-#    cb3.ax.text(.5, (2 * j + 1) / 8.0, lab, ha='center', va='center')
-#cb3.ax.get_yaxis().labelpad = 15
+
+  col_matrix = np.transpose(col_matrix)
+  ax2 = fig.add_axes([box.x0, box.y0+box.height+bar_space, box.width,
+    bar_width*1.5])
+  heatmap = ax2.pcolormesh(col_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.5,
+      edgecolors='k')
+  for y in range(col_matrix.shape[0]):
+    for x in range(col_matrix.shape[1]):
+      plt.text(x + 0.5, y + 0.5, '%.2f' % col_matrix[y, x],
+          horizontalalignment='center', verticalalignment='center', rotation=90)
+  ax2.set_axis_off()
+  ax2.invert_yaxis()
+  plt.axis("tight")
+
+def plot_figure(data, row_labels, col_labels):
+  rows, cols = data.shape
+  fig, ax = plt.subplots()
+  #heatmap = ax.pcolormesh(data, cmap=plt.cm.YlOrBr, alpha=0.8)
+  heatmap = ax.pcolormesh(data, cmap=plt.cm.Blues, alpha=0.8)
+  #heatmap = ax.pcolormesh(data)
+  #heatmap = ax.pcolor(data)
+  # put the major ticks at the middle of each cell
+  #ax.set_yticks(np.arange(data.shape[0]) + 0.5, minor=False)
+  #ax.set_xticks(np.arange(data.shape[1]) + 0.5, minor=False)
+  plt.gca().set_xlim((0, cols))
+  plt.gca().set_ylim((0, rows))
+  #annotate
+  #for y in range(data.shape[0]):
+  #  for x in range(data.shape[1]):
+  #    plt.text(x + 0.5, y + 0.5, '%d' % int(data[y, x]),
+  #        horizontalalignment='center', verticalalignment='center', rotation=90)
+  show_values(heatmap, fmt="%d")
+  #divider = make_axes_locatable(ax)
+  #cax = divider.append_axes("right", size="5%", pad=0.05)
+  #cbar = plt.colorbar(heatmap, cax)
+  cbar = plt.colorbar(heatmap)
+  ax.set_axis_off()
+  # want a more natural, table-like display
+  ax.invert_yaxis()
+  #ax.xaxis.tick_top()
+  #ax.set_xticklabels(col_labels, minor=False)
+  #ax.set_yticklabels(row_labels, minor=False)
+  plt.xticks(rotation=90)
+  #ax.grid(False)
+  ## Turn off all the ticks
+  #ax = plt.gca()
+  #for t in ax.xaxis.get_major_ticks():
+  #    t.tick1On = False
+  #    t.tick2On = False
+  #for t in ax.yaxis.get_major_ticks():
+  #    t.tick1On = False
+  #    t.tick2On = False
+  plot_colorbars(row_labels, col_labels, fig, ax)
+  print ax.get_position()
   plt.show()
 
 def initialize():
