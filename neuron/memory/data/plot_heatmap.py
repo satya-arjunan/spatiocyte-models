@@ -166,7 +166,7 @@ def plot_figure(data, row_labels, col_labels, abs_min):
       ha = 'right'
     cbar.ax.text(pos, .5, lab, ha=ha, va='center', color=color)
   #cbar.ax.get_xaxis().labelpad = 15
-  cbar.ax.set_xlabel('Kinesin concentration at tip (% of lowest concentration)')
+  cbar.ax.set_xlabel('%% higher than the lowest kinesin concentration (%d) at tip' %int(float(abs_min)))
   ax.set_axis_off()
   #ax.set_aspect("equal")
   # want a more natural, table-like display
@@ -240,9 +240,12 @@ def get_data(filenames, labels, start_row, bins):
   return data, row_labels, col_labels, abs_min
 
 file = "saved_data.csv"
-#data, row_labels, col_labels, abs_min = load_data(file)
-filenames, labels, start_row, bins = initialize()
-data, row_labels, col_labels, abs_min = get_data(filenames, labels, start_row, bins)
-save_data(file, data, row_labels, col_labels, abs_min)
+load = 0
+if(load):
+  data, row_labels, col_labels, abs_min = load_data(file)
+else:
+  filenames, labels, start_row, bins = initialize()
+  data, row_labels, col_labels, abs_min = get_data(filenames, labels, start_row, bins)
+  save_data(file, data, row_labels, col_labels, abs_min)
 plot_figure(data, row_labels, col_labels, abs_min)
 
