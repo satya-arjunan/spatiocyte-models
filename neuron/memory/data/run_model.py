@@ -25,7 +25,7 @@ def register_job(param, obj, fdmap, epoll, jobCnt):
   epoll.register(obj, select.EPOLLHUP)
   print "started job:", jobCnt, "id:", fd, param
 
-T = 10000
+T = 100000
 #V1 = [0.05]
 #V2 = [0.05]
 #V3 = [0.05]
