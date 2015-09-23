@@ -153,17 +153,17 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB','1']]
 r.VariableReferenceList = [['_', 'Variable:/:KIF','1']]
 r.SearchVacant = 1
-r.k = 10
+r.k = 15
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:detachGTP')
 r.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_GTP','1']]
 r.VariableReferenceList = [['_', 'Variable:/:KIF','1']]
 r.SearchVacant = 1
-r.k = 10
+r.k = 15
 #-------------------------------------------------------------------------------
 
-visualLogger = sim.createEntity('VisualizationLogProcess', 'Process:/:visualLogger')
+visualLogger = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
 visualLogger.VariableReferenceList = [['_', 'Variable:/:TUB']]
 visualLogger.VariableReferenceList = [['_', 'Variable:/:TUB_M']]
 visualLogger.VariableReferenceList = [['_', 'Variable:/:TUB_P']]
