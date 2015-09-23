@@ -19,14 +19,16 @@ def get_mean(file, start_row, bins):
 def load_data(file):
   loaddata = np.loadtxt(file, delimiter=",", dtype=str)
   rows, cols = loaddata.shape
+  abs_min = loaddata[0][0]
   data = loaddata[1:rows, 1:cols].astype(float)
   row_labels = loaddata[1:rows+1, 0:1].reshape(rows-1)
   col_labels = loaddata[0:1, 1:cols+1].reshape(cols-1)
-  return data, row_labels, col_labels
+  return data, row_labels, col_labels, abs_min
 
-def save_data(file, data, row_labels, col_labels):
+def save_data(file, data, row_labels, col_labels, abs_min):
   rows, cols = data.shape
   savedata = np.zeros((rows+1, cols+1)).astype(str)
+  savedata[0][0] = abs_min
   savedata[1:rows+1, 1:cols+1] = data.astype(str)
   savedata[1:rows+1, 0:1] = row_labels.reshape(savedata[1:rows+1, 0:1].shape)
   savedata[0:1, 1:cols+1] = col_labels.reshape(savedata[0:1, 1:cols+1].shape)
@@ -49,9 +51,6 @@ def show_values(pc, fmt="%.2f", **kw):
   #        horizontalalignment='center', verticalalignment='center', rotation=0)
 
 def plot_colorbars(row_labels, col_labels, fig, ax):
-  vmin = float('inf')
-  vmax = -1.0
-  vdelta = float('inf')
   vals = []
   col_matrix = np.zeros((len(col_labels), len(col_labels[0].split(" "))))
   for i in range(len(col_labels)):
@@ -68,6 +67,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   vals = np.array(vals)
   vmax = np.amax(vals)
   vmin = np.amin(vals)
+  vdelta = float('inf')
   for i in range(len(vals)-1):
     if (vals[i+1] > vals[i] and vals[i+1] - vals[i] < vdelta):
       vdelta = vals[i+1]-vals[i]
@@ -118,7 +118,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   show_values(heatmap)
   plt.axis("tight")
 
-def plot_figure(data, row_labels, col_labels):
+def plot_figure(data, row_labels, col_labels, abs_min):
   rows, cols = data.shape
   fig, ax = plt.subplots()
   #heatmap = ax.pcolormesh(data, cmap=plt.cm.YlOrBr, alpha=0.8)
@@ -160,6 +160,7 @@ def plot_figure(data, row_labels, col_labels):
     if(j == 0):
       pos = (2*j + 0.02)/8.0
       ha = 'left'
+      lab = '%d (%d)' %(lab, int(float(abs_min)))
     elif(j == len(major_ticks)-1):
       pos = (2*j - 0.02)/8.0
       ha = 'right'
@@ -220,7 +221,6 @@ def get_data(filenames, labels, start_row, bins):
   data = np.zeros((rows, cols))
   row_labels = np.zeros(rows).astype(str)
   col_labels = np.zeros(cols).astype(str)
-  min_mean = float('inf')
   for file in filenames:
     vals = np.asarray(file.split("_"))
     vals = (vals[1:len(vals)-1]).astype(float)
@@ -234,17 +234,15 @@ def get_data(filenames, labels, start_row, bins):
     col_labels[col-1] = "%.2f %.2f" %(vals[2], vals[3])
     mean = get_mean(file, start_row, bins)[bins-1]
     data[row-1][col-1] = mean
-    if mean < min_mean:
-      min_mean = mean
-
   #convert to percentage of lowest value
-  data = np.divide(np.subtract(data, min_mean), min_mean/100.0)
-  return data, row_labels, col_labels
+  abs_min = np.amin(data)
+  data = np.divide(np.subtract(data, abs_min), abs_min/100.0)
+  return data, row_labels, col_labels, abs_min
 
 file = "saved_data.csv"
-#data, row_labels, col_labels = load_data(file)
+#data, row_labels, col_labels, abs_min = load_data(file)
 filenames, labels, start_row, bins = initialize()
-data, row_labels, col_labels = get_data(filenames, labels, start_row, bins)
-save_data(file, data, row_labels, col_labels)
-plot_figure(data, row_labels, col_labels)
+data, row_labels, col_labels, abs_min = get_data(filenames, labels, start_row, bins)
+save_data(file, data, row_labels, col_labels, abs_min)
+plot_figure(data, row_labels, col_labels, abs_min)
 
