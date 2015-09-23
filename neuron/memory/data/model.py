@@ -4,11 +4,11 @@ import math
 try:
   T
 except NameError:
-  T = 100
-  V1 = 1.0
-  V2 = 1.0
-  V3 = 1.0
-  V4 = 1.0
+  T = 1000
+  V1 = 0.0
+  V2 = 0.5
+  V3 = 0.0
+  V4 = 0.0
   filename = "histogram"
 
 duration = T
@@ -44,7 +44,7 @@ theSimulator.createEntity('Variable', 'Variable:/Soma:LENGTHX').Value = somaRadi
 theSimulator.createEntity('Variable', 'Variable:/Soma:LENGTHY').Value = somaRadius*2
 theSimulator.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = neuriteRadius*4
 theSimulator.createEntity('Variable', 'Variable:/Soma:VACANT').Value = -1
-theSimulator.createEntity('Variable', 'Variable:/Soma:Kinesin').Value = 25
+theSimulator.createEntity('Variable', 'Variable:/Soma:Kinesin').Value = 250
 theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerA').Value = V1*1079
 theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerB').Value = V2*1102
 theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerC').Value = V3*1102
@@ -93,12 +93,12 @@ populator.UniformLength = 0.25
 populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerE')
 populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerE']]
 
-react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:detachPlus')
-react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','-1']]
-react.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP','-1']]
-react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','1']]
-react.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP','1']]
-react.p = 1
+#react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:detachPlus')
+#react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','-1']]
+#react.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP','-1']]
+#react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','1']]
+#react.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP','1']]
+#react.p = 0
 
 diffuse = theSimulator.createEntity('DiffusionProcess', 'Process:/Soma:diffuseKinesin')
 diffuse.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin']]
