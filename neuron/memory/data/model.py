@@ -1,5 +1,3 @@
-import math
-
 
 try:
   T
@@ -11,6 +9,7 @@ except NameError:
   V4 = 0.0
   filename = "histogram"
 
+import math
 duration = T
 Filaments = 13
 RotateAngle = math.pi
@@ -22,174 +21,189 @@ neuriteLength = 5e-6
 somaRadius = 1.3e-6
 MTLength = neuriteLength*0.95
 
-singleMTVolumeVoxels = 717256.0
-singleNeuriteVolumeVoxels = 48325789.0
-thisSmallNeuronVolumeVoxels = 1822273.0
-totalKinesins = 1000*singleMTVolumeVoxels/singleNeuriteVolumeVoxels
-print "totalKinesins:", totalKinesins
 
-theSimulator.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
+sim = theSimulator
 
-# Create the root container compartment using the default Cuboid geometry:
-theSimulator.rootSystem.StepperID = 'SS'
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = somaRadius*2+neuriteLength*2
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = somaRadius*2+neuriteLength*2
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = neuriteRadius*4.5
-theSimulator.createEntity('Variable', 'Variable:/:VACANT')
+sim.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 
-# Create the Soma compartment of the Neuron:
-theSimulator.createEntity('System', 'System:/:Soma').StepperID = 'SS'
-theSimulator.createEntity('Variable', 'Variable:/Soma:GEOMETRY').Value = 1
-theSimulator.createEntity('Variable', 'Variable:/Soma:LENGTHX').Value = somaRadius*2
-theSimulator.createEntity('Variable', 'Variable:/Soma:LENGTHY').Value = somaRadius*2
-theSimulator.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = neuriteRadius*4
-theSimulator.createEntity('Variable', 'Variable:/Soma:VACANT').Value = -1
-theSimulator.createEntity('Variable', 'Variable:/Soma:Kinesin').Value = 25
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerA').Value = V1*1079
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerB').Value = V2*1102
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerC').Value = V3*1102
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerD').Value = V4*1098
-theSimulator.createEntity('Variable', 'Variable:/Soma:BlockerE').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/Soma:MTKinesin' ).Value = 0
-theSimulator.createEntity('Variable', 'Variable:/Soma:MTKinesinATP' ).Value = 0
-theSimulator.createEntity('Variable', 'Variable:/Soma:Tubulin' ).Value = 0
-#theSimulator.createEntity('Variable', 'Variable:/Soma:actTubulin' ).Value = 0
-theSimulator.createEntity('Variable', 'Variable:/Soma:TubulinM' ).Value = 0
-theSimulator.createEntity('Variable', 'Variable:/Soma:TubulinP' ).Value = 0
-# Create the Soma membrane:
-theSimulator.createEntity('System', 'System:/Soma:Membrane').StepperID = 'SS'
-theSimulator.createEntity('Variable', 'Variable:/Soma/Membrane:DIMENSION').Value = 2
-theSimulator.createEntity('Variable', 'Variable:/Soma/Membrane:VACANT')
+sim.rootSystem.StepperID = 'SS'
+x = sim.createEntity('Variable', 'Variable:/:LENGTHX')
+x.Value = somaRadius*2+neuriteLength*2
+y = sim.createEntity('Variable', 'Variable:/:LENGTHY')
+y.Value = somaRadius*2+neuriteLength*2
+sim.createEntity('Variable', 'Variable:/:LENGTHZ').Value =neuriteRadius*4.5
+sim.createEntity('Variable', 'Variable:/:VACANT')
 
-populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:populate')
-populator.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin']]
-#populator.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin']]
+sim.createEntity('System', 'System:/:Soma').StepperID = 'SS'
+sim.createEntity('Variable', 'Variable:/Soma:GEOMETRY').Value = 1
+sim.createEntity('Variable', 'Variable:/Soma:LENGTHX').Value = somaRadius*2
+sim.createEntity('Variable', 'Variable:/Soma:LENGTHY').Value = somaRadius*2
+sim.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = neuriteRadius*4
+sim.createEntity('Variable', 'Variable:/Soma:VACANT').Value = -1
+sim.createEntity('Variable', 'Variable:/Soma:KIF').Value = 25
+sim.createEntity('Variable', 'Variable:/Soma:TUB_GTP' ).Value = 1
+sim.createEntity('Variable', 'Variable:/Soma:TUB_KIF' ).Value = 0
+sim.createEntity('Variable', 'Variable:/Soma:TUB_KIF_ATP' ).Value = 0
+sim.createEntity('Variable', 'Variable:/Soma:TUB_GTP_KIF' ).Value = 0
+sim.createEntity('Variable', 'Variable:/Soma:TUB_GTP_KIF_ATP' ).Value = 0
+sim.createEntity('Variable', 'Variable:/Soma:TUB' ).Value = 0
+sim.createEntity('Variable', 'Variable:/Soma:TUB_M' ).Value = 0
+sim.createEntity('Variable', 'Variable:/Soma:TUB_P' ).Value = 0
 
-populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:populateK')
-populator.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin']]
-#populator.OriginX = -1.0
-#populator.UniformLengthX = 0.1
+sim.createEntity('System', 'System:/Soma:Membrane').StepperID = 'SS'
+sim.createEntity('Variable', 'Variable:/Soma/Membrane:DIMENSION').Value = 2
+sim.createEntity('Variable', 'Variable:/Soma/Membrane:VACANT')
 
-populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerA')
-populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerA']]
-populator.OriginX = 0.75
-populator.UniformLength = 0.25
+#Populate-----------------------------------------------------------------------
+p = sim.createEntity('MoleculePopulateProcess', 'Process:/Soma:pTUB_KIF')
+p.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF']]
 
-populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerB')
-populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerB']]
-populator.OriginX = 0.25
-populator.UniformLength = 0.25
+p = sim.createEntity('MoleculePopulateProcess', 'Process:/Soma:pTUB_GTP')
+p.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
+p.LengthBinFractions = [V1, V2, V3, V4]
+p.Priority = 100 #set high priority for accurate fraction
 
-populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerC')
-populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerC']]
-populator.OriginX = -0.25
-populator.UniformLength = 0.25
+p = sim.createEntity('MoleculePopulateProcess', 'Process:/Soma:pKIF')
+p.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
+#-------------------------------------------------------------------------------
 
-populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerD')
-populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerD']]
-populator.OriginX = -0.75
-populator.UniformLength = 0.25
+#Cytosolic KIF recruitment to microtubule---------------------------------------
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b1')
+r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','1']]
+r.p = 0.333
 
-populator = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/Soma:popBlockerE')
-populator.VariableReferenceList = [['_', 'Variable:/Soma:BlockerE']]
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b2')
+r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','1']]
+r.p = 1
+#-------------------------------------------------------------------------------
 
-#react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:detachPlus')
-#react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','-1']]
-#react.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP','-1']]
-#react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','1']]
-#react.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP','1']]
-#react.p = 0
+#MT KIF detachment to cytosol---------------------------------------------------
+r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:detach')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
+r.SearchVacant = 1
+r.k = 15
 
-diffuse = theSimulator.createEntity('DiffusionProcess', 'Process:/Soma:diffuseKinesin')
-diffuse.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin']]
-diffuse.D = 0.5e-12
+r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:detachGTP')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
+r.SearchVacant = 1
+r.k = 15
+#-------------------------------------------------------------------------------
+
+#KIF ATP hydrolysis-------------------------------------------------------------
+r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:h1')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','1']]
+r.SearchVacant = 1
+r.k = 100
+
+r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:h2')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','1']]
+r.SearchVacant = 1
+r.k = 100
+#-------------------------------------------------------------------------------
+
+#KIF ADP phosphorylation--------------------------------------------------------
+r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:phos1')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']]
+r.SearchVacant = 1
+r.k = 145
+
+r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:phos2')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']]
+r.SearchVacant = 1
+r.k = 145
+#-------------------------------------------------------------------------------
+
+#KIF ratchet biased walk_-------------------------------------------------------
+r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:rat1')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','1']]
+#if BindingSite[1]==TUB
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','0']]
+#set product as
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']]
+#else if BindingSite[1]==TUB_GTP
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']]
+#set product as
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']]
+r.BindingSite = 1
+r.k = 55
+
+r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:rat2')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','-1']]    #A
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','1']]         #C
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','0']]             #E
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']]     #D
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']]         #H
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']] #F
+r.BindingSite = 1
+r.k = 55
+#-------------------------------------------------------------------------------
+
+#KIF random walk between GTP and GDP tubulins-----------------------------------
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:w1')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','1']]
+r.ForcedSequence = 1
+r.p = 1
+
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:w2')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','1']]
+r.ForcedSequence = 1
+r.p = 1
+
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:w3')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','1']]
+r.ForcedSequence = 1
+r.p = 1
+#-------------------------------------------------------------------------------
+
+#KIF normal diffusion-----------------------------------------------------------
+d = sim.createEntity('DiffusionProcess', 'Process:/Soma:dKIF')
+d.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
+d.D = 0.5e-12
+
+d = sim.createEntity('DiffusionProcess', 'Process:/Soma:dTUB_KIF')
+d.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF']]
+d.D = 0.04e-12
+
+d = sim.createEntity('DiffusionProcess', 'Process:/Soma:dTUB_GTP_KIF')
+d.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF']]
+d.WalkReact = 1
+d.D = 0.04e-12
+#-------------------------------------------------------------------------------
 
 
-
-
-
-#react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:explicitAttachAct_k6')
-#react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','-1']]
-#react.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin','-1']]
-#react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
-#react.k = 2.5863133e-22
-#react.p = 1
-#react.k = 1.69706e-20
-
-react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:explicitAttach_k1')
-react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','-1']]
-react.VariableReferenceList = [['_', 'Variable:/Soma:Tubulin','-1']]
-react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
-#react.k = 2.5863133e-24
-react.p = 1
-#react.k = 6.78823e-24
-
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:detach_k4')
-react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','-1']]
-#react.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin','1']]
-react.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin','1']]
-react.SearchVacant = 1
-react.k = 15
-
-#react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:inactive_k7')
-#react.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin','-1']]
-#react.VariableReferenceList = [['_', 'Variable:/Soma:Tubulin','1']]
-#react.k = 0.055
-
-
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:hydrolysis_k3')
-react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','-1']]
-react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','1']]
-react.SearchVacant = 1
-react.k = 100
-
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:phosphorylate_k2')
-react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','-1']]
-react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','1']]
-react.SearchVacant = 1
-react.k = 145
-
-react = theSimulator.createEntity('SpatiocyteTauLeapProcess', 'Process:/Soma:ratchet_k5')
-react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin','-1']]
-react.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP','1']]
-#react.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin','1']]
-react.BindingSite = 1
-react.k = 55
-
-diffuse = theSimulator.createEntity('DiffusionProcess', 'Process:/Soma:diffusePlus')
-diffuse.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin']]
-#diffuse.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin', '1']]
-diffuse.D = 0.04e-12
-
-#visualLogger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/Soma:visualLogger')
-##visualLogger.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:Tubulin']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:TubulinM']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin', '10600']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerA']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerB']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerC']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerD']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:BlockerE']]
-##visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin']]
-##visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:Interface']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin']]
-#visualLogger.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP']]
-#visualLogger.LogInterval = 1
-
-#micro = theSimulator.createEntity('MicroscopyTrackingProcess', 'Process:/Soma:micro')
-#micro.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin', '1']]
-#micro.VariableReferenceList = [['_', 'Variable:/Soma:Indicator' ]]
-#micro.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin', '1']]
-#micro.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP', '1']]
-#micro.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin', '-1']]
-#micro.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin', '-1']]
-#micro.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin', '-1']]
-#micro.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin', '12500']]
-#micro.LogInterval = 1
-#micro.ExposureTime = 60
-#micro.FileName = "translocation.dat"
+v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
+v.LogInterval = 1
 
 def rotatePointAlongVector(P, C, N, angle):
   x = P[0]
@@ -207,9 +221,12 @@ def rotatePointAlongVector(P, C, N, angle):
   cosT = math.cos(angle)
   oneMinusCosT = 1-cosT
   sinT = math.sin(angle)
-  xx = (a*(v2 + w2) - u*(b*v + c*w - u*x - v*y - w*z)) * oneMinusCosT + x*cosT + (-c*v + b*w - w*y + v*z)*sinT
-  yy = (b*(u2 + w2) - v*(a*u + c*w - u*x - v*y - w*z)) * oneMinusCosT + y*cosT + (c*u - a*w + w*x - u*z)*sinT
-  zz = (c*(u2 + v2) - w*(a*u + b*v - u*x - v*y - w*z)) * oneMinusCosT + z*cosT + (-b*u + a*v - v*x + u*y)*sinT
+  xx = (a*(v2+w2)-u*(b*v+c*w-u*x-v*y-w*z))*oneMinusCosT+x*cosT+(
+      -c*v+b*w-w*y+v*z)*sinT
+  yy = (b*(u2+w2)-v*(a*u+c*w-u*x-v*y-w*z))*oneMinusCosT+y*cosT+(
+      c*u-a*w+w*x-u*z)*sinT
+  zz = (c*(u2+v2)-w*(a*u+b*v-u*x-v*y-w*z))*oneMinusCosT+z*cosT+(
+      -b*u+a*v-v*x+u*y)*sinT
   return [xx, yy, zz]
 
 somaMTs = 0
@@ -229,26 +246,29 @@ for i in range(somaMTs):
             OriginZ = 0.5 
           else:
             OriginZ = -0.5 
-        Microtubule = theSimulator.createEntity('MicrotubuleProcess', 'Process:/Soma:Microtubule%d%d' %(i,j))
-        P = rotatePointAlongVector(somaMTorigin, somaMTvectorZpoint, somaMTvectorZ, somaMTrotateAngle*i+startAngle)
-        Microtubule.OriginX = P[0]
-        Microtubule.OriginY = P[1]
-        Microtubule.OriginZ = OriginZ
-        Microtubule.RotateX = 0
-        Microtubule.RotateY = 0
-        Microtubule.RotateZ =  somaMTrotateAngle*i+startAngle
-        Microtubule.Radius = MTRadius
-        Microtubule.SubunitRadius = KinesinRadius
-        Microtubule.Length = somaRadius*0.7
-        Microtubule.Filaments = Filaments
-        Microtubule.Periodic = 0
-        Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin' ]]
-        Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:Indicator' ]]
-        Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP' ]]
-        #Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin' ]]
-        Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:Tubulin' , '-1']]
-        Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:TubulinM' , '-2']]
-        Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP' , '-3']]
+        m = sim.createEntity('MicrotubuleProcess',
+            'Process:/Soma:Microtubule%d%d' %(i,j))
+        P = rotatePointAlongVector(somaMTorigin, somaMTvectorZpoint,
+            somaMTvectorZ, somaMTrotateAngle*i+startAngle)
+        m.OriginX = P[0]
+        m.OriginY = P[1]
+        m.OriginZ = OriginZ
+        m.RotateX = 0
+        m.RotateY = 0
+        m.RotateZ =  somaMTrotateAngle*i+startAngle
+        m.Radius = MTRadius
+        m.SubunitRadius = KinesinRadius
+        m.Length = somaRadius*0.7
+        m.Filaments = Filaments
+        m.Periodic = 0
+        m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP' ]]
+        m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+        m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+        m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+        m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+        m.VariableReferenceList = [['_', 'Variable:/Soma:TUB' , '-1']]
+        m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M' , '-2']]
+        m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P' , '-3']]
 
 angle = math.pi/4
 A = [0.5, 0, 0]
@@ -271,60 +291,68 @@ nNeuriteMTs = 1
 
 for i in range(nNeurites):
   # Create the neurite:
-  theSimulator.createEntity('System', 'System:/:neurite%d' %i).StepperID = 'SS'
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d:GEOMETRY' %i).Value = 3
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d:LENGTHX' %i).Value = neuritesLengthX[i]
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d:LENGTHY' %i).Value = neuriteRadius*2
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d:ORIGINX' %i).Value = neuritesOriginX[i]
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d:ORIGINY' %i).Value = neuritesOriginY[i]
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d:ORIGINZ' %i).Value = 0
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d:ROTATEZ' %i).Value = neuritesRotateZ[i]
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d:VACANT' %i)
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d:DIFFUSIVE' %i).Name = '/:Soma'
+  sim.createEntity('System', 'System:/:Neurite%d' %i).StepperID = 'SS'
+  sim.createEntity('Variable', 'Variable:/Neurite%d:GEOMETRY' %i).Value = 3
+  x = sim.createEntity('Variable', 'Variable:/Neurite%d:LENGTHX' %i)
+  x.Value = neuritesLengthX[i]
+  y = sim.createEntity('Variable', 'Variable:/Neurite%d:LENGTHY' %i)
+  y.Value = neuriteRadius*2
+  x = sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINX' %i)
+  x.Value = neuritesOriginX[i]
+  y = sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINY' %i)
+  y.Value = neuritesOriginY[i]
+  sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINZ' %i).Value = 0
+  r = sim.createEntity('Variable', 'Variable:/Neurite%d:ROTATEZ' %i)
+  r.Value = neuritesRotateZ[i]
+  sim.createEntity('Variable', 'Variable:/Neurite%d:VACANT' %i)
+  d = sim.createEntity('Variable', 'Variable:/Neurite%d:DIFFUSIVE' %i)
+  d.Name = '/:Soma'
   # Create the neurite membrane:
-  theSimulator.createEntity('System', 'System:/neurite%d:Membrane' %i).StepperID = 'SS'
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d/Membrane:DIMENSION' %i).Value = 2
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d/Membrane:VACANT' %i)
-  theSimulator.createEntity('Variable', 'Variable:/neurite%d/Membrane:DIFFUSIVE' %i).Name = '/Soma:Membrane'
-  Histogram = theSimulator.createEntity('HistogramLogProcess', 'Process:/neurite%d:Histogram' %i)
-  Histogram.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin' ]]
-  Histogram.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP' ]]
-  Histogram.VariableReferenceList = [['_', 'Variable:/Soma:Kinesin' ]]
-  Histogram.Length = neuritesLengthX[i]
-  Histogram.Radius = neuriteRadius
-  Histogram.Bins = 5
-  Histogram.LogInterval = 1
-  Histogram.ExposureTime = 60
-  Histogram.FileName = filename + ("_n%d.csv" %i)
-  Histogram.LogEnd = duration-1
-  Histogram.Iterations = 1
+  sim.createEntity('System', 'System:/Neurite%d:Membrane' %i).StepperID = 'SS'
+  sim.createEntity('Variable',
+      'Variable:/Neurite%d/Membrane:DIMENSION' %i).Value = 2
+  sim.createEntity('Variable', 'Variable:/Neurite%d/Membrane:VACANT' %i)
+  sim.createEntity('Variable',
+      'Variable:/Neurite%d/Membrane:DIFFUSIVE' %i).Name = '/Soma:Membrane'
+  h = sim.createEntity('HistogramLogProcess',
+      'Process:/Neurite%d:Histogram' %i)
+  h.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+  h.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+  h.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+  h.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+  h.VariableReferenceList = [['_', 'Variable:/Soma:KIF' ]]
+  h.Length = neuritesLengthX[i]
+  h.Radius = neuriteRadius
+  h.Bins = 5
+  h.LogInterval = 1
+  h.ExposureTime = 60
+  h.FileName = filename + ("_n%d.csv" %i)
+  h.LogEnd = duration-1
+  h.Iterations = 1
 
   for j in range(nNeuriteMTs):
-    Microtubule = theSimulator.createEntity('MicrotubuleProcess', 'Process:/neurite%d:Microtubule%d' %(i, j))
-    Microtubule.OriginX = MTsOriginX[j]
-    Microtubule.OriginY = MTsOriginY[j]
-    Microtubule.OriginZ = MTsOriginZ[j]
-    Microtubule.RotateX = 0
-    Microtubule.RotateY = 0
-    Microtubule.RotateZ =  0
-    Microtubule.Radius = MTRadius
-    Microtubule.SubunitRadius = KinesinRadius
-    Microtubule.Length = MTLength
-    Microtubule.Filaments = Filaments
-    Microtubule.Periodic = 0
-    Microtubule.Verbose = 1
-    Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesin' ]]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:MTKinesinATP' ]]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:BlockerA' ]]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:BlockerB' ]]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:BlockerC' ]]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:BlockerD' ]]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:BlockerE' ]]
-    #Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:actTubulin' ]]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:Tubulin' , '-1']]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:TubulinM' , '-2']]
-    Microtubule.VariableReferenceList = [['_', 'Variable:/Soma:TubulinP' , '-3']]
+    m = sim.createEntity('MicrotubuleProcess',
+        'Process:/Neurite%d:Microtubule%d' %(i, j))
+    m.OriginX = MTsOriginX[j]
+    m.OriginY = MTsOriginY[j]
+    m.OriginZ = MTsOriginZ[j]
+    m.RotateX = 0
+    m.RotateY = 0
+    m.RotateZ =  0
+    m.Radius = MTRadius
+    m.SubunitRadius = KinesinRadius
+    m.Length = MTLength
+    m.Filaments = Filaments
+    m.Periodic = 0
+    m.Verbose = 1
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB', '-1']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M', '-2']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P', '-3']]
 
 run(duration)
-
 
