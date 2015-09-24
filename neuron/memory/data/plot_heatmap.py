@@ -11,7 +11,8 @@ def get_mean(file, start_row, bins):
                                       #want to average
   meanCols = [cols-1]#, cols-2, cols-3] #Edit this to the species cols that you
                                       #want to average
-  total = np.zeros(cols)
+  #meanCols = [cols-1, cols-2, cols-3, cols-4, cols-5]
+  total = np.zeros(bins)
   for i in meanCols:
     total = np.add(total, data[0:rows, i:i+1].reshape(rows/bins, bins))
   return np.mean(total, axis=0)#.astype(int)
@@ -186,7 +187,7 @@ def initialize():
   filenames = glob.glob("his_*.csv")
   #filenames = glob.glob("his_1e-01_5e-02_1e-01_5e-02_n0.csv")
   filename = filenames[0]
-  startTime = 400
+  startTime = 1
   data = np.loadtxt(filename, delimiter=',', skiprows=1)
   bins = 0
   initTime = float(data[0][0])

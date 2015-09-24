@@ -193,17 +193,17 @@ d.D = 0.04e-12
 #-------------------------------------------------------------------------------
 
 
-v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
-v.LogInterval = 1
+#v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
+#v.LogInterval = 1
 
 def rotatePointAlongVector(P, C, N, angle):
   x = P[0]
