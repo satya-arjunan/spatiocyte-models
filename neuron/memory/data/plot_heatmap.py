@@ -187,7 +187,7 @@ def initialize():
   filenames = glob.glob("his_*.csv")
   #filenames = glob.glob("his_1e-01_5e-02_1e-01_5e-02_n0.csv")
   filename = filenames[0]
-  startTime = 1
+  startTime = 400
   data = np.loadtxt(filename, delimiter=',', skiprows=1)
   bins = 0
   initTime = float(data[0][0])
