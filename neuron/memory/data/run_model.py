@@ -11,19 +11,6 @@ def get_param(T, V1, V2, V3, V4, cnt):
   #if (filename == "HistogramCooperativity_1.000000e-02_1.000000e+00_1.000000e-01_1.000000e+03.csv"):
   #  print "jobCnt:",cnt
   #  exit()
-#!/usr/bin/env python
-import os
-import psutil
-import subprocess
-import select
-import shlex
-import time
-
-def get_param(T, V1, V2, V3, V4, cnt):
-  filename = ('his_%0.00e_%0.00e_%0.00e_%0.00e' %(V1,V2,V3,V4))
-  #if (filename == "HistogramCooperativity_1.000000e-02_1.000000e+00_1.000000e-01_1.000000e+03.csv"):
-  #  print "jobCnt:",cnt
-  #  exit()
   param = ("--parameters=\"{'T':%0.00e, 'V1':%0.00e, 'V2':%0.00e, 'V3':%0.00e, 'V4':%0.00e, 'filename':'%s'}\"" %(T, V1, V2, V3, V4, filename))
   return param
 

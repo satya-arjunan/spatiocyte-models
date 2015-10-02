@@ -9,9 +9,9 @@ def get_mean(file, start_row, bins):
   rows,cols = data.shape
   #meanCols = [cols-1, cols-2, cols-3] #Edit this to the species cols that you
                                       #want to average
-  meanCols = [cols-1]#, cols-2, cols-3] #Edit this to the species cols that you
+  #meanCols = [cols-1]#, cols-2, cols-3] #Edit this to the species cols that you
                                       #want to average
-  #meanCols = [cols-1, cols-2, cols-3, cols-4, cols-5]
+  meanCols = [cols-1, cols-2, cols-3, cols-4, cols-5]
   total = np.zeros(bins)
   for i in meanCols:
     total = np.add(total, data[0:rows, i:i+1].reshape(rows/bins, bins))
@@ -236,7 +236,7 @@ def get_data(filenames, labels, start_row, bins):
     mean = get_mean(file, start_row, bins)[bins-1]
     data[row-1][col-1] = mean
   #convert to percentage of lowest value
-  abs_min = np.amin(data)
+  abs_min = max(np.amin(data), 1.0)
   data = np.divide(np.subtract(data, abs_min), abs_min/100.0)
   return data, row_labels, col_labels, abs_min
 

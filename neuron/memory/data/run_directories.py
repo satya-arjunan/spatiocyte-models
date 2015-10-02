@@ -5,6 +5,7 @@ import subprocess
 import select
 import shlex
 import time
+import sys
 
 
 dirs = ['GTP_2x_tubConc_fixInt', 'GTP_3x_tubConc_fixInt', 'GTP_4x_tubConc_fixInt', 'GTP_2x_fixConc', 'GTP_3x_fixConc', 'GTP_4x_fixConc', '25kinesin_GTP', 'GTP_2x_fixConc_fixInt', 'GTP_3x_fixConc_fixInt', 'GTP_4x_fixConc_fixInt', '25kinesin_GTP_fixInt', 'GTP_2x_tubConc', 'GTP_3x_tubConc', 'GTP_4x_tubConc']
@@ -16,5 +17,8 @@ for dir in dirs:
   cwd = dir
   print "running... ", command_line, "in", dir
   args = shlex.split(command_line)
-  subprocess.call(args, stdout=subprocess.PIPE, close_fds=True, cwd=cwd)
-
+  popen = subprocess.Popen(args, stdout=subprocess.PIPE, close_fds=True, cwd=cwd)
+  for line in popen.stdout:
+    sys.stdout.write(line)
+    sys.stdout.flush()
+    print dir
