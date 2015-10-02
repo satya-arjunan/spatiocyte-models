@@ -45,13 +45,15 @@ react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process
 react.VariableReferenceList = [['_', 'Variable:/:Kinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:Tubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','1']]
-react.k = 2.5863133e-18
+#react.k = 2.5863133e-18
+react.p = 0.1
 
 react = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:explicitAttachAct')
 react.VariableReferenceList = [['_', 'Variable:/:Kinesin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:actTubulin','-1']]
 react.VariableReferenceList = [['_', 'Variable:/:MTKinesin','1']]
-react.k = 2.5863133e-18
+#react.k = 2.5863133e-18
+react.p = 1
 
 diffuse = theSimulator.createEntity('DiffusionProcess', 'Process:/:diffuseKinesin')
 diffuse.VariableReferenceList = [['_', 'Variable:/:Kinesin']]
