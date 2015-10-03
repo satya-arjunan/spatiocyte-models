@@ -73,6 +73,40 @@ r.SearchVacant = 1
 r.k = 15
 #-------------------------------------------------------------------------------
 
+#MT KIF detachment to cytosol at plus end---------------------------------------
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:p1')
+r.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_P','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_GTP','1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_P','1']]
+r.VariableReferenceList = [['_', 'Variable:/:KIF','1']]
+r.p = 1
+
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:p2')
+r.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_P','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_GTP','1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_P','1']]
+r.VariableReferenceList = [['_', 'Variable:/:KIF','1']]
+r.p = 1
+
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:p3')
+r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_P','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB','1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_P','1']]
+r.VariableReferenceList = [['_', 'Variable:/:KIF','1']]
+r.p = 1
+
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:p4')
+r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_P','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB','1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_P','1']]
+r.VariableReferenceList = [['_', 'Variable:/:KIF','1']]
+r.p = 1
+#-------------------------------------------------------------------------------
+
 #KIF ATP hydrolysis-------------------------------------------------------------
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:h1')
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP','-1']]
