@@ -12,7 +12,7 @@ import scipy.constants
 
 nBin = int(V1)
 binLength = 0.4e-6
-filename = "collision_%d_%d_%.2f.csv" %(int(V1), int(V2), V3)
+filename = "collision_%d_%d_%.2f_n0.csv" %(int(V1), int(V2), V3)
 neuriteLength = nBin*binLength
 Filaments = 13
 MTRadius = 12.5e-9
