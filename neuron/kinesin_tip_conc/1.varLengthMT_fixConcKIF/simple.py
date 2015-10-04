@@ -1,24 +1,27 @@
+import math
 import scipy.constants
 
 T = 10
+nBin = 1
+binLength = 0.4e-6
+filename = "his_%d.csv" %nBin
+neuriteLength = nBin*binLength
 Filaments = 13
 MTRadius = 12.5e-9
 VoxelRadius = 0.4e-8
 KinesinRadius = 0.4e-8
 neuriteRadius = 0.2e-6
-neuriteLength = 1e-6
-MT_NeuriteTip_space = 0.2e-6
 pPlusEnd_Detach = 1
-MTLength = neuriteLength-MT_NeuriteTip_space*2
+MTLength = neuriteLength-50e-9
 KinesinConc = 2e-7 #in Molar
-ActualVolume =  1.14e-19 #in m^3
-nKinesin = KinesinConc*scipy.constants.N_A*1e+3*ActualVolume
-print "nKinesin:", nKinesin
+Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength
+nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
+print "Volume:", Volume, "nKinesin:", nKinesin
 
 sim = theSimulator
 sim.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 sim.rootSystem.StepperID = 'SS'
-sim.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 3 #Rod shaped
+sim.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 2 #Cylinder
 sim.createEntity('Variable', 'Variable:/:ROTATEZ').Value = 0
 sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = neuriteLength
 sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = neuriteRadius*2
@@ -36,6 +39,7 @@ sim.createEntity('Variable', 'Variable:/:TUB_P' ).Value = 0
 sim.createEntity('System', 'System:/:Membrane').StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/Membrane:DIMENSION').Value = 2
 sim.createEntity('Variable', 'Variable:/Membrane:VACANT')
+sim.createEntity('Variable', 'Variable:/Membrane:Sensor' ).Value = 7440
 
 #Loggers-----------------------------------------------------------------------
 v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
@@ -48,10 +52,47 @@ v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP' ]]
 v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF' ]]
 v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP' ]]
 v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP']]
-v.LogInterval = 1e-2
+v.VariableReferenceList = [['_', 'Variable:/Membrane:Sensor']]
+v.LogInterval = 1
+
+#h = sim.createEntity('HistogramLogProcess', 'Process:/:h')
+#h.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
+#h.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF' ]]
+#h.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP' ]]
+#h.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP' ]]
+#h.VariableReferenceList = [['_', 'Variable:/:KIF' ]]
+#h.Length = neuriteLength
+#h.Radius = neuriteRadius
+#h.Bins = nBin
+#h.LogInterval = 1
+#h.ExposureTime = 40
+#h.FileName = "histogram.csv"
+#h.LogEnd = T-1
+#h.Iterations = 1
+#-------------------------------------------------------------------------------
+
+#Collision----------------------------------------------------------------------
+d = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r3')
+d.VariableReferenceList = [['_', 'Variable:/:KIF','-1']]
+d.VariableReferenceList = [['_', 'Variable:/Membrane:Sensor','-1']]
+d.VariableReferenceList = [['_', 'Variable:/Membrane:Sensor','1']]
+d.p = 1
+d.Collision = 3
+
+i = sim.createEntity('IteratingLogProcess', 'Process:/:iter')
+i.VariableReferenceList = [['_', 'Variable:/:KIF']]
+i.LogInterval = 1e-2
+i.LogEnd = T-1
+i.Iterations = 1
+i.Collision = 3
+i.FileName = "collision.csv"
 #-------------------------------------------------------------------------------
 
 #Populate-----------------------------------------------------------------------
+p = sim.createEntity('MoleculePopulateProcess', 'Process:/:pSensor')
+p.VariableReferenceList = [['_', 'Variable:/Membrane:Sensor']]
+p.EdgeX = 1
+
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/:pTUB_KIF')
 p.VariableReferenceList = [['_', 'Variable:/:TUB_KIF']]
 
@@ -75,7 +116,7 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:b2')
 r.VariableReferenceList = [['_', 'Variable:/:KIF','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_GTP','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF','1']]
-r.p = 1
+r.p = 0
 #-------------------------------------------------------------------------------
 
 #MT KIF detachment to cytosol---------------------------------------------------
@@ -240,4 +281,4 @@ m.VariableReferenceList = [['_', 'Variable:/:TUB', '-1']]
 m.VariableReferenceList = [['_', 'Variable:/:TUB_M', '-2']]
 m.VariableReferenceList = [['_', 'Variable:/:TUB_P', '-3']]
 
-run(T+0.01)
+run(T)
