@@ -47,21 +47,23 @@ sim.createEntity('Variable', 'Variable:/:TUB_P' ).Value = 0
 sim.createEntity('System', 'System:/:Membrane').StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/Membrane:DIMENSION').Value = 2
 sim.createEntity('Variable', 'Variable:/Membrane:VACANT')
-sim.createEntity('Variable', 'Variable:/Membrane:Sensor' ).Value = 7440
+sim.createEntity('Variable', 'Variable:/Membrane:PlusSensor' ).Value = 7440
+sim.createEntity('Variable', 'Variable:/Membrane:MinusSensor' ).Value = 7440
 
 #Loggers-----------------------------------------------------------------------
-#v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
-#v.VariableReferenceList = [['_', 'Variable:/:TUB']]
-#v.VariableReferenceList = [['_', 'Variable:/:TUB_M']]
-#v.VariableReferenceList = [['_', 'Variable:/:TUB_P']]
-#v.VariableReferenceList = [['_', 'Variable:/:KIF']]
-#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
-#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP' ]]
-#v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF' ]]
-#v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP' ]]
-#v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP']]
-#v.VariableReferenceList = [['_', 'Variable:/Membrane:Sensor']]
-#v.LogInterval = 1
+v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
+v.VariableReferenceList = [['_', 'Variable:/:TUB']]
+v.VariableReferenceList = [['_', 'Variable:/:TUB_M']]
+v.VariableReferenceList = [['_', 'Variable:/:TUB_P']]
+v.VariableReferenceList = [['_', 'Variable:/:KIF']]
+v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
+v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP' ]]
+v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF' ]]
+v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP' ]]
+v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP']]
+v.VariableReferenceList = [['_', 'Variable:/Membrane:PlusSensor']]
+v.VariableReferenceList = [['_', 'Variable:/Membrane:MinusSensor']]
+v.LogInterval = 1
 
 #h = sim.createEntity('HistogramLogProcess', 'Process:/:h')
 #h.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
@@ -82,13 +84,21 @@ sim.createEntity('Variable', 'Variable:/Membrane:Sensor' ).Value = 7440
 #Collision----------------------------------------------------------------------
 d = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r3')
 d.VariableReferenceList = [['_', 'Variable:/:KIF','-1']]
-d.VariableReferenceList = [['_', 'Variable:/Membrane:Sensor','-1']]
-d.VariableReferenceList = [['_', 'Variable:/Membrane:Sensor','1']]
+d.VariableReferenceList = [['_', 'Variable:/Membrane:PlusSensor','-1']]
+d.VariableReferenceList = [['_', 'Variable:/Membrane:PlusSensor','1']]
+d.p = 1
+d.Collision = 3
+
+d = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r4')
+d.VariableReferenceList = [['_', 'Variable:/:KIF','-1']]
+d.VariableReferenceList = [['_', 'Variable:/Membrane:MinusSensor','-1']]
+d.VariableReferenceList = [['_', 'Variable:/Membrane:MinusSensor','1']]
 d.p = 1
 d.Collision = 3
 
 i = sim.createEntity('IteratingLogProcess', 'Process:/:iter')
-i.VariableReferenceList = [['_', 'Variable:/:KIF']]
+i.VariableReferenceList = [['_', 'Variable:/Membrane:PlusSensor']]
+i.VariableReferenceList = [['_', 'Variable:/Membrane:MinusSensor']]
 i.LogInterval = 1e-2
 i.LogEnd = T-1
 i.Iterations = 1
@@ -97,9 +107,13 @@ i.FileName = filename
 #-------------------------------------------------------------------------------
 
 #Populate-----------------------------------------------------------------------
-p = sim.createEntity('MoleculePopulateProcess', 'Process:/:pSensor')
-p.VariableReferenceList = [['_', 'Variable:/Membrane:Sensor']]
+p = sim.createEntity('MoleculePopulateProcess', 'Process:/:pPlusSensor')
+p.VariableReferenceList = [['_', 'Variable:/Membrane:PlusSensor']]
 p.EdgeX = 1
+
+p = sim.createEntity('MoleculePopulateProcess', 'Process:/:pMinusSensor')
+p.VariableReferenceList = [['_', 'Variable:/Membrane:MinusSensor']]
+p.EdgeX = -1
 
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/:pTUB_KIF')
 p.VariableReferenceList = [['_', 'Variable:/:TUB_KIF']]

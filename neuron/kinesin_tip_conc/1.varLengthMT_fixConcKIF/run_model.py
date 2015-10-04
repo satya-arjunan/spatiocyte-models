@@ -21,7 +21,7 @@ def register_job(param, obj, fdmap, epoll, jobCnt):
   epoll.register(obj, select.EPOLLHUP)
   print "started job:", jobCnt, "id:", fd, param
 
-T = 100
+T = 5000
 Iterations = 1
 V1 = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0] #nBin
 V2 = [0.0, 55.0] #ratchet rate
@@ -40,7 +40,7 @@ if __name__ == '__main__':
             V4[l], cnt))
 
   SLICE_IN_SECONDS = 0.1
-  param = get_param(0.001, 1, String, V1[0], V2[0], V3[0], V4[0], 0)
+  param = get_param(1, 1, String, V1[0], V2[0], V3[0], V4[0], 0)
   subproc = add_job(param)
   resultTable = []
   startTime = time.time()
