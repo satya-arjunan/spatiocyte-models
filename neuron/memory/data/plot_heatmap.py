@@ -149,10 +149,10 @@ def plot_figure(data, row_labels, col_labels, abs_min):
   cbar = plt.colorbar(heatmap, cax=cax, orientation='horizontal')
   cbar.ax.get_xaxis().set_ticks([])
   vmin, vmax = cbar.get_clim()
-  major_ticks = np.arange(vmin, vmax+1, vmax/4).astype(int)
+  major_ticks = np.arange(vmin, vmax+1, (vmax-vmin)/4.0).astype(int)
   for j, lab in enumerate(major_ticks):
-    color = np.array(heatmap.get_cmap()(major_ticks[j]))
-    if np.all(color[:3] > 0.5):
+    color = np.array(heatmap.get_cmap()(major_ticks[j]/vmax))
+    if (color[0] > 0.5 and color[1] > 0.5 and color [2] > 0.5):
       color = (0.0, 0.0, 0.0)
     else:
       color = (1.0, 1.0, 1.0)
@@ -182,6 +182,7 @@ def plot_figure(data, row_labels, col_labels, abs_min):
   plt.xticks(rotation=90)
   plot_colorbars(row_labels, col_labels, fig, ax)
   plt.show()
+
 
 def initialize():
   filenames = glob.glob("his_*.csv")

@@ -65,6 +65,18 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
     if (vals[i+1] > vals[i] and vals[i+1] - vals[i] < vdelta):
       vdelta = vals[i+1]-vals[i]
 
+  rows, rcols = row_matrix.shape
+  V0 = row_matrix[0:rows, 0:1]
+  if(rcols > 1):
+    V1 = row_matrix[0:rows, 1:2]
+
+  rows, ccols = col_matrix.shape
+  V2 = col_matrix[0:rows, 0:1]
+  V2 = np.transpose(V2)
+  if(ccols > 1):
+    V3 = col_matrix[0:rows, 1:2]
+    V3 = np.transpose(V3)
+
   #cax = divider.append_axes("left", size="20%", pad=0.05)
   #rect [left, bottom, width, height]
   #ax1 = fig.add_axes([0.80, 0.05, 0.05, 0.8])
@@ -74,42 +86,60 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   #cmap = mpl.cm.Oranges
   #cmap = mpl.cm.OrRd
   cmap = mpl.cm.YlGn
-  bar_width = 0.04
+  bar_width = 0.03
   padding = 0
   #ax1 = fig.add_axes(cax)
   box = ax.get_position()
+
   ax1 = fig.add_axes([box.x0-(bar_width+padding), box.y0, bar_width,
     box.height])
-  heatmap = ax1.pcolor(row_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.0,
-      edgecolors='k')
+  heatmap = ax1.pcolor(V1, cmap=cmap, edgecolors='k')
   #ax1.set_axis_off()
-  #ax1.xaxis.tick_top()
+  ax1.xaxis.tick_top()
   ax1.invert_yaxis()
   #put major ticks at the middle of each cell
   ax1.set_xticks(np.arange(row_matrix.shape[1]) + 0.5, minor=False)
-  ax1.set_xticklabels(['V0', 'V1'])
+  ax1.set_xticklabels(['Ratchet'])
   ax1.set_yticklabels([])
   major_ticks = np.arange(0, 37, 6)
   ax1.set_yticks(major_ticks)
-  show_values(heatmap)
+  show_values(heatmap, fmt="%d")
   plt.axis("tight")
 
-  col_matrix = np.transpose(col_matrix)
+  if(rcols > 1):
+    ax0 = fig.add_axes([box.x0-(bar_width*2+padding), box.y0, bar_width,
+      box.height])
+    heatmap = ax0.pcolor(V0, cmap=cmap, edgecolors='k')
+    ax0.xaxis.tick_top()
+    ax0.invert_yaxis()
+    ax0.set_xticks(np.arange(row_matrix.shape[1]) + 0.5, minor=False)
+    ax0.set_xticklabels(['Length'])
+    ax0.set_yticklabels([])
+    major_ticks = np.arange(0, 37, 6)
+    ax0.set_yticks(major_ticks)
+    show_values(heatmap, fmt="%d")
+    plt.axis("tight")
+
   ax2 = fig.add_axes([box.x0, box.y0+box.height+padding, box.width,
     bar_width*1.5])
-  heatmap = ax2.pcolor(col_matrix, cmap=cmap, vmin=vmin, vmax=vmax*1.0,
-      edgecolors='k')
+  heatmap = ax2.pcolor(V2, cmap=cmap, edgecolors='k')
   ax2.set_yticks(np.arange(col_matrix.shape[1]) + 0.5, minor=False)
-  ax2.set_yticklabels(['V2', 'V3'])
+  ax2.set_yticklabels(['p'])
   ax2.set_xticklabels([])
   ax2.set_xticks(major_ticks)
-  #ax2.yaxis.tick_right()
-  #for tic in ax2.xaxis.get_major_ticks():
-  #  tic.tick1On = tic.tick2On = False
-  #ax2.set_axis_off()
-  #ax2.invert_yaxis()
-  show_values(heatmap)
+  show_values(heatmap, fmt="%.2f")
   plt.axis("tight")
+
+  if(ccols > 1):
+    ax3 = fig.add_axes([box.x0, box.y0+box.height*2+padding, box.width,
+      bar_width*1.5])
+    heatmap = ax2.pcolor(V3, cmap=cmap, edgecolors='k')
+    ax3.set_yticks(np.arange(col_matrix.shape[1]) + 0.5, minor=False)
+    ax3.set_yticklabels(['V3'])
+    ax3.set_xticklabels([])
+    ax3.set_xticks(major_ticks)
+    show_values(heatmap, fmt="%.2f")
+    plt.axis("tight")
 
 def plot_figure(data, row_labels, col_labels, abs_min):
   rows, cols = data.shape
@@ -159,7 +189,7 @@ def plot_figure(data, row_labels, col_labels, abs_min):
       ha = 'right'
     cbar.ax.text(pos, .5, lab, ha=ha, va='center', color=color)
   #cbar.ax.get_xaxis().labelpad = 15
-  cbar.ax.set_xlabel('%% higher than the lowest kinesin concentration (%d) at tip' %int(float(abs_min)))
+  #cbar.ax.set_xlabel('%% higher than the lowest kinesin concentration (%d) at tip' %int(float(abs_min)))
   ax.set_axis_off()
   #ax.set_aspect("equal")
   # want a more natural, table-like display
