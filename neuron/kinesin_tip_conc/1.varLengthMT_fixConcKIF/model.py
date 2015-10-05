@@ -51,19 +51,19 @@ sim.createEntity('Variable', 'Variable:/Membrane:PlusSensor' ).Value = 7440
 sim.createEntity('Variable', 'Variable:/Membrane:MinusSensor' ).Value = 7440
 
 #Loggers-----------------------------------------------------------------------
-v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
-v.VariableReferenceList = [['_', 'Variable:/:TUB']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_M']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_P']]
-v.VariableReferenceList = [['_', 'Variable:/:KIF']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP']]
-v.VariableReferenceList = [['_', 'Variable:/Membrane:PlusSensor']]
-v.VariableReferenceList = [['_', 'Variable:/Membrane:MinusSensor']]
-v.LogInterval = 1
+#v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
+#v.VariableReferenceList = [['_', 'Variable:/:TUB']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_M']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_P']]
+#v.VariableReferenceList = [['_', 'Variable:/:KIF']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP']]
+#v.VariableReferenceList = [['_', 'Variable:/Membrane:PlusSensor']]
+#v.VariableReferenceList = [['_', 'Variable:/Membrane:MinusSensor']]
+#v.LogInterval = 1
 
 #h = sim.createEntity('HistogramLogProcess', 'Process:/:h')
 #h.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]

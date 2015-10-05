@@ -7,7 +7,7 @@ import numpy as np
 def get_mean(file):
   data = np.loadtxt(file, delimiter=",", skiprows=start_row+1)
   rows,cols = data.shape
-  return data[rows-1, cols-1]
+  return data[rows-1, cols-2]-data[rows-1, cols-1]
 
 def load_data(file):
   loaddata = np.loadtxt(file, delimiter=",", dtype=str)
@@ -141,9 +141,9 @@ def plot_figure(data, row_labels, col_labels, abs_min):
   cbar = plt.colorbar(heatmap, cax=cax, orientation='horizontal')
   cbar.ax.get_xaxis().set_ticks([])
   vmin, vmax = cbar.get_clim()
-  major_ticks = np.arange(vmin, vmax+1, vmax/4).astype(int)
+  major_ticks = np.arange(vmin, vmax+1, (vmax-vmin)/4.0).astype(int)
   for j, lab in enumerate(major_ticks):
-    color = np.array(heatmap.get_cmap()(major_ticks[j]))
+    color = np.array(heatmap.get_cmap()(major_ticks[j]/vmax))
     if np.all(color[:3] > 0.5):
       color = (0.0, 0.0, 0.0)
     else:
@@ -174,6 +174,7 @@ def plot_figure(data, row_labels, col_labels, abs_min):
   plt.xticks(rotation=90)
   plot_colorbars(row_labels, col_labels, fig, ax)
   plt.show()
+
 
 def initialize():
   filenames = glob.glob("collision_*.csv")
@@ -228,12 +229,13 @@ def get_data(filenames, labels, start_row, bins):
     mean = get_mean(file)
     data[row-1][col-1] = mean
   #convert to percentage of lowest value
-  abs_min = max(np.amin(data), 1.0)
-  data = np.divide(np.subtract(data, abs_min), abs_min/100.0)
+  #abs_min = max(np.amin(data), 1.0)
+  abs_min = np.amin(data)
+  #data = np.divide(np.subtract(data, abs_min), abs_min/100.0)
   return data, row_labels, col_labels, abs_min
 
 file = "saved_data.csv"
-load = 0
+load = 1
 if(load):
   data, row_labels, col_labels, abs_min = load_data(file)
 else:
