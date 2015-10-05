@@ -4,6 +4,8 @@ import matplotlib as mpl
 import glob
 import numpy as np
 
+fontsize = 20
+
 def get_mean(file):
   data = np.loadtxt(file, delimiter=",", skiprows=start_row+1)
   rows,cols = data.shape
@@ -103,7 +105,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   ax1.set_yticklabels([])
   major_ticks = np.arange(0, 37, 6)
   ax1.set_yticks(major_ticks)
-  show_values(heatmap, fmt="%d")
+  show_values(heatmap, fmt="%d", size=fontsize)
   plt.axis("tight")
 
   if(rcols > 1):
@@ -117,7 +119,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
     ax0.set_yticklabels([])
     major_ticks = np.arange(0, 37, 6)
     ax0.set_yticks(major_ticks)
-    show_values(heatmap, fmt="%d")
+    show_values(heatmap, fmt="%d", size=fontsize)
     plt.axis("tight")
 
   ax2 = fig.add_axes([box.x0, box.y0+box.height+padding, box.width,
@@ -127,7 +129,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   ax2.set_yticklabels(['p'])
   ax2.set_xticklabels([])
   ax2.set_xticks(major_ticks)
-  show_values(heatmap, fmt="%.2f")
+  show_values(heatmap, fmt="%.2f", size=fontsize)
   plt.axis("tight")
 
   if(ccols > 1):
@@ -138,7 +140,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
     ax3.set_yticklabels(['V3'])
     ax3.set_xticklabels([])
     ax3.set_xticks(major_ticks)
-    show_values(heatmap, fmt="%.2f")
+    show_values(heatmap, fmt="%.2f", size=fontsize)
     plt.axis("tight")
 
 def plot_figure(data, row_labels, col_labels, abs_min):
@@ -158,7 +160,7 @@ def plot_figure(data, row_labels, col_labels, abs_min):
   #ax.set_xticks(np.arange(data.shape[1]) + 0.5, minor=False)
   plt.gca().set_xlim((0, cols))
   plt.gca().set_ylim((0, rows))
-  show_values(heatmap, fmt="%d")
+  show_values(heatmap, fmt="%d", size=fontsize)
   #divider = make_axes_locatable(ax)
   #cax = divider.append_axes("right", size="5%", pad=0.05)
   #cbar = plt.colorbar(heatmap, cax)
@@ -187,7 +189,7 @@ def plot_figure(data, row_labels, col_labels, abs_min):
     elif(j == len(major_ticks)-1):
       pos = (2*j - 0.02)/8.0
       ha = 'right'
-    cbar.ax.text(pos, .5, lab, ha=ha, va='center', color=color)
+    cbar.ax.text(pos, .5, lab, ha=ha, va='center', color=color, size=fontsize)
   #cbar.ax.get_xaxis().labelpad = 15
   #cbar.ax.set_xlabel('%% higher than the lowest kinesin concentration (%d) at tip' %int(float(abs_min)))
   ax.set_axis_off()
