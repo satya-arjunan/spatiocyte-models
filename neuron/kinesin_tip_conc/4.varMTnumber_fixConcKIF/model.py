@@ -58,7 +58,11 @@ def rotatePointAlongVector(P, C, N, angle):
   return [xx, yy, zz]
 
 
-if(nNeuriteMT == 2):
+if(nNeuriteMT == 1):
+  MTsOriginX[0] = 0.0
+  MTsOriginY[0] = 0.0
+  MTsOriginZ[0] = 0.0
+elif(nNeuriteMT == 2):
   space = (neuriteRadius*2-MTRadius*2*2)/(2+2)
   MTsOriginY[0] = -1+(space+MTRadius)/neuriteRadius
   MTsOriginY[1] = 1-(space+MTRadius)/neuriteRadius
