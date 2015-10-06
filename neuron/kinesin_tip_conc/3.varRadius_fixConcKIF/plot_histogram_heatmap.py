@@ -6,10 +6,18 @@ import numpy as np
 
 fontsize = 20
 
-def get_mean(file):
+def get_mean(file, start_row, bins):
   data = np.loadtxt(file, delimiter=",", skiprows=start_row+1)
   rows,cols = data.shape
-  return data[rows-1, cols-2]-data[rows-1, cols-1]
+  #meanCols = [cols-1, cols-2, cols-3] #Edit this to the species cols that you
+                                      #want to average
+  #meanCols = [cols-1]#, cols-2, cols-3] #Edit this to the species cols that you
+                                      #want to average
+  meanCols = [cols-1]# cols-2, cols-3, cols-4, cols-5]
+  total = np.zeros(bins)
+  for i in meanCols:
+    total = np.add(total, data[0:rows, i:i+1].reshape(rows/bins, bins))
+  return np.mean(total, axis=0)#.astype(int)
 
 def load_data(file):
   loaddata = np.loadtxt(file, delimiter=",", dtype=str)
@@ -160,7 +168,7 @@ def plot_figure(data, row_labels, col_labels, abs_min):
   #ax.set_xticks(np.arange(data.shape[1]) + 0.5, minor=False)
   plt.gca().set_xlim((0, cols))
   plt.gca().set_ylim((0, rows))
-  show_values(heatmap, fmt="%d", size=fontsize)
+  show_values(heatmap, fmt="%.4f", size=fontsize)
   #divider = make_axes_locatable(ax)
   #cax = divider.append_axes("right", size="5%", pad=0.05)
   #cbar = plt.colorbar(heatmap, cax)
@@ -173,8 +181,9 @@ def plot_figure(data, row_labels, col_labels, abs_min):
   cbar = plt.colorbar(heatmap, cax=cax, orientation='horizontal')
   cbar.ax.get_xaxis().set_ticks([])
   vmin, vmax = cbar.get_clim()
-  major_ticks = np.arange(vmin, vmax+1, (vmax-vmin)/4.0).astype(int)
+  major_ticks = np.arange(vmin, vmax+1, (vmax-vmin)/4.0)
   for j, lab in enumerate(major_ticks):
+    lab = '%.4f' %lab
     color = np.array(heatmap.get_cmap()(major_ticks[j]/vmax))
     if np.all(color[:3] > 0.5):
       color = (0.0, 0.0, 0.0)
@@ -185,7 +194,6 @@ def plot_figure(data, row_labels, col_labels, abs_min):
     if(j == 0):
       pos = (2*j + 0.02)/8.0
       ha = 'left'
-      lab = '%d (%d)' %(lab, int(float(abs_min)))
     elif(j == len(major_ticks)-1):
       pos = (2*j - 0.02)/8.0
       ha = 'right'
@@ -209,10 +217,10 @@ def plot_figure(data, row_labels, col_labels, abs_min):
 
 
 def initialize():
-  filenames = glob.glob("collision_*.csv")
+  filenames = glob.glob("histogram_*.csv")
   #filenames = glob.glob("his_1e-01_5e-02_1e-01_5e-02_n0.csv")
   filename = filenames[0]
-  startTime = 1
+  startTime = 200
   data = np.loadtxt(filename, delimiter=',', skiprows=1)
   bins = 0
   initTime = float(data[0][0])
@@ -256,18 +264,17 @@ def get_data(filenames, labels, start_row, bins):
     col = labels[row_head_size].index(vals[row_head_size])+1
     for i in range(row_head_size, len(labels)-1):
       col = col+(labels[i+1].index(vals[i+1]))*len(labels[i])
-    row_labels[row-1] = "%.2e %.2e" %(vals[0], vals[1])
-    col_labels[col-1] = "%.2e" %(vals[2])
-    mean = get_mean(file)
+    row_labels[row-1] = "%.4e %.4e" %(vals[0], vals[1])
+    col_labels[col-1] = "%.4e" %(vals[2])
+    mean = get_mean(file, start_row, bins)[bins-1]
     data[row-1][col-1] = mean
   #convert to percentage of lowest value
-  #abs_min = max(np.amin(data), 1.0)
-  abs_min = np.amin(data)
+  abs_min = max(np.amin(data), 1.0)
   #data = np.divide(np.subtract(data, abs_min), abs_min/100.0)
   return data, row_labels, col_labels, abs_min
 
 file = "saved_data.csv"
-load = 1
+load = 0
 if(load):
   data, row_labels, col_labels, abs_min = load_data(file)
 else:
