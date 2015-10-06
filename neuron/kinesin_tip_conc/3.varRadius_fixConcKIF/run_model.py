@@ -21,10 +21,10 @@ def register_job(param, obj, fdmap, epoll, jobCnt):
   epoll.register(obj, select.EPOLLHUP)
   print "started job:", jobCnt, "id:", fd, param
 
-T = 1000
+T = 2000
 Iterations = 1
 #V1 = [0.05e-6, 0.1e-6, 0.2e-6, 0.5e-6, 0.7e-6, 0.8e-6]#, 1.0e-6, 1.5e-6, 2e-6]
-V1 = [0.7e-6, 0.8e-6]#, 1.0e-6, 1.5e-6, 2e-6]
+V1 = [0.6e-6, 0.7e-6, 0.8e-6, 0.9e-6, 1e-6]#, 1.0e-6, 1.5e-6, 2e-6]
 V2 = [55.0, 0.0] #ratchet rate
 V3 = [0.0, 0.01, 0.05, 0.1, 0.5, 1.0] #p
 V4 = [0]
