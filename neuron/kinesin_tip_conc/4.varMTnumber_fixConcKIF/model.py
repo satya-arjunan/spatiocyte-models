@@ -26,7 +26,7 @@ Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength
 nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
 print "Volume:", Volume, "nKinesin:", nKinesin
 
-nNeuriteMT = V1
+nNeuriteMT = int(V1)
 EdgeSpace = 25e-9
 MTLength = (neuriteLength-2*EdgeSpace)
 MTsOriginX = np.zeros(nNeuriteMT)
@@ -120,19 +120,19 @@ sim.createEntity('Variable', 'Variable:/Membrane:PlusSensor' ).Value = 19504
 sim.createEntity('Variable', 'Variable:/Membrane:MinusSensor' ).Value = 19504
 
 #Loggers-----------------------------------------------------------------------
-v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
-v.VariableReferenceList = [['_', 'Variable:/:TUB']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_M']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_P']]
-v.VariableReferenceList = [['_', 'Variable:/:KIF']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP']]
-v.VariableReferenceList = [['_', 'Variable:/Membrane:PlusSensor']]
-v.VariableReferenceList = [['_', 'Variable:/Membrane:MinusSensor']]
-v.LogInterval = 1
+#v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
+#v.VariableReferenceList = [['_', 'Variable:/:TUB']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_M']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_P']]
+#v.VariableReferenceList = [['_', 'Variable:/:KIF']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_GTP']]
+#v.VariableReferenceList = [['_', 'Variable:/Membrane:PlusSensor']]
+#v.VariableReferenceList = [['_', 'Variable:/Membrane:MinusSensor']]
+#v.LogInterval = 1
 
 h = sim.createEntity('HistogramLogProcess', 'Process:/:h')
 h.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
