@@ -3,7 +3,7 @@ try:
   T
 except NameError:
   T = 4
-  V1 = 0 #extra nBin in one neurite
+  V1 = 10 #extra nBin in one neurite
   V2 = 55 #ratchet rate
   V3 = 1.0 #p
 
@@ -58,21 +58,36 @@ def rotatePointAlongVector(P, C, N, angle):
       -b*u+a*v-v*x+u*y)*sinT
   return [xx, yy, zz]
 
-rootLength = somaRadius*2+neuriteLength*2
-angle = math.pi/4
+rootLength = (somaRadius*2+neuriteLength*2)*math.cos(math.pi/4)+neuriteRadius
+angle = math.pi/nNeurite
 vectorZ = [0.0, 0.0, 1.0]
 vectorZpoint = [0.0, 0.0, 0.0]
 inSomaLength = VoxelRadius*10
 neuritesLengthX = [neuriteLength-nBinX*binLength]*nNeurite
 neuritesLengthX[nNeurite-1] = neuriteLength #longer neurite
 neuritesRotateZ = np.zeros(nNeurite)
-neuritesOrigin = np.zeros((4, 3))
+neuritesOrigin = np.zeros((nNeurite, 3))
+maxPoint = np.full(3, -np.inf)
+minPoint = np.full(3, np.inf)
 for i in range(nNeurite):
-  mid = (somaRadius+neuritesLengthX[i]/2-inSomaLength)/(rootLength/2)
+  tip = somaRadius+neuritesLengthX[i]-inSomaLength+neuriteRadius
+  mid = somaRadius+neuritesLengthX[i]/2-inSomaLength
   rad = angle+angle*2*i
   neuritesRotateZ[i] = -rad
   origin = [mid, 0, 0]
   neuritesOrigin[i] = rotatePointAlongVector(origin, vectorZpoint, vectorZ, rad)
+  edge = [tip, 0, 0]
+  point = rotatePointAlongVector(edge, vectorZpoint, vectorZ, rad)
+  maxPoint = np.amax([maxPoint, point], axis=0)
+  minPoint = np.amin([minPoint, point], axis=0)
+
+rootLengths = np.subtract(maxPoint, minPoint)
+halfRootLengths = np.divide(rootLengths, 2.0)
+center = np.subtract(0, np.add(halfRootLengths, minPoint))
+somaOrigin = np.nan_to_num(np.divide(center, halfRootLengths))
+for i in range(nNeurite):
+  neuritesOrigin[i] = np.divide(neuritesOrigin[i], halfRootLengths)
+  neuritesOrigin[i] = np.add(neuritesOrigin[i], somaOrigin)
 
 MTLengths = np.zeros(nNeurite)
 for i in range(len(neuritesLengthX)):
@@ -121,9 +136,9 @@ sim = theSimulator
 sim.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 sim.rootSystem.StepperID = 'SS'
 
-sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLength
-sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = rootLength
-sim.createEntity('Variable', 'Variable:/:LENGTHZ').Value = neuriteRadius*4.5
+sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLengths[0]
+sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = rootLengths[1]
+sim.createEntity('Variable', 'Variable:/:LENGTHZ').Value = neuriteRadius*4+6*VoxelRadius
 sim.createEntity('Variable', 'Variable:/:VACANT')
 
 sim.createEntity('System', 'System:/:Soma').StepperID = 'SS'
@@ -131,6 +146,9 @@ sim.createEntity('Variable', 'Variable:/Soma:GEOMETRY').Value = 1
 sim.createEntity('Variable', 'Variable:/Soma:LENGTHX').Value = somaRadius*2
 sim.createEntity('Variable', 'Variable:/Soma:LENGTHY').Value = somaRadius*2
 sim.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = neuriteRadius*4
+sim.createEntity('Variable', 'Variable:/Soma:ORIGINX').Value = somaOrigin[0]
+sim.createEntity('Variable', 'Variable:/Soma:ORIGINY').Value = somaOrigin[1]
+sim.createEntity('Variable', 'Variable:/Soma:ORIGINZ').Value = somaOrigin[2]
 sim.createEntity('Variable', 'Variable:/Soma:VACANT')
 sim.createEntity('Variable', 'Variable:/Soma:KIF').Value = nKinesin
 sim.createEntity('Variable', 'Variable:/Soma:TUB_GTP' ).Value = 0
@@ -149,20 +167,20 @@ sim.createEntity('Variable', 'Variable:/Soma/Membrane:VACANT')
 #sim.createEntity('Variable', 'Variable:/Soma/Membrane:MinusSensor' ).Value = 7440
 
 #Loggers-----------------------------------------------------------------------
-#v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
-##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
-##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
-#v.LogInterval = 1
+v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
+v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
+v.LogInterval = 1
 
 #-------------------------------------------------------------------------------
 

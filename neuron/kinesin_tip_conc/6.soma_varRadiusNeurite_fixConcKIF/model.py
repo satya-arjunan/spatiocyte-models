@@ -2,7 +2,7 @@
 try:
   T
 except NameError:
-  T = 4
+  T = 4000
   V1 = 0 #extra nBin in one neurite
   V2 = 55 #ratchet rate
   V3 = 1.0 #p
@@ -67,6 +67,8 @@ neuritesLengthX = [neuriteLength-nBinX*binLength]*nNeurite
 neuritesLengthX[nNeurite-1] = neuriteLength #longer neurite
 neuritesRotateZ = np.zeros(nNeurite)
 neuritesOrigin = np.zeros((4, 3))
+neuriteRadii = [neuriteRadius]*nNeurite
+neuriteRadii[nNeurite-1] = neuriteRadius*1.25
 for i in range(nNeurite):
   mid = (somaRadius+neuritesLengthX[i]/2-inSomaLength)/(rootLength/2)
   rad = angle+angle*2*i
@@ -123,14 +125,14 @@ sim.rootSystem.StepperID = 'SS'
 
 sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLength
 sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = rootLength
-sim.createEntity('Variable', 'Variable:/:LENGTHZ').Value = neuriteRadius*4.5
+sim.createEntity('Variable', 'Variable:/:LENGTHZ').Value = neuriteRadius*6.5
 sim.createEntity('Variable', 'Variable:/:VACANT')
 
 sim.createEntity('System', 'System:/:Soma').StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/Soma:GEOMETRY').Value = 1
 sim.createEntity('Variable', 'Variable:/Soma:LENGTHX').Value = somaRadius*2
 sim.createEntity('Variable', 'Variable:/Soma:LENGTHY').Value = somaRadius*2
-sim.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = neuriteRadius*4
+sim.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = neuriteRadius*6
 sim.createEntity('Variable', 'Variable:/Soma:VACANT')
 sim.createEntity('Variable', 'Variable:/Soma:KIF').Value = nKinesin
 sim.createEntity('Variable', 'Variable:/Soma:TUB_GTP' ).Value = 0
@@ -149,20 +151,20 @@ sim.createEntity('Variable', 'Variable:/Soma/Membrane:VACANT')
 #sim.createEntity('Variable', 'Variable:/Soma/Membrane:MinusSensor' ).Value = 7440
 
 #Loggers-----------------------------------------------------------------------
-#v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
-##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
-##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
-#v.LogInterval = 1
+v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
+v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
+v.LogInterval = 1
 
 #-------------------------------------------------------------------------------
 
@@ -373,7 +375,7 @@ for i in range(nNeurite):
   x = sim.createEntity('Variable', 'Variable:/Neurite%d:LENGTHX' %i)
   x.Value = neuritesLengthX[i]
   y = sim.createEntity('Variable', 'Variable:/Neurite%d:LENGTHY' %i)
-  y.Value = neuriteRadius*2
+  y.Value = neuriteRadii[i]*2
   x = sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINX' %i)
   x.Value = neuritesOrigin[i][0]
   y = sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINY' %i)
@@ -399,7 +401,7 @@ for i in range(nNeurite):
   h.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
   h.VariableReferenceList = [['_', 'Variable:/Soma:KIF' ]]
   h.Length = neuritesLengthX[i]
-  h.Radius = neuriteRadius
+  h.Radius = neuriteRadii[i]
   h.Bins = int(round(neuritesLengthX[i]/binLength)) 
   h.LogInterval = 1e-2
   h.ExposureTime = 40
