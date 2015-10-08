@@ -18,7 +18,8 @@ filename = "_%d_%d_%.2f" %(int(V1), int(V2), V3)
 neuriteLength = nBin*binLength
 Filaments = 13
 MTRadius = 12.5e-9
-VoxelRadius = 0.7e-8
+#VoxelRadius = 0.7e-8 (actual value used)
+VoxelRadius = 1.5e-8
 KinesinRadius = 0.4e-8
 neuriteRadius = 0.3e-6
 somaRadius = 2e-6
@@ -58,7 +59,6 @@ def rotatePointAlongVector(P, C, N, angle):
       -b*u+a*v-v*x+u*y)*sinT
   return [xx, yy, zz]
 
-rootLength = (somaRadius*2+neuriteLength*2)*math.cos(math.pi/4)+neuriteRadius
 angle = math.pi/nNeurite
 vectorZ = [0.0, 0.0, 1.0]
 vectorZpoint = [0.0, 0.0, 0.0]

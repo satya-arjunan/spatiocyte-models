@@ -2,8 +2,8 @@
 try:
   T
 except NameError:
-  T = 4000
-  V1 = 0 #extra nBin in one neurite
+  T = 100
+  V1 = 100 #percentage increase in neurite radius
   V2 = 55 #ratchet rate
   V3 = 1.0 #p
 
@@ -11,13 +11,14 @@ import math
 import scipy.constants
 import numpy as np
 
-nBinX = int(V1)
+nBinX = 0
 nBin = 10+nBinX
 binLength = 0.4e-6
 filename = "_%d_%d_%.2f" %(int(V1), int(V2), V3)
 neuriteLength = nBin*binLength
 Filaments = 13
 MTRadius = 12.5e-9
+#VoxelRadius = 0.7e-8 (actual value used)
 VoxelRadius = 1.5e-8
 KinesinRadius = 0.4e-8
 neuriteRadius = 0.3e-6
@@ -25,9 +26,9 @@ somaRadius = 2e-6
 nNeurite = 4
 pPlusEnd_Detach = 1
 KinesinConc = 2e-7 #in Molar
-volumes = [1.655e-17, 1.6696e-17, 1.684e-17, 1.6988e-17, 1.7134e-17, 1.7282e-17, 1.7428e-17, 1.7577e-17, 1.772e-17, 1.7868e-17, 1.8013e-17]
+volumes = [1.5531e-17, 1.5659e-17, 1.5788e-17, 1.5916e-17, 1.6045e-17, 1.6173e-17, 1.6302e-17, 1.6430e-17, 1.6558e-17, 1.6687e-17, 1.6815e-17]
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
-Volume =  volumes[int(V1)]
+Volume =  volumes[int(V1)/10]
 nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
 print "Volume:", Volume, "nKinesin:", nKinesin
 
@@ -58,81 +59,106 @@ def rotatePointAlongVector(P, C, N, angle):
       -b*u+a*v-v*x+u*y)*sinT
   return [xx, yy, zz]
 
-rootLength = somaRadius*2+neuriteLength*2
-angle = math.pi/4
+angle = math.pi/nNeurite
 vectorZ = [0.0, 0.0, 1.0]
 vectorZpoint = [0.0, 0.0, 0.0]
-inSomaLength = VoxelRadius*10
+inSomaLength = VoxelRadius*20
 neuritesLengthX = [neuriteLength-nBinX*binLength]*nNeurite
 neuritesLengthX[nNeurite-1] = neuriteLength #longer neurite
-neuritesRotateZ = np.zeros(nNeurite)
-neuritesOrigin = np.zeros((4, 3))
+maxNeuriteRadius = neuriteRadius*(1.0+V1/100.0)
 neuriteRadii = [neuriteRadius]*nNeurite
-neuriteRadii[nNeurite-1] = neuriteRadius*1.25
+neuriteRadii[nNeurite-1] = maxNeuriteRadius
+neuritesRotateZ = np.zeros(nNeurite)
+neuritesOrigin = np.zeros((nNeurite, 3))
+maxPoint = np.full(3, -np.inf)
+minPoint = np.full(3, np.inf)
 for i in range(nNeurite):
-  mid = (somaRadius+neuritesLengthX[i]/2-inSomaLength)/(rootLength/2)
+  tip = somaRadius+neuritesLengthX[i]-inSomaLength+maxNeuriteRadius
+  mid = somaRadius+neuritesLengthX[i]/2-inSomaLength
   rad = angle+angle*2*i
   neuritesRotateZ[i] = -rad
   origin = [mid, 0, 0]
   neuritesOrigin[i] = rotatePointAlongVector(origin, vectorZpoint, vectorZ, rad)
+  edge = [tip, 0, 0]
+  point = rotatePointAlongVector(edge, vectorZpoint, vectorZ, rad)
+  maxPoint = np.amax([maxPoint, point], axis=0)
+  minPoint = np.amin([minPoint, point], axis=0)
+
+rootLengths = np.subtract(maxPoint, minPoint)
+halfRootLengths = np.divide(rootLengths, 2.0)
+center = np.subtract(0, np.add(halfRootLengths, minPoint))
+with np.errstate(divide='ignore', invalid='ignore'):
+  somaOrigin = np.true_divide(center, halfRootLengths)
+  somaOrigin[somaOrigin == np.inf] = 0
+  somaOrigin = np.nan_to_num(somaOrigin)
+for i in range(nNeurite):
+  with np.errstate(divide='ignore', invalid='ignore'):
+    neuritesOrigin[i] = np.divide(neuritesOrigin[i], halfRootLengths)
+    neuritesOrigin[i][neuritesOrigin[i] == np.inf] = 0
+    neuritesOrigin[i] = np.nan_to_num(neuritesOrigin[i])
+  neuritesOrigin[i] = np.add(neuritesOrigin[i], somaOrigin)
 
 MTLengths = np.zeros(nNeurite)
 for i in range(len(neuritesLengthX)):
   MTLengths[i] = neuritesLengthX[i]-2*EdgeSpace
-MTsOriginX = np.zeros(nNeuriteMT)
-MTsOriginY = np.zeros(nNeuriteMT)
-MTsOriginZ = np.zeros(nNeuriteMT)
+MTsOriginX = np.zeros((nNeurite, nNeuriteMT))
+MTsOriginY = np.zeros((nNeurite, nNeuriteMT))
+MTsOriginZ = np.zeros((nNeurite, nNeuriteMT))
 
-if(nNeuriteMT == 1):
-  MTsOriginX[0] = 0.0
-  MTsOriginY[0] = 0.0
-  MTsOriginZ[0] = 0.0
-elif(nNeuriteMT == 2):
-  space = (neuriteRadius*2-MTRadius*2*2)/(2+2)
-  MTsOriginY[0] = -1+(space+MTRadius)/neuriteRadius
-  MTsOriginY[1] = 1-(space+MTRadius)/neuriteRadius
-elif(nNeuriteMT == 3):
-  y = neuriteRadius*math.cos(math.pi/3)
-  y2 = y*math.cos(math.pi/3)
-  z = y*math.sin(math.pi/3)
-  MTsOriginY[0] = y/neuriteRadius
-  MTsOriginY[1] = -y2/neuriteRadius
-  MTsOriginZ[1] = -z/neuriteRadius
-  MTsOriginY[2] = -y2/neuriteRadius
-  MTsOriginZ[2] = z/neuriteRadius
-elif(nNeuriteMT == 4):
-  space = (neuriteRadius*2-MTRadius*2*2)/(2+3)
-  MTsOriginY[0] = -1+(space+MTRadius)/neuriteRadius
-  MTsOriginY[1] = 1-(space+MTRadius)/neuriteRadius
-  space = (neuriteRadius*2-MTRadius*2*2)/(2+3)
-  MTsOriginZ[2] = -1+(space+MTRadius)/neuriteRadius
-  MTsOriginZ[3] = 1-(space+MTRadius)/neuriteRadius
-else:
-  MTsOriginY[0] = 2*2.0/6;
-  P = [0.0, MTsOriginY[0], 0.0]
-  C = [0.0, 0.0, 0.0]
-  N = [1.0, 0.0, 0.0]
-  angle = 2*math.pi/(nNeuriteMT-1)
-  for i in range(nNeuriteMT-2):
-    P = rotatePointAlongVector(P, C, N, angle);
-    MTsOriginX[i+1] = P[0]
-    MTsOriginY[i+1] = P[1]
-    MTsOriginZ[i+1] = P[2]
+for i in range(nNeurite):
+  if(nNeuriteMT == 1):
+    MTsOriginX[i][0] = 0.0
+    MTsOriginY[i][0] = 0.0
+    MTsOriginZ[i][0] = 0.0
+  elif(nNeuriteMT == 2):
+    space = (neuriteRadii[i]*2-MTRadius*2*2)/(2+2)
+    MTsOriginY[i][0] = -1+(space+MTRadius)/neuriteRadii[i]
+    MTsOriginY[i][1] = 1-(space+MTRadius)/neuriteRadii[i]
+  elif(nNeuriteMT == 3):
+    y = neuriteRadii[i]*math.cos(math.pi/3)
+    y2 = y*math.cos(math.pi/3)
+    z = y*math.sin(math.pi/3)
+    MTsOriginY[i][0] = y/neuriteRadii[i]
+    MTsOriginY[i][1] = -y2/neuriteRadii[i]
+    MTsOriginZ[i][1] = -z/neuriteRadii[i]
+    MTsOriginY[i][2] = -y2/neuriteRadii[i]
+    MTsOriginZ[i][2] = z/neuriteRadii[i]
+  elif(nNeuriteMT == 4):
+    space = (neuriteRadius*2-MTRadius*2*2)/(2+3)
+    MTsOriginY[i][0] = -1+(space+MTRadius)/neuriteRadii[i]
+    MTsOriginY[i][1] = 1-(space+MTRadius)/neuriteRadii[i]
+    space = (neuriteRadius*2-MTRadius*2*2)/(2+3)
+    MTsOriginZ[i][2] = -1+(space+MTRadius)/neuriteRadii[i]
+    MTsOriginZ[i][3] = 1-(space+MTRadius)/neuriteRadii[i]
+  else:
+    MTsOriginY[i][0] = 2*2.0/6;
+    P = [0.0, MTsOriginY[i][0], 0.0]
+    C = [0.0, 0.0, 0.0]
+    N = [1.0, 0.0, 0.0]
+    angle = 2*math.pi/(nNeuriteMT-1)
+    for j in range(nNeuriteMT-2):
+      P = rotatePointAlongVector(P, C, N, angle);
+      MTsOriginX[i][j+1] = P[0]
+      MTsOriginY[i][j+1] = P[1]
+      MTsOriginZ[i][j+1] = P[2]
 
 sim = theSimulator
 sim.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 sim.rootSystem.StepperID = 'SS'
 
-sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLength
-sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = rootLength
-sim.createEntity('Variable', 'Variable:/:LENGTHZ').Value = neuriteRadius*6.5
+sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLengths[0]
+sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = rootLengths[1]
+sim.createEntity('Variable', 'Variable:/:LENGTHZ').Value = maxNeuriteRadius*4+6*VoxelRadius
 sim.createEntity('Variable', 'Variable:/:VACANT')
 
 sim.createEntity('System', 'System:/:Soma').StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/Soma:GEOMETRY').Value = 1
 sim.createEntity('Variable', 'Variable:/Soma:LENGTHX').Value = somaRadius*2
 sim.createEntity('Variable', 'Variable:/Soma:LENGTHY').Value = somaRadius*2
-sim.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = neuriteRadius*6
+sim.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = maxNeuriteRadius*4
+sim.createEntity('Variable', 'Variable:/Soma:ORIGINX').Value = somaOrigin[0]
+sim.createEntity('Variable', 'Variable:/Soma:ORIGINY').Value = somaOrigin[1]
+sim.createEntity('Variable', 'Variable:/Soma:ORIGINZ').Value = somaOrigin[2]
 sim.createEntity('Variable', 'Variable:/Soma:VACANT')
 sim.createEntity('Variable', 'Variable:/Soma:KIF').Value = nKinesin
 sim.createEntity('Variable', 'Variable:/Soma:TUB_GTP' ).Value = 0
@@ -151,20 +177,20 @@ sim.createEntity('Variable', 'Variable:/Soma/Membrane:VACANT')
 #sim.createEntity('Variable', 'Variable:/Soma/Membrane:MinusSensor' ).Value = 7440
 
 #Loggers-----------------------------------------------------------------------
-v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
-v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
-v.LogInterval = 1
+#v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
+##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
+##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
+#v.LogInterval = 1
 
 #-------------------------------------------------------------------------------
 
@@ -412,9 +438,9 @@ for i in range(nNeurite):
   for j in range(nNeuriteMT):
     m = sim.createEntity('MicrotubuleProcess',
         'Process:/Neurite%d:Microtubule%d' %(i, j))
-    m.OriginX = MTsOriginX[j]
-    m.OriginY = MTsOriginY[j]
-    m.OriginZ = MTsOriginZ[j]
+    m.OriginX = MTsOriginX[i][j]
+    m.OriginY = MTsOriginY[i][j]
+    m.OriginZ = MTsOriginZ[i][j]
     m.RotateX = 0
     m.RotateY = 0
     m.RotateZ = 0
