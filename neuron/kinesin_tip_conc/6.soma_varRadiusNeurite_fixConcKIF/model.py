@@ -2,8 +2,8 @@
 try:
   T
 except NameError:
-  T = 100
-  V1 = 100 #percentage increase in neurite radius
+  T = 4
+  V1 = 10 #percentage increase in neurite radius
   V2 = 55 #ratchet rate
   V3 = 1.0 #p
 
@@ -19,7 +19,7 @@ neuriteLength = nBin*binLength
 Filaments = 13
 MTRadius = 12.5e-9
 #VoxelRadius = 0.7e-8 (actual value used)
-VoxelRadius = 1.5e-8
+VoxelRadius = 0.7e-8
 KinesinRadius = 0.4e-8
 neuriteRadius = 0.3e-6
 somaRadius = 2e-6
