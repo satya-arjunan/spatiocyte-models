@@ -18,14 +18,14 @@ filename = "_%d_%d_%.2f" %(int(V1), int(V2), V3)
 neuriteLength = nBin*binLength
 Filaments = 13
 MTRadius = 12.5e-9
-VoxelRadius = 1.5e-8
+VoxelRadius = 0.7e-8
 KinesinRadius = 0.4e-8
 neuriteRadius = 0.3e-6
 somaRadius = 2e-6
 nNeurite = 4
 pPlusEnd_Detach = 1
 KinesinConc = 2e-7 #in Molar
-volumes = [1.655e-17, 1.6696e-17, 1.684e-17, 1.6988e-17, 1.7134e-17, 1.7282e-17, 1.7428e-17, 1.7577e-17, 1.772e-17, 1.7868e-17, 1.8013e-17]
+volumes = [1.5531e-17, 1.5659e-17, 1.5788e-17, 1.5916e-17, 1.6045e-17, 1.6173e-17, 1.6302e-17, 1.6430e-17, 1.6558e-17, 1.6687e-17, 1.6815e-17]
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
 Volume =  volumes[int(V1)]
 nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
@@ -84,9 +84,15 @@ for i in range(nNeurite):
 rootLengths = np.subtract(maxPoint, minPoint)
 halfRootLengths = np.divide(rootLengths, 2.0)
 center = np.subtract(0, np.add(halfRootLengths, minPoint))
-somaOrigin = np.nan_to_num(np.divide(center, halfRootLengths))
+with np.errstate(divide='ignore', invalid='ignore'):
+  somaOrigin = np.true_divide(center, halfRootLengths)
+  somaOrigin[somaOrigin == np.inf] = 0
+  somaOrigin = np.nan_to_num(somaOrigin)
 for i in range(nNeurite):
-  neuritesOrigin[i] = np.divide(neuritesOrigin[i], halfRootLengths)
+  with np.errstate(divide='ignore', invalid='ignore'):
+    neuritesOrigin[i] = np.divide(neuritesOrigin[i], halfRootLengths)
+    neuritesOrigin[i][neuritesOrigin[i] == np.inf] = 0
+    neuritesOrigin[i] = np.nan_to_num(neuritesOrigin[i])
   neuritesOrigin[i] = np.add(neuritesOrigin[i], somaOrigin)
 
 MTLengths = np.zeros(nNeurite)
@@ -167,20 +173,20 @@ sim.createEntity('Variable', 'Variable:/Soma/Membrane:VACANT')
 #sim.createEntity('Variable', 'Variable:/Soma/Membrane:MinusSensor' ).Value = 7440
 
 #Loggers-----------------------------------------------------------------------
-v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
-v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
-v.LogInterval = 1
+#v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
+##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
+##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
+#v.LogInterval = 1
 
 #-------------------------------------------------------------------------------
 

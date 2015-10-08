@@ -21,7 +21,7 @@ VoxelRadius = 0.4e-8
 KinesinRadius = 0.4e-8
 neuriteRadius = 0.5e-6
 pPlusEnd_Detach = 1
-KinesinConc = 2e-7 #in Molar
+KinesinConc = 6e-7 #in Molar
 Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength
 nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
 print "Volume:", Volume, "nKinesin:", nKinesin
