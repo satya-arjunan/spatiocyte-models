@@ -21,11 +21,11 @@ def register_job(param, obj, fdmap, epoll, jobCnt):
   epoll.register(obj, select.EPOLLHUP)
   print "started job:", jobCnt, "id:", fd, param
 
-T = 2000
+T = 3000
 Iterations = 1
-V1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-V2 = [55.0, 0.0] #ratchet rate
-V3 = [0.0, 0.01, 0.05, 0.1, 0.5, 1.0] #p
+V1 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] # MT id to be 100% populated with GTP
+V2 = [1, 2, 3, 4] #binLength times
+V3 = [0.0, 0.01, 0.05, 0.1, 0.5, 1.0] #p of GTP binding
 V4 = [0]
 String = 'None'
 if __name__ == '__main__':
