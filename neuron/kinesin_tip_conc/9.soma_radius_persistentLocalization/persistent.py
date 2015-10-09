@@ -30,7 +30,7 @@ volumes = [1.5691e-17, 1.6931e-17, 1.8196e-17, 1.9486e-17, 2.0801e-17, 2.2141e-1
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
 Volume =  volumes[int(V1)/10]
 #nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
-nKinesin = 18
+nKinesin = 25
 print "Volume:", Volume, "nKinesin:", nKinesin
 
 nNeuriteMT = 5
