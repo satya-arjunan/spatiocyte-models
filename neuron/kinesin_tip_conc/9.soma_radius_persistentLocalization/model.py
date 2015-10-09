@@ -3,7 +3,7 @@ try:
   T
 except NameError:
   T = 180000
-  V1 = 0 #percentage increase in all except one neurite radius
+  V1 = 50 #percentage increase in all except one neurite radius
   V2 = 55 #ratchet rate
   V3 = 1.0 #p
 
@@ -26,12 +26,12 @@ somaRadius = 1.3e-6
 nNeurite = 4
 pPlusEnd_Detach = 1
 KinesinConc = 2e-7 #in Molar
-volumes = [1.5691e-17, 1.6931e-17, 1.8196e-17, 1.9486e-17, 2.0801e-17, 2.2141e-17, 2.3506e-17, 2.4895e-17, 2.6304e-17, 2.7741e-17, 2.9199e-17]
+volumes = [5.7185e-18, 9.3958e-18] 
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
-Volume =  volumes[int(V1)/10]
+#Volume =  volumes[int(V1)/10]
 #nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
-nKinesin = 18
-print "Volume:", Volume, "nKinesin:", nKinesin
+nKinesin = 25*volumes[1]/volumes[0]
+print "nKinesin:", nKinesin
 
 nNeuriteMT = 5
 EdgeSpace = 25e-9
@@ -67,8 +67,8 @@ inSomaLength = VoxelRadius*63
 neuritesLengthX = [neuriteLength-nBinX*binLength]*nNeurite
 neuritesLengthX[nNeurite-1] = neuriteLength #longer neurite
 maxNeuriteRadius = neuriteRadius*(1.0+V1/100.0)
-neuriteRadii = [neuriteRadius]*nNeurite
-neuriteRadii[nNeurite-1] = maxNeuriteRadius
+neuriteRadii = [maxNeuriteRadius]*nNeurite
+neuriteRadii[nNeurite-1] = neuriteRadius
 neuritesRotateZ = np.zeros(nNeurite)
 neuritesOrigin = np.zeros((nNeurite, 3))
 maxPoint = np.full(3, -np.inf)
@@ -138,7 +138,10 @@ for i in range(nNeurite):
     N = [1.0, 0.0, 0.0]
     angle = 2*math.pi/(nNeuriteMT-1)
     for j in range(nNeuriteMT-2):
-      P = rotatePointAlongVector(P, C, N, angle);
+      if(i == 0):
+          P = rotatePointAlongVector(P, C, N, angle/2);
+      else:
+          P = rotatePointAlongVector(P, C, N, angle);
       MTsOriginX[i][j+1] = P[0]
       MTsOriginY[i][j+1] = P[1]
       MTsOriginZ[i][j+1] = P[2]
@@ -271,7 +274,7 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b3')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:aTUB','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','1']]
-r.p = 1
+r.p = V3
 #-------------------------------------------------------------------------------
 
 #MT KIF detachment to cytosol---------------------------------------------------
@@ -365,10 +368,20 @@ r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:aTUB','1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','0']] #If BindingSite[1]==TUB
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']] #option 1
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']] #Elif BindingSite[1]==TUB_GTP
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']] #option 2
+r.VariableReferenceList = [['_', 'Variable:/Soma:aTUB','0']] #Elif BindingSite[1]==TUB_GTP
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']] #option 2
 r.BindingSite = 1
-r.k = 55
+r.k = V2
+
+#r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:rat1')
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','-1']]
+#r.VariableReferenceList = [['_', 'Variable:/Soma:aTUB','1']]
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','0']] #If BindingSite[1]==TUB
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']] #option 1
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']] #Elif BindingSite[1]==TUB_GTP
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']] #option 2
+#r.BindingSite = 1
+#r.k = V2
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:rat2')
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','-1']]    #A
@@ -378,7 +391,7 @@ r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']]     #D
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']]         #H
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']] #F
 r.BindingSite = 1
-r.k = 55
+r.k = V2
 #-------------------------------------------------------------------------------
 
 #KIF random walk between GTP and GDP tubulins-----------------------------------
@@ -422,6 +435,44 @@ d.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF']]
 d.WalkReact = 1
 d.D = 0.04e-12
 #-------------------------------------------------------------------------------
+
+nSomaMT = 16
+somaMTrotateAngle = math.pi*2/max(1.0, nSomaMT)
+somaMTorigin = [0.5, 0.0, 0.0]
+somaMTvectorZ = [0.0, 0.0, 1.0]
+somaMTvectorZpoint = [0.0, 0.0, 0.0]
+for i in range(nSomaMT):
+  for j in range(3):
+    startAngle = math.pi/3.3
+    OriginZ = 0.0
+    if(j != 0):
+      startAngle = math.pi/2
+      if(j == 1):
+        OriginZ = 0.5 
+      else:
+        OriginZ = -0.5 
+    m = theSimulator.createEntity('MicrotubuleProcess', 'Process:/Soma:Microtubule%d%d' %(i,j))
+    P = rotatePointAlongVector(somaMTorigin, somaMTvectorZpoint, somaMTvectorZ, somaMTrotateAngle*i+startAngle)
+    m.OriginX = P[0]
+    m.OriginY = P[1]
+    m.OriginZ = OriginZ
+    m.RotateX = 0
+    m.RotateY = 0
+    m.RotateZ =  somaMTrotateAngle*i+startAngle
+    m.Radius = MTRadius
+    m.SubunitRadius = KinesinRadius
+    m.Length = somaRadius*0.7
+    m.Filaments = Filaments
+    m.Periodic = 0
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB', '-1']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M', '-2']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P', '-3']]
 
 for i in range(nNeurite):
   sim.createEntity('System', 'System:/:Neurite%d' %i).StepperID = 'SS'

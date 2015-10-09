@@ -3,7 +3,7 @@ try:
   T
 except NameError:
   T = 4
-  V1 = 30 #percentage increase in neurite radius
+  V1 = 50 #percentage increase in neurite radius
   V2 = 55 #ratchet rate
   V3 = 1.0 #p
 
@@ -19,13 +19,14 @@ neuriteLength = nBin*binLength
 Filaments = 13
 MTRadius = 12.5e-9
 #VoxelRadius = 0.7e-8 #(actual value used)
-VoxelRadius = 1.0e-8
+VoxelRadius = 1.5e-8
 KinesinRadius = 0.4e-8
 neuriteRadius = 0.3e-6
 somaRadius = 2e-6
 nNeurite = 4
 pPlusEnd_Detach = 1
 KinesinConc = 2e-7 #in Molar
+volumes = [2.1637e-17, 2.0301e-17, 1.8987e-17, 1.7700e-17, 1.6432e-17]
 volumes = [1.5691e-17, 1.6931e-17, 1.8196e-17, 1.9486e-17, 2.0801e-17, 2.2141e-17, 2.3506e-17, 2.4895e-17, 2.6304e-17, 2.7741e-17, 2.9199e-17]
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
 Volume =  volumes[int(V1)/10]
@@ -159,7 +160,7 @@ sim.createEntity('Variable', 'Variable:/Soma:LENGTHZ').Value = maxNeuriteRadius*
 sim.createEntity('Variable', 'Variable:/Soma:ORIGINX').Value = somaOrigin[0]
 sim.createEntity('Variable', 'Variable:/Soma:ORIGINY').Value = somaOrigin[1]
 sim.createEntity('Variable', 'Variable:/Soma:ORIGINZ').Value = somaOrigin[2]
-sim.createEntity('Variable', 'Variable:/Soma:VACANT')
+sim.createEntity('Variable', 'Variable:/Soma:VACANT').Value = -1
 sim.createEntity('Variable', 'Variable:/Soma:KIF').Value = nKinesin
 sim.createEntity('Variable', 'Variable:/Soma:TUB_GTP' ).Value = 0
 sim.createEntity('Variable', 'Variable:/Soma:TUB_KIF' ).Value = 0
