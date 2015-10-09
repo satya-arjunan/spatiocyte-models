@@ -21,7 +21,7 @@ def register_job(param, obj, fdmap, epoll, jobCnt):
   epoll.register(obj, select.EPOLLHUP)
   print "started job:", jobCnt, "id:", fd, param
 
-T = 3000
+T = 2000
 Iterations = 1
 V1 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] # MT id to be 100% populated with GTP
 V2 = [1, 2, 3, 4] #binLength times
@@ -51,7 +51,7 @@ if __name__ == '__main__':
   duration = time.time()-startTime
   typicalMemory = max(resultTable)*1.7
 
-  jobStart = 0
+  jobStart = 90
   #jobStart = 4300
   jobEnd = len(params)
   print "total jobs:",len(params), "start:", jobStart, "end:", jobEnd
