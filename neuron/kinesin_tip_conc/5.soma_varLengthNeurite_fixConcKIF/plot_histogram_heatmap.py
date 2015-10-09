@@ -7,15 +7,6 @@ import numpy as np
 fontsize = 20
 
 def get_mean(file, start_row, bins):
-  startTime = 200
-  data = np.loadtxt(file, delimiter=',', skiprows=1)
-  bins = 0
-  initTime = float(data[0][0])
-  for row in data:
-    if(row[0] == initTime):
-      bins = bins+1
-  logInterval = data[bins][0]-initTime
-  start_row = int(np.ceil((startTime-initTime)/logInterval))*bins
   data = np.loadtxt(file, delimiter=",", skiprows=start_row+1)
   rows,cols = data.shape
   #meanCols = [cols-1, cols-2, cols-3] #Edit this to the species cols that you
@@ -226,7 +217,7 @@ def plot_figure(data, row_labels, col_labels, abs_min):
 
 
 def initialize():
-  filenames = glob.glob("histogram_*n3.csv")
+  filenames = glob.glob("histogram_*n0.csv")
   #filenames = glob.glob("his_1e-01_5e-02_1e-01_5e-02_n0.csv")
   filename = filenames[0]
   startTime = 200
