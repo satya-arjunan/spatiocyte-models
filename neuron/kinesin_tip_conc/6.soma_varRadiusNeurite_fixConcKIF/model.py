@@ -3,7 +3,7 @@ try:
   T
 except NameError:
   T = 4
-  V1 = 50 #percentage increase in neurite radius
+  V1 = 0 #percentage increase in neurite radius
   V2 = 55 #ratchet rate
   V3 = 1.0 #p
 
@@ -26,8 +26,8 @@ somaRadius = 2e-6
 nNeurite = 4
 pPlusEnd_Detach = 1
 KinesinConc = 2e-7 #in Molar
-volumes = [2.1637e-17, 2.0301e-17, 1.8987e-17, 1.7700e-17, 1.6432e-17]
-volumes = [1.5691e-17, 1.6931e-17, 1.8196e-17, 1.9486e-17, 2.0801e-17, 2.2141e-17, 2.3506e-17, 2.4895e-17, 2.6304e-17, 2.7741e-17, 2.9199e-17]
+#volumes = [1.5691e-17, 1.6931e-17, 1.8196e-17, 1.9486e-17, 2.0801e-17, 2.2141e-17, 2.3506e-17, 2.4895e-17, 2.6304e-17, 2.7741e-17, 2.9199e-17]
+volumes = [3.0154e-17, 2.8674e-17, 2.7220e-17, 2.5788e-17, 2.4381e-17, 2.3000e-17, 2.1637e-17, 2.0301e-17, 1.8987e-17, 1.7700e-17, 1.6432e-17]
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
 Volume =  volumes[int(V1)/10]
 nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
