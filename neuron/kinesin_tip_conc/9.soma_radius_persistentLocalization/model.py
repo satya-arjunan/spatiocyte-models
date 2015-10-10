@@ -63,7 +63,7 @@ def rotatePointAlongVector(P, C, N, angle):
 angle = math.pi/nNeurite
 vectorZ = [0.0, 0.0, 1.0]
 vectorZpoint = [0.0, 0.0, 0.0]
-inSomaLength = VoxelRadius*63
+inSomaLength = VoxelRadius*30
 neuritesLengthX = [neuriteLength-nBinX*binLength]*nNeurite
 neuritesLengthX[nNeurite-1] = neuriteLength #longer neurite
 maxNeuriteRadius = neuriteRadius*(1.0+V1/100.0)
@@ -182,21 +182,22 @@ sim.createEntity('Variable', 'Variable:/Soma/Membrane:VACANT')
 #sim.createEntity('Variable', 'Variable:/Soma/Membrane:MinusSensor' ).Value = 7440
 
 #Loggers-----------------------------------------------------------------------
-v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
-v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
-v.LogInterval = 1
+#v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
+##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
+##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
+#v.LogInterval = 1
+#v.FileName = "visual" + filename + ".dat"
 
 m = sim.createEntity('MicroscopyTrackingProcess', 'Process:/Soma:m')
 m.VariableReferenceList = [['_', 'Variable:/Soma:KIF', '1']]
@@ -208,7 +209,7 @@ m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF', '-1']]
 m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF', '12500']]
 m.LogInterval = 1
 m.ExposureTime = 60
-m.FileName = "translocation.dat"
+m.FileName = "micro" + filename + ".dat"
 #-------------------------------------------------------------------------------
 
 #Collision----------------------------------------------------------------------
