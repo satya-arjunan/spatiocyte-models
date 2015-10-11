@@ -3,7 +3,7 @@ try:
   T
 except NameError:
   T = 180000
-  V1 = 50 #percentage increase in all except one neurite radius
+  V1 = 80 #percentage increase in all except one neurite radius
   V2 = 55 #ratchet rate
   V3 = 1.0 #p
 
@@ -26,11 +26,12 @@ somaRadius = 1.3e-6
 nNeurite = 4
 pPlusEnd_Detach = 1
 KinesinConc = 2e-7 #in Molar
-volumes = [5.7185e-18, 9.3958e-18] 
+volumes = [5.8822e-18, 6.5798e-18, 7.2979e-18, 8.0669e-18, 8.8546e-18, 9.6954e-18, 1.0553e-17, 1.1466e-17, 1.2395e-17, 1.3378e-17, 1.4378e-17]
+Volume = [9.6945e-18]
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
 #Volume =  volumes[int(V1)/10]
 #nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
-nKinesin = 25*volumes[1]/volumes[0]
+nKinesin = 25*volumes[int(V1)/10]/volumes[0]
 print "nKinesin:", nKinesin
 
 nNeuriteMT = 5
@@ -263,7 +264,7 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b1')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','1']]
-r.p = 0.00005
+r.p = 0.00002
 
 r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b2')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
