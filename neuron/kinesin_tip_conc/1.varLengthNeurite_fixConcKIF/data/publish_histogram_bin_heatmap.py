@@ -22,17 +22,22 @@ def get_mean(file, start_row, bins):
 def load_data(file):
   loaddata = np.loadtxt(file, delimiter=",", dtype=str)
   rows, cols = loaddata.shape
+  bins = int(loaddata[rows-1][0])
+  nrows = (rows-1)/bins
   abs_val = loaddata[0][0]
-  data = loaddata[1:rows, 1:cols].astype(float)
-  row_labels = loaddata[1:rows+1, 0:1].reshape(rows-1)
+  data = loaddata[1:rows, 1:cols].astype(float).reshape(bins, nrows, cols-1)
+  row_labels = loaddata[1:nrows+1, 0:1].reshape(nrows)
   col_labels = loaddata[0:1, 1:cols+1].reshape(cols-1)
   return data, row_labels, col_labels, abs_val
 
 def save_data(file, data, row_labels, col_labels, abs_val):
-  rows, cols = data.shape
-  savedata = np.zeros((rows+1, cols+1)).astype(str)
+  bins, rows, cols = data.shape
+  nrows = bins*rows
+  data = data.reshape((nrows, cols))
+  savedata = np.zeros((nrows+1, cols+1)).astype(str)
   savedata[0][0] = abs_val
-  savedata[1:rows+1, 1:cols+1] = data.astype(str)
+  savedata[nrows][0] = bins
+  savedata[1:nrows+1, 1:cols+1] = data.astype(str)
   savedata[1:rows+1, 0:1] = row_labels.reshape(savedata[1:rows+1, 0:1].shape)
   savedata[0:1, 1:cols+1] = col_labels.reshape(savedata[0:1, 1:cols+1].shape)
   np.savetxt(file, savedata, delimiter=",", fmt="%s")
@@ -66,7 +71,7 @@ def show_values(pc, fmt="%.2f", **kw):
       color = (0.0, 0.0, 0.0)
     else:
       color = (1.0, 1.0, 1.0)
-    if fmt=="%d" or fmt=="%.0f":
+    if fmt=="%d":
       value = int(round(value))
     ax.text(x, y, fmt % value, ha="center", va="center", color=color, **kw)
   #for y in range(row_matrix.shape[0]):
@@ -97,8 +102,9 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
       vdelta = vals[i+1]-vals[i]
 
   rows, rcols = row_matrix.shape
-  V0 = np.add(row_matrix[0:rows, 0:1], 0.4e-6)
-  V0 = np.divide(V0, 1e-7)
+  #V0 = np.add(row_matrix[0:rows, 0:1], 0.4e-6)
+  #V0 = np.divide(V0, 1e-7)
+  V0 = row_matrix[0:rows, 0:1]
   if(rcols > 1):
     V1 = row_matrix[0:rows, 1:2]
 
@@ -151,7 +157,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
     ax0.set_xticks(np.arange(row_matrix.shape[1]) + 0.5, minor=False)
     ax0.set_xticklabels([])
     ax0.set_yticklabels([])
-    ax0.set_ylabel('Neurite radius (x0.1 um)', fontsize=fontsize)
+    ax0.set_ylabel('Neurite length (x0.4 um)', fontsize=fontsize)
     #major_ticks = np.arange(0, 37, 6)
     #ax0.set_yticks(major_ticks)
     show_values(heatmap, fmt="%.0f", size=fontsize)
@@ -183,7 +189,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
     show_values(heatmap, fmt="%.2f", size=fontsize)
     plt.axis("tight")
 
-def plot_figure(data, row_labels, col_labels, abs_val):
+def plot_figure(data, row_labels, col_labels, abs_val, plot_bin):
   rows, cols = data.shape
   fig, ax = plt.subplots()
   #heatmap = ax.pcolormesh(data, cmap=plt.cm.YlOrBr, alpha=0.8)
@@ -232,8 +238,8 @@ def plot_figure(data, row_labels, col_labels, abs_val):
     cbar.ax.text(pos, .5, lab, ha=ha, va='center', color=color, size=fontsize)
   #cbar.ax.get_xaxis().labelpad = 15
   #cbar.ax.set_xlabel('%% higher than the lowest kinesin concentration (%d) at tip' %int(float(abs_val)))
-  cbar.ax.set_xlabel('% of max cytosolic kinesin concentration at tip',
-      size=fontsize)
+  label = '%% of max cytosolic kinesin concentration at bin #%d' %plot_bin
+  cbar.ax.set_xlabel(label, size=fontsize)
   ax.set_axis_off()
   #ax.set_aspect("equal")
   # want a more natural, table-like display
@@ -285,7 +291,7 @@ def get_data(filenames, labels, start_row, bins):
     rows = rows*len(labels[i+1])
   for i in range(row_head_size, len(labels)-1):
     cols = cols*len(labels[i+1])
-  data = np.zeros((rows, cols))
+  data = np.zeros((bins, rows, cols))
   row_labels = np.zeros(rows).astype(str)
   col_labels = np.zeros(cols).astype(str)
   for file in filenames:
@@ -299,20 +305,20 @@ def get_data(filenames, labels, start_row, bins):
       col = col+(labels[i+1].index(vals[i+1]))*len(labels[i])
     row_labels[row-1] = "%.4e %.4e" %(vals[0], vals[1])
     col_labels[col-1] = "%.4e" %(vals[2])
-    mean = get_mean(file, start_row, bins)[bins-1]
-    data[row-1][col-1] = mean
-  #convert to percentage
+    data[0:bins, row-1:row, col-1:col] = get_mean(file, start_row, bins
+        ).reshape(bins, 1, 1)
   abs_val = np.amax(data)
   data = np.divide(data, abs_val/100.0)
   return data, row_labels, col_labels, abs_val
 
-file = "saved_data.csv"
-load = 1
+file = "saved_histogram_data.csv"
+load = 0
+plot_bin = 9
 if(load):
   data, row_labels, col_labels, abs_val = load_data(file)
 else:
   filenames, labels, start_row, bins = initialize()
-  data, row_labels, col_labels, abs_val = get_data(filenames, labels, start_row, bins)
+  data, row_labels, col_labels, abs_val = get_data(filenames, labels,
+      start_row, bins)
   save_data(file, data, row_labels, col_labels, abs_val)
-plot_figure(data, row_labels, col_labels, abs_val)
-
+plot_figure(data[plot_bin], row_labels, col_labels, abs_val, plot_bin)

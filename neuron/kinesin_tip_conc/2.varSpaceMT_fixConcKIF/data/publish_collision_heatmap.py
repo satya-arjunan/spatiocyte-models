@@ -58,6 +58,8 @@ def show_values(pc, fmt="%.2f", **kw):
       color = (0.0, 0.0, 0.0)
     else:
       color = (1.0, 1.0, 1.0)
+    if fmt=="%d" or fmt=="%.0f":
+      value = int(round(value))
     ax.text(x, y, fmt % value, ha="center", va="center", color=color, **kw)
   #for y in range(row_matrix.shape[0]):
   #  for x in range(row_matrix.shape[1]):
