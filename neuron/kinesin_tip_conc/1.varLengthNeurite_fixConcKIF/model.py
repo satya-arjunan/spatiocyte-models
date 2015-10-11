@@ -12,7 +12,7 @@ import scipy.constants
 
 nBin = int(V1)
 binLength = 0.4e-6
-filename = "collision_%d_%d_%.2f_n0.csv" %(int(V1), int(V2), V3)
+filename = "_%d_%d_%.2f_n0.csv" %(int(V1), int(V2), V3)
 neuriteLength = nBin*binLength
 Filaments = 13
 MTRadius = 12.5e-9
@@ -65,20 +65,20 @@ sim.createEntity('Variable', 'Variable:/Membrane:MinusSensor' ).Value = 7440
 #v.VariableReferenceList = [['_', 'Variable:/Membrane:MinusSensor']]
 #v.LogInterval = 1
 
-#h = sim.createEntity('HistogramLogProcess', 'Process:/:h')
-#h.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
-#h.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF' ]]
-#h.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP' ]]
-#h.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP' ]]
-#h.VariableReferenceList = [['_', 'Variable:/:KIF' ]]
-#h.Length = neuriteLength
-#h.Radius = neuriteRadius
-#h.Bins = nBin
-#h.LogInterval = 1
-#h.ExposureTime = 40
-#h.FileName = "histogram.csv"
-#h.LogEnd = T-1
-#h.Iterations = 1
+h = sim.createEntity('HistogramLogProcess', 'Process:/:h')
+h.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
+h.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF' ]]
+h.VariableReferenceList = [['_', 'Variable:/:TUB_KIF_ATP' ]]
+h.VariableReferenceList = [['_', 'Variable:/:TUB_GTP_KIF_ATP' ]]
+h.VariableReferenceList = [['_', 'Variable:/:KIF' ]]
+h.Length = neuriteLength
+h.Radius = neuriteRadius
+h.Bins = 10
+h.LogInterval = 1e-2
+h.ExposureTime = 40
+h.FileName = "histogram" + filename
+h.LogEnd = T-1
+h.Iterations = 1
 #-------------------------------------------------------------------------------
 
 #Collision----------------------------------------------------------------------
@@ -103,7 +103,7 @@ i.LogInterval = 1e-2
 i.LogEnd = T-1
 i.Iterations = 1
 i.Collision = 3
-i.FileName = filename
+i.FileName = "collision" + filename
 #-------------------------------------------------------------------------------
 
 #Populate-----------------------------------------------------------------------
