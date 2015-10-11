@@ -105,14 +105,15 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   #cmap = mpl.cm.YlOrBr
   #cmap = mpl.cm.Reds
   #cmap = mpl.cm.Oranges
-  bar_width = 0.03
+  bar_width = 0.05
+  bar_height = 0.04
   padding = 0
   #ax1 = fig.add_axes(cax)
   box = ax.get_position()
 
-  cmap = mpl.cm.YlGn
-  ax1 = fig.add_axes([box.x0-(bar_width*2+padding), box.y0, bar_width,
-    box.height])
+  #cmap = mpl.cm.YlGn
+  cmap = mpl.cm.YlOrBr
+  ax1 = fig.add_axes([box.x1, box.y0, bar_width, box.height])
   heatmap = ax1.pcolor(V1, cmap=cmap, edgecolors='k')
   #ax1.set_axis_off()
   ax1.xaxis.tick_top()
@@ -120,8 +121,10 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   #put major ticks at the middle of each cell
   ax1.set_xticks(np.arange(row_matrix.shape[1]) + 0.5, minor=False)
   #ax1.set_xticklabels(['Ratchet'])
-  ax1.set_xticklabels([''])
+  ax1.set_xticklabels([])
   ax1.set_yticklabels([])
+  ax1.set_ylabel('Plus-end biased walk', fontsize=fontsize)
+  ax1.yaxis.set_label_position('right')
   major_ticks = np.arange(0, 37, 6)
   ax1.set_yticks(major_ticks)
   show_values_binary(heatmap, minus=0, size=fontsize)
@@ -135,9 +138,9 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
     ax0.xaxis.tick_top()
     ax0.invert_yaxis()
     ax0.set_xticks(np.arange(row_matrix.shape[1]) + 0.5, minor=False)
-    #ax0.set_xticklabels(['Length'])
-    ax0.set_xticklabels([''])
+    ax0.set_xticklabels([])
     ax0.set_yticklabels([])
+    ax0.set_ylabel('Neurite length (x0.4 um)', fontsize=fontsize)
     major_ticks = np.arange(0, 37, 6)
     ax0.set_yticks(major_ticks)
     show_values(heatmap, fmt="%d", size=fontsize)
@@ -145,12 +148,14 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
 
   cmap = mpl.cm.YlOrBr
   ax2 = fig.add_axes([box.x0, box.y0+box.height+padding, box.width,
-    bar_width*1.5])
+    bar_height])
   heatmap = ax2.pcolor(V2, cmap=cmap, edgecolors='k')
   ax2.set_yticks(np.arange(col_matrix.shape[1]) + 0.5, minor=False)
   #ax2.set_yticklabels(['p'])
-  ax2.set_yticklabels([''])
+  ax2.set_yticklabels([])
   ax2.set_xticklabels([])
+  ax2.set_xlabel("Kinesin-MT binding probability", fontsize=fontsize)
+  ax2.xaxis.set_label_position('top')
   ax2.set_xticks(major_ticks)
   show_values(heatmap, fmt="%.2f", size=fontsize)
   plt.axis("tight")
@@ -158,7 +163,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   if(ccols > 1):
     cmap = mpl.cm.YlGn
     ax3 = fig.add_axes([box.x0, box.y0+box.height*2+padding, box.width,
-      bar_width*1.5])
+      bar_height])
     heatmap = ax2.pcolor(V3, cmap=cmap, edgecolors='k')
     ax3.set_yticks(np.arange(col_matrix.shape[1]) + 0.5, minor=False)
     ax3.set_yticklabels(['V3'])
@@ -190,7 +195,7 @@ def plot_figure(data, row_labels, col_labels, abs_val):
   #cbar = plt.colorbar(heatmap, cax)
   box = ax.get_position()
   padding = 0.005
-  bar_width = 0.03
+  bar_width = 0.04
   #cax = fig.add_axes([box.x0+box.width+padding, box.y0, bar_width, box.height])
   cax = fig.add_axes([box.x0, box.y0-bar_width-padding, box.width, bar_width])
   #rect [left, bottom, width, height]
