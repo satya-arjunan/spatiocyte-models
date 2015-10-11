@@ -27,7 +27,8 @@ def load_data(file):
   col_labels = loaddata[0:1, 1:cols+1].reshape(cols-1)
   return data, row_labels, col_labels, abs_val
 
-def plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows):
+def plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows,
+    sub_rows):
   row_headers = np.zeros((len(row_labels), len(row_labels[0].split(" "))))
   for i in range(len(row_labels)):
     labels = row_labels[i].split(" ")
@@ -39,24 +40,29 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows):
     labels = col_labels[i].split(" ")
     for j in range(len(labels)):
       col_headers[i, j] = float(labels[j])
-  x = row_headers[plot_rows[0]-1:plot_rows[1], 0:1]
+
+  xticklabels = np.divide(row_headers[plot_rows[0]-1:plot_rows[1], 0:1], 1e-0)
+  x = np.arange(len(xticklabels))
   rows, cols = data.shape
   fig, ax = plt.subplots()
   rects = []
-  interval = (x[1]-x[0])[0]
+  interval = (x[1]-x[0])
   pcols = plot_cols[1]-plot_cols[0]+1
   width = interval/(pcols+1.0)
   ax.set_color_cycle(['r', 'b', 'g', 'a'])
   colors = get_colors(pcols)
   for i in range(pcols):
     y = data[plot_rows[0]-1:plot_rows[1], plot_cols[0]+i-1:plot_cols[0]+i]
+    if sub_rows:
+      y = np.subtract(y,
+          data[sub_rows[0]-1:sub_rows[1], plot_cols[0]+i-1:plot_cols[0]+i])
     xpos = -interval/2.0+width/2.0+i*width
     rects.append(ax.bar(x+xpos, y, width, color=colors[i])[0])
   ax.set_xlim(x[0]-interval/2.0, x[-1]+interval/2.0)
-  ax.set_ylabel('Cytosolic kinesin tip concentration\n(% of max)',
-      fontsize=fontsize)
+  ax.set_ylabel('Increase in cytosolic kinesin tip concentration\nwrt. no bias walk (% of max)', fontsize=fontsize)
   ax.set_xlabel('Neurite length (x0.4 um)', fontsize=fontsize)
   ax.set_xticks(x)
+  ax.set_xticklabels(np.transpose(xticklabels)[0])
   ax.tick_params(axis='both', which='major', labelsize=fontsize)
   ax.tick_params(axis='both', which='minor', labelsize=fontsize)
   #ax.set_xticklabels(x, fontsize=20)
@@ -73,7 +79,8 @@ file = "saved_data.csv"
 data, row_labels, col_labels, abs_val = load_data(file)
 plot_cols = [4, 6]
 plot_rows = [12, 20]
-plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows)
+sub_rows = [2, 10]
+plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows, sub_rows)
 
 
 

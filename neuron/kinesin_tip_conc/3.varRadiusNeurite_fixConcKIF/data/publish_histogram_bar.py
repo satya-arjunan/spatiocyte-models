@@ -41,7 +41,8 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows,
     for j in range(len(labels)):
       col_headers[i, j] = float(labels[j])
 
-  xticklabels = np.divide(row_headers[plot_rows[0]-1:plot_rows[1], 0:1], 1e-7)
+  xticklabels = np.add(row_headers[plot_rows[0]-1:plot_rows[1], 0:1], 0.4e-6)
+  xticklabels = np.divide(xticklabels, 1e-7)
   x = np.arange(len(xticklabels))
   rows, cols = data.shape
   fig, ax = plt.subplots()
@@ -60,7 +61,7 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows,
     rects.append(ax.bar(x+xpos, y, width, color=colors[i])[0])
   ax.set_xlim(x[0]-interval/2.0, x[-1]+interval/2.0)
   ax.set_ylabel('Increase in cytosolic kinesin tip concentration\nwrt. no bias walk (% of max)', fontsize=fontsize)
-  ax.set_xlabel('Neurite radius expansion (x0.1 um)', fontsize=fontsize)
+  ax.set_xlabel('Neurite radius (x0.1 um)', fontsize=fontsize)
   ax.set_xticks(x)
   ax.set_xticklabels(np.transpose(xticklabels)[0])
   ax.tick_params(axis='both', which='major', labelsize=fontsize)

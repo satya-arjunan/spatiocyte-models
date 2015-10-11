@@ -95,7 +95,8 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
       vdelta = vals[i+1]-vals[i]
 
   rows, rcols = row_matrix.shape
-  V0 = np.divide(row_matrix[0:rows, 0:1], 1e-7)
+  V0 = np.add(row_matrix[0:rows, 0:1], 0.4e-6)
+  V0 = np.divide(V0, 1e-7)
   if(rcols > 1):
     V1 = row_matrix[0:rows, 1:2]
 
@@ -133,8 +134,8 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   ax1.set_yticklabels([])
   ax1.set_ylabel('Plus-end biased walk', fontsize=fontsize)
   ax1.yaxis.set_label_position('right')
-  major_ticks = np.arange(0, 37, 6)
-  ax1.set_yticks(major_ticks)
+  #major_ticks = np.arange(0, 37, 6)
+  #ax1.set_yticks(major_ticks)
   show_values_binary(heatmap, minus=0, size=fontsize)
   plt.axis("tight")
 
@@ -148,10 +149,10 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
     ax0.set_xticks(np.arange(row_matrix.shape[1]) + 0.5, minor=False)
     ax0.set_xticklabels([])
     ax0.set_yticklabels([])
-    ax0.set_ylabel('Neurite radius expansion (x0.1 um)', fontsize=fontsize)
-    major_ticks = np.arange(0, 37, 6)
-    ax0.set_yticks(major_ticks)
-    show_values(heatmap, fmt="%d", size=fontsize)
+    ax0.set_ylabel('Neurite radius (x0.1 um)', fontsize=fontsize)
+    #major_ticks = np.arange(0, 37, 6)
+    #ax0.set_yticks(major_ticks)
+    show_values(heatmap, fmt="%.0f", size=fontsize)
     plt.axis("tight")
 
   cmap = mpl.cm.YlOrBr
@@ -164,7 +165,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   ax2.set_xticklabels([])
   ax2.set_xlabel("Kinesin-MT binding probability", fontsize=fontsize)
   ax2.xaxis.set_label_position('top')
-  ax2.set_xticks(major_ticks)
+  #ax2.set_xticks(major_ticks)
   show_values(heatmap, fmt="%.2f", size=fontsize)
   plt.axis("tight")
 
@@ -176,7 +177,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
     ax3.set_yticks(np.arange(col_matrix.shape[1]) + 0.5, minor=False)
     ax3.set_yticklabels(['V3'])
     ax3.set_xticklabels([])
-    ax3.set_xticks(major_ticks)
+    #ax3.set_xticks(major_ticks)
     show_values(heatmap, fmt="%.2f", size=fontsize)
     plt.axis("tight")
 
