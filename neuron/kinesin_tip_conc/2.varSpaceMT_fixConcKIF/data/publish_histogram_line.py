@@ -67,7 +67,7 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows,
     if plot_bar:
       rects.append(ax.bar(x+xpos, y, width, color=colors[i])[0])
     else:
-      rects.append(ax.plot(x, y, color=colors[i], linewidth=5)[0])
+      rects.append(ax.plot(x, y, color=kelly_colors[i], linewidth=5)[0])
   if plot_bar:
     ax.set_xlim(x[0]-interval/2.0, x[-1]+interval/2.0)
   else:
@@ -82,9 +82,9 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows,
   #ax.set_xticklabels(x, fontsize=20)
   legends = []
   for i in range(prows):
-    legends.append("%d" %row_headers[plot_rows[0]+i-1][0])
-  ax.legend(rects, legends, loc='upper left', title="Neurite length\n(x0.4 um)",
-      fontsize=fontsize, labelspacing=0.1)
+    legends.append("%.1f" %(row_headers[plot_rows[0]+i-1][0]/1e-8))
+  ax.legend(rects, legends, loc='lower right',
+      title="Inter-MT space\n(x10 nm)", fontsize=fontsize, labelspacing=0.1)
 
   ax.get_legend().get_title().set_fontsize('20')
   plt.show()
@@ -93,7 +93,8 @@ file = "saved_histogram_data.csv"
 data, row_labels, col_labels, abs_val = load_data(file)
 plot_bar = 0
 plot_cols = [2, 2]
-plot_rows = [11, 20]
+#plot_rows = [11, 20]
+plot_rows = [1, 8]
 #sub_rows = [1, 10]
 sub_rows = []
 plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows, sub_rows, plot_bar)
