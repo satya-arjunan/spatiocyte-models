@@ -4,7 +4,7 @@ try:
 except NameError:
   T = 4
   V1 = 3 # neurite MT bin out of 10 bins to be fully populated with GTP
-  V2 = 2 #nBin times
+  V2 = 3 #nBin times
   V3 = 1.0 #p
 
 import math
@@ -27,9 +27,10 @@ nNeurite = 4
 pPlusEnd_Detach = 1
 KinesinConc = 2e-7 #in Molar
 #volumes = [1.5531e-17, 1.5659e-17, 1.5788e-17, 1.5916e-17, 1.6045e-17, 1.6173e-17, 1.6302e-17, 1.6430e-17, 1.6558e-17, 1.6687e-17, 1.6815e-17]
-volumes = [1.6647e-17, 1.6796e-17, 1.6940e-17, 1.7088e-17, 1.7236e-17, 1.7384e-17, 1.7528e-17, 1.7676e-17, 1.7821e-17, 1.7969e-17, 1.8113e-17]
+#volumes = [1.6647e-17, 1.6796e-17, 1.6940e-17, 1.7088e-17, 1.7236e-17, 1.7384e-17, 1.7528e-17, 1.7676e-17, 1.7821e-17, 1.7969e-17, 1.8113e-17]
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
-Volume =  volumes[int(V1)]
+volumes = [1.6647e-17, 1.8113e-17, 1.9577e-17]
+Volume =  volumes[int(V2)-1]
 nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
 print "Volume:", Volume, "nKinesin:", nKinesin
 
@@ -333,7 +334,7 @@ r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']] #option 1
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']] #Elif BindingSite[1]==TUB_GTP
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']] #option 2
 r.BindingSite = 1
-r.k = V2
+r.k = 55
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:rat2')
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','-1']]    #A
@@ -343,7 +344,7 @@ r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']]     #D
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']]         #H
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']] #F
 r.BindingSite = 1
-r.k = V2
+r.k = 55
 #-------------------------------------------------------------------------------
 
 #KIF random walk between GTP and GDP tubulins-----------------------------------

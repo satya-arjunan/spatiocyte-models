@@ -2,10 +2,10 @@
 try:
   T
 except NameError:
-  T = 180000
+  T = 54000
   V1 = 80 #percentage increase in all except one neurite radius
-  V2 = 55 #ratchet rate
-  V3 = 1.0 #p
+  V2 = 0.00001 #p TUB
+  V3 = 0.9 #p aTUB
 
 import math
 import scipy.constants
@@ -31,7 +31,7 @@ Volume = [9.6945e-18]
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
 #Volume =  volumes[int(V1)/10]
 #nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
-nKinesin = 25*volumes[int(V1)/10]/volumes[0]
+nKinesin = 33*volumes[int(V1)/10]/volumes[0]
 print "nKinesin:", nKinesin
 
 nNeuriteMT = 5
@@ -183,22 +183,22 @@ sim.createEntity('Variable', 'Variable:/Soma/Membrane:VACANT')
 #sim.createEntity('Variable', 'Variable:/Soma/Membrane:MinusSensor' ).Value = 7440
 
 #Loggers-----------------------------------------------------------------------
-#v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
+v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
-##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
-##v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
-#v.LogInterval = 1
-#v.FileName = "visual" + filename + ".dat"
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
+v.LogInterval = 10
+v.FileName = "visual" + filename + ".dat"
 
 m = sim.createEntity('MicroscopyTrackingProcess', 'Process:/Soma:m')
 m.VariableReferenceList = [['_', 'Variable:/Soma:KIF', '1']]
@@ -264,7 +264,7 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b1')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','1']]
-r.p = 0.00002
+r.p = 0.00001
 
 r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b2')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
@@ -276,7 +276,7 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b3')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:aTUB','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','1']]
-r.p = V3
+r.p = 0.9
 #-------------------------------------------------------------------------------
 
 #MT KIF detachment to cytosol---------------------------------------------------
@@ -373,7 +373,7 @@ r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']] #option 1
 r.VariableReferenceList = [['_', 'Variable:/Soma:aTUB','0']] #Elif BindingSite[1]==TUB_GTP
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']] #option 2
 r.BindingSite = 1
-r.k = V2
+r.k = 55
 
 #r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:rat1')
 #r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','-1']]
@@ -383,7 +383,7 @@ r.k = V2
 #r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']] #Elif BindingSite[1]==TUB_GTP
 #r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']] #option 2
 #r.BindingSite = 1
-#r.k = V2
+#r.k = 55
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:rat2')
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','-1']]    #A
@@ -393,7 +393,7 @@ r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']]     #D
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']]         #H
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']] #F
 r.BindingSite = 1
-r.k = V2
+r.k = 55
 #-------------------------------------------------------------------------------
 
 #KIF random walk between GTP and GDP tubulins-----------------------------------
