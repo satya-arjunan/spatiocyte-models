@@ -84,18 +84,19 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows,
   for i in range(prows):
     legends.append("%.1f" %(row_headers[plot_rows[0]+i-1][0]/1e-8))
   ax.legend(rects, legends, loc='lower right',
-      title="Inter-MT space\n(x10 nm)", fontsize=fontsize, labelspacing=0.1)
+      title="Inter-MT space\n(x10 nm)", fontsize=fontsize, labelspacing=0.1,
+      framealpha=0.7, ncol=1, columnspacing=0.3, handletextpad=0.2)
 
   ax.get_legend().get_title().set_fontsize('20')
   plt.show()
 
 file = "saved_histogram_data.csv"
 data, row_labels, col_labels, abs_val = load_data(file)
-plot_bar = 0
+plot_bar = 1
 plot_cols = [2, 2]
-#plot_rows = [11, 20]
-plot_rows = [1, 8]
-#sub_rows = [1, 10]
+plot_rows = [9, 16]
+#plot_rows = [1, 8]
+#sub_rows = [1, 8]
 sub_rows = []
 plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows, sub_rows, plot_bar)
 
