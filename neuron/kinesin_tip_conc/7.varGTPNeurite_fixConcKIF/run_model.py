@@ -51,7 +51,7 @@ if __name__ == '__main__':
   duration = time.time()-startTime
   typicalMemory = max(resultTable)*1.7
 
-  jobStart = 90
+  jobStart = 0
   #jobStart = 4300
   jobEnd = len(params)
   print "total jobs:",len(params), "start:", jobStart, "end:", jobEnd
