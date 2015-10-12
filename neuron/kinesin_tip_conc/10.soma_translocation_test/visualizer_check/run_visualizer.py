@@ -8,7 +8,7 @@ import time
 import sys
 import glob
 
-files = glob.glob('visual*.dat')
+files = sorted(glob.glob('visual*.dat'), reverse=True)
 
 for file in files:
   command_line = "spatiocyte " + file
@@ -20,4 +20,6 @@ for file in files:
   if (val == "y"):
     os.remove(file)
     print "File", file, "is deleted."
+  elif (val == 'q'):
+    exit()
 
