@@ -207,7 +207,7 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_bin):
   #heatmap = ax.pcolor(data, cmap=plt.cm.Blues, vmax=abs_val*0.7)
   #heatmap = ax.pcolor(data, cmap=red_black, vmax=abs_val*0.7)
   #heatmap = ax.pcolor(data, cmap=green_black, vmax=abs_val*0.7)
-  heatmap = ax.pcolor(data, cmap=white_black, vmax=abs_val)
+  heatmap = ax.pcolor(data, cmap=white_black, vmax=abs_val*0.7)
   #heatmap = ax.pcolor(data)
   # put the major ticks at the middle of each cell
   #ax.set_yticks(np.arange(data.shape[0]) + 0.5, minor=False)
@@ -264,7 +264,8 @@ def get_data(filename, start_row, row_labels, col_labels):
                                       #want to average
   #meanCols = [cols-1]#, cols-2, cols-3] #Edit this to the species cols that you
                                       #want to average
-  meanCols = [cols-1]# cols-2, cols-3, cols-4, cols-5]
+  #meanCols = [cols-1]# cols-2, cols-3, cols-4, cols-5]
+  meanCols = [cols-3]# cols-2, cols-3, cols-4, cols-5]
   bins = len(col_labels)
   dataset = np.empty([len(meanCols), rows/bins, bins])
   for i in range(len(meanCols)):

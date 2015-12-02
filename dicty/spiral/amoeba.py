@@ -1,3 +1,5 @@
+import math
+
 T = 100000
 sim = theSimulator
 s = sim.createStepper('SpatiocyteStepper', 'SS')
@@ -14,6 +16,8 @@ sim.createEntity('Variable', 'Variable:/:VACANT')
 sim.createEntity('Variable', 'Variable:/:XYPLANE').Value = 3
 sim.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
 sim.createEntity('Variable', 'Variable:/:YZPLANE').Value = 5
+sim.createEntity('Variable', 'Variable:/:A').Value = 0
+sim.createEntity('Variable', 'Variable:/:B').Value = 0
 
 sim.createEntity('System', 'System:/:Membrane').StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/Membrane:DIMENSION').Value = 2
@@ -24,7 +28,7 @@ sim.createEntity('Variable', 'Variable:/Cell:GEOMETRY').Value = 1
 sim.createEntity('Variable', 'Variable:/Cell:LENGTHX').Value = 20e-6
 sim.createEntity('Variable', 'Variable:/Cell:LENGTHY').Value = 20e-6
 sim.createEntity('Variable', 'Variable:/Cell:LENGTHZ').Value = 11e-6
-sim.createEntity('Variable', 'Variable:/Cell:ORIGINZ').Value = -0.9
+sim.createEntity('Variable', 'Variable:/Cell:ORIGINZ').Value = -1.0
 sim.createEntity('Variable', 'Variable:/Cell:VACANT')
 
 sim.createEntity('System', 'System:/Cell:Surface').StepperID = 'SS'
@@ -54,6 +58,8 @@ l.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m']]
 l.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3Km']]
 l.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3a']]
 l.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm']]
+#l.VariableReferenceList = [['_', 'Variable:/:A']]
+#l.VariableReferenceList = [['_', 'Variable:/:B']]
 #l.VariableReferenceList = [['_', 'Variable:/Membrane:VACANT']]
 l.LogInterval = 20
 
@@ -63,13 +69,18 @@ h.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m']]
 h.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3Km']]
 h.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3a']]
 h.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm']]
-#h.Density = 0
+#h.VariableReferenceList = [['_', 'Variable:/:A', '-1']]
+#h.VariableReferenceList = [['_', 'Variable:/:B', '-2']]
+h.Density = 0
 h.Bins = 50
 h.LogInterval = 20
 h.ExposureTime = 20
-#h.RadialHeight = 20*s.VoxelRadius
+h.RadialHeight = 20*s.VoxelRadius
 h.LogEnd = T-1
 h.Iterations = 1
+h.RotateX = math.pi/2
+h.InnerRadius = 9e-6
+h.OuterRadius = 11e-6
 
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/Cell/Surface:pop')
 p.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m']]
