@@ -1,6 +1,8 @@
 import math
 
-T = 100000
+T = 10000
+interval = 1
+
 sim = theSimulator
 s = sim.createStepper('SpatiocyteStepper', 'SS')
 s.VoxelRadius = 6e-8 
@@ -73,8 +75,8 @@ h.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm']]
 #h.VariableReferenceList = [['_', 'Variable:/:B', '-2']]
 h.Density = 0
 h.Bins = 50
-h.LogInterval = 20
-h.ExposureTime = 20
+h.LogInterval = interval/10.0
+h.ExposureTime = interval
 h.RadialHeight = 20*s.VoxelRadius
 h.LogEnd = T-1
 h.Iterations = 1
