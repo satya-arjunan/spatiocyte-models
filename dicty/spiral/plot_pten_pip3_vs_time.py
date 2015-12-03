@@ -63,8 +63,8 @@ def get_data(filename, start_row, row_labels, col_labels):
   abs_val = np.amax(dataset)
   return dataset, abs_val
 
-start_time = 2000
-end_time = 9000
+start_time = 200
+end_time = 900
 filename, start_row, row_labels, col_labels = initialize(start_time)
 data, abs_val = get_data(filename, start_row, row_labels, col_labels)
 plot_figure(data, row_labels, col_labels, start_time, end_time)
