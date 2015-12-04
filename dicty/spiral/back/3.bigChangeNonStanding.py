@@ -136,7 +136,7 @@ b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3a','1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3a','1']]
-b.p = 0.5
+b.p = 0.8
 
 b = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Cell/Surface:PIP2toPIP3')
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m','-1']]
