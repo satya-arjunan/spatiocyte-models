@@ -188,7 +188,7 @@ r.k = 0.2
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:dissociatePIP2')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2', '1']]
-r.k = 0.001
+r.k = 0
 
 while getCurrentTime() < T:
   run(2)

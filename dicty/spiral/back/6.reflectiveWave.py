@@ -1,6 +1,6 @@
 import math
 
-T = 1000
+T = 5000
 interval = 0.1
 
 sim = theSimulator
@@ -89,7 +89,6 @@ h.Iterations = 1
 h.RotateX = math.pi/2
 h.InnerRadius = 9e-6
 h.OuterRadius = 11e-6
-h.FileName = "original.csv"
 
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/Cell/Surface:pop')
 p.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m']]
@@ -122,6 +121,11 @@ r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:rec
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m', '1']]
 r.k = 4e-1
+
+r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:recruitPI3K')
+r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3K', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3Km', '1']]
+r.k = 1e-3
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:recruitPTEN')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTEN', '-1']]
@@ -178,12 +182,12 @@ r.k = 0.2
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:dissociatePIP3')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2', '1']]
-r.k = 0.2
+r.k = 0.15
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:dissociatePIP3a')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3a', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2', '1']]
-r.k = 0.2
+r.k = 0.15
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:dissociatePIP2')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m', '-1']]

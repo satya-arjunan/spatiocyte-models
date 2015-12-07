@@ -53,7 +53,7 @@ PIP2.Value = 8054
 PIP2.Name = "HD"
 
 PI3K = sim.createEntity('Variable', 'Variable:/Cell/Surface:PI3K')
-PI3K.Value = 9264
+PI3K.Value = 7264
 PI3K.Name = "HD"
 
 PTEN = sim.createEntity('Variable', 'Variable:/Cell/Surface:PTEN')
@@ -121,7 +121,7 @@ d.D = 1e-13
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:recruitPIP2')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m', '1']]
-r.k = 4e-1
+r.k = 2e-1
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:recruitPTEN')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTEN', '-1']]
@@ -142,7 +142,7 @@ b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3a','1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3a','1']]
-b.p = 0.8
+b.p = 0.7
 
 b = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Cell/Surface:PIP2toPIP3')
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m','-1']]
@@ -156,14 +156,14 @@ b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m','1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm','1']]
-b.p = 1
+b.p = 0.7
 
 b = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Cell/Surface:PIP3atoPIP2')
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3a','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m','1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm','1']]
-b.p = 1
+b.p = 0.7
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:dissociatePTEN')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm', '-1']]
@@ -188,7 +188,7 @@ r.k = 0.2
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:dissociatePIP2')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2', '1']]
-r.k = 0.001
+r.k = 0
 
 while getCurrentTime() < T:
   run(2)
