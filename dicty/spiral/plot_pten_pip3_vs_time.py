@@ -8,13 +8,15 @@ from matplotlib.colors import LinearSegmentedColormap
 fontsize = 20
 
 def plot_figure(data, row_labels, col_labels, start_time, end_time):
+  bin_id = 4
   logInterval = row_labels[1]-row_labels[0]
   timePoints = (end_time-start_time)/logInterval
   dim, rows, cols = data.shape
-  x = data[0:1, 0:timePoints, 5][0]
+  x = data[0:1, 0:timePoints, bin_id][0]
+  x = np.add(x, data[2:3, 0:timePoints, bin_id][0])
   max_x = np.amax(x)
   x = x/max_x
-  y = data[1:2, 0:timePoints, 5][0]
+  y = data[1:2, 0:timePoints, bin_id][0]
   max_y = np.amax(y)
   y = y/max_y
   z = np.arange(len(x))*logInterval
@@ -25,7 +27,7 @@ def plot_figure(data, row_labels, col_labels, start_time, end_time):
   plt.show()
 
 def initialize(startTime):
-  filename = "HistogramLog.csv"
+  filename = "original.csv"
   data = np.loadtxt(filename, delimiter=',', skiprows=1)
   bins = 0
   initTime = float(data[0][0])
@@ -54,7 +56,7 @@ def get_data(filename, start_row, row_labels, col_labels):
   #meanCols = [cols-1]#, cols-2, cols-3] #Edit this to the species cols that you
                                       #want to average
   #meanCols = [cols-1]# cols-2, cols-3, cols-4, cols-5]
-  meanCols = [cols-3, cols-1]# cols-2, cols-3, cols-4, cols-5]
+  meanCols = [cols-2, cols-1, cols-4]# cols-2, cols-3, cols-4, cols-5]
   bins = len(col_labels)
   dataset = np.empty([len(meanCols), rows/bins, bins])
   for i in range(len(meanCols)):
@@ -63,8 +65,8 @@ def get_data(filename, start_row, row_labels, col_labels):
   abs_val = np.amax(dataset)
   return dataset, abs_val
 
-start_time = 3500
-end_time = 4200
+start_time = 0
+end_time = 2000
 filename, start_row, row_labels, col_labels = initialize(start_time)
 data, abs_val = get_data(filename, start_row, row_labels, col_labels)
 plot_figure(data, row_labels, col_labels, start_time, end_time)

@@ -236,7 +236,7 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_bin):
   plt.show()
 
 def initialize(startTime):
-  filename = "HistogramLog.csv"
+  filename = "original.csv"
   data = np.loadtxt(filename, delimiter=',', skiprows=1)
   bins = 0
   initTime = float(data[0][0])
@@ -265,19 +265,20 @@ def get_data(filename, start_row, row_labels, col_labels):
   #meanCols = [cols-1]#, cols-2, cols-3] #Edit this to the species cols that you
                                       #want to average
   #meanCols = [cols-1]# cols-2, cols-3, cols-4, cols-5]
-  meanCols = [cols-3]# cols-2, cols-3, cols-4, cols-5]
+  meanCols = [cols-2]# cols-2, cols-3, cols-4, cols-5]
   bins = len(col_labels)
   dataset = np.empty([len(meanCols), rows/bins, bins])
   for i in range(len(meanCols)):
     dataset[i] = data[0:rows, meanCols[i]:meanCols[i]+1].reshape(rows/bins,
         bins)
+  dataset[0] = np.add(dataset[0], data[0:rows, cols-4:cols-4+1].reshape(rows/bins, bins))
   abs_val = np.amax(dataset)
   return dataset, abs_val
 
 file = "saved_histogram_data.csv"
 load = 0
 plot_bin = 0
-start_time = 50000
+start_time = 0
 if(load):
   data, row_labels, col_labels, abs_val = load_data(file)
 else:
