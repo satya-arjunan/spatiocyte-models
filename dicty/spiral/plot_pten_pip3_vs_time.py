@@ -13,7 +13,7 @@ def plot_figure(data, row_labels, col_labels, start_time, end_time):
   timePoints = (end_time-start_time)/logInterval
   dim, rows, cols = data.shape
   x = data[0:1, 0:timePoints, bin_id][0]
-  x = np.add(x, data[2:3, 0:timePoints, bin_id][0])
+  #x = np.add(x, data[2:3, 0:timePoints, bin_id][0])
   max_x = np.amax(x)
   x = x/max_x
   y = data[1:2, 0:timePoints, bin_id][0]
@@ -56,7 +56,7 @@ def get_data(filename, start_row, row_labels, col_labels):
   #meanCols = [cols-1]#, cols-2, cols-3] #Edit this to the species cols that you
                                       #want to average
   #meanCols = [cols-1]# cols-2, cols-3, cols-4, cols-5]
-  meanCols = [cols-2, cols-1, cols-4]# cols-2, cols-3, cols-4, cols-5]
+  meanCols = [cols-2, cols-1]# cols-2, cols-3, cols-4, cols-5]
   bins = len(col_labels)
   dataset = np.empty([len(meanCols), rows/bins, bins])
   for i in range(len(meanCols)):

@@ -271,7 +271,6 @@ def get_data(filename, start_row, row_labels, col_labels):
   for i in range(len(meanCols)):
     dataset[i] = data[0:rows, meanCols[i]:meanCols[i]+1].reshape(rows/bins,
         bins)
-  dataset[0] = np.add(dataset[0], data[0:rows, cols-4:cols-4+1].reshape(rows/bins, bins))
   abs_val = np.amax(dataset)
   return dataset, abs_val
 

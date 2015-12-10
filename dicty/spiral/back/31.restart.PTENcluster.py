@@ -3,6 +3,10 @@ import math
 T = 1000
 interval = 0.1
 
+volume = 1.17332e-15
+area = 8.9156e-10
+ratio = area/volume
+
 sim = theSimulator
 s = sim.createStepper('SpatiocyteStepper', 'SS')
 s.VoxelRadius = 6e-8 
@@ -42,20 +46,20 @@ PIP2m.Value = 4600
 PIP3m = sim.createEntity('Variable', 'Variable:/Cell/Surface:PIP3m')
 PIP3m.Value = 4600
 PTENm = sim.createEntity('Variable', 'Variable:/Cell/Surface:PTENm')
-PTENm.Value = 309
+PTENm.Value = 2500
 PI3Km = sim.createEntity('Variable', 'Variable:/Cell/Surface:PI3Km')
-PI3Km.Value = 1096
+PI3Km.Value = 0
 
 PIP2 = sim.createEntity('Variable', 'Variable:/Cell/Surface:PIP2')
 PIP2.Value = 0
 PIP2.Name = "HD"
 
 PI3K = sim.createEntity('Variable', 'Variable:/Cell/Surface:PI3K')
-PI3K.Value = 6500
+PI3K.Value = 5000
 PI3K.Name = "HD"
 
 PTEN = sim.createEntity('Variable', 'Variable:/Cell/Surface:PTEN')
-PTEN.Value = 12000 #increase this to change from lateral wave to spiral
+PTEN.Value = 2500 #increase this to change from lateral wave to spiral
 PTEN.Name = "HD"
 
 l = sim.createEntity('VisualizationLogProcess', 'Process:/Cell/Surface:logger')
@@ -112,55 +116,55 @@ d.D = 3e-13 #change this to change period
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:recruitPIP2')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m', '1']]
-r.k = 3e-1 #change this to change period
+r.k = 1e-2 #change this to change period
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:recruitPI3K')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3K', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3Km', '1']]
-r.k = 1e-1 #change this to change period
+r.k = 1.6e-4 #change this to change period
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:recruitPTEN')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTEN', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m', '1']]
-r.k = 5e-14 #change this to change period
+r.k = 1e-14 #change this to change period
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:recruitPI3Km')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3K', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3Km', '1']]
-r.k = 5e-14 #change this to change period
+r.k = 1e-14 #change this to change period
 
 b = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Cell/Surface:PIP2toPIP3')
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3Km','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m','1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3Km','1']]
-b.p = 0.16
+b.p = 0.025
 
 b = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Cell/Surface:PIP3toPIP2')
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m','1']]
 b.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTEN','1']]
-b.p = 0.8
+b.p = 0.15
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:dissociatePTEN')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTEN', '1']]
-r.k = 2.0 #change this to change period
+r.k = 0.2 #change this to change period
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:dissociatePI3K')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3Km', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3K', '1']]
-r.k = 1.5 #change this to change period
+r.k = 0.15 #change this to change period
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:dissociatePIP3')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2', '1']]
-r.k = 0.04 #change this to change period #reduce this to increase period and duration of PIP3/PIP2
+r.k = 6.7e-3 #change this to change period #reduce this to increase period and duration of PIP3/PIP2
 
 while getCurrentTime() < T:
   run(2)
