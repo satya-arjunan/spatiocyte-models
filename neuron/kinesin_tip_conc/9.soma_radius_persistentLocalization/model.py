@@ -4,8 +4,8 @@ try:
 except NameError:
   T = 54000
   V1 = 80 #percentage increase in all except one neurite radius
-  V2 = 0.00001 #p TUB
-  V3 = 0.9 #p aTUB
+  V2 = 0.00002 #p TUB
+  V3 = 0.8 #p aTUB
 
 import math
 import scipy.constants
@@ -31,7 +31,7 @@ Volume = [9.6945e-18]
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
 #Volume =  volumes[int(V1)/10]
 #nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
-nKinesin = 33*volumes[int(V1)/10]/volumes[0]
+nKinesin = 35*volumes[int(V1)/10]/volumes[0]
 print "nKinesin:", nKinesin
 
 nNeuriteMT = 5

@@ -15,9 +15,9 @@ s.RemoveSurfaceBias = 1
 
 sim.rootSystem.StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
-sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = 25e-6
-sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = 25e-6
-sim.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 13e-6
+sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = 6e-6
+sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = 6e-6
+sim.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 4e-6
 sim.createEntity('Variable', 'Variable:/:VACANT')
 sim.createEntity('Variable', 'Variable:/:XYPLANE').Value = 3
 sim.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
@@ -31,9 +31,9 @@ sim.createEntity('Variable', 'Variable:/Membrane:VACANT')
 
 sim.createEntity('System', 'System:/:Cell').StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/Cell:GEOMETRY').Value = 1
-sim.createEntity('Variable', 'Variable:/Cell:LENGTHX').Value = 20e-6
-sim.createEntity('Variable', 'Variable:/Cell:LENGTHY').Value = 20e-6
-sim.createEntity('Variable', 'Variable:/Cell:LENGTHZ').Value = 11e-6
+sim.createEntity('Variable', 'Variable:/Cell:LENGTHX').Value = 5e-6
+sim.createEntity('Variable', 'Variable:/Cell:LENGTHY').Value = 5e-6
+sim.createEntity('Variable', 'Variable:/Cell:LENGTHZ').Value = 3e-6
 sim.createEntity('Variable', 'Variable:/Cell:ORIGINZ').Value = -1.0
 sim.createEntity('Variable', 'Variable:/Cell:VACANT')
 
@@ -146,6 +146,14 @@ r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP2m', '1']]
 #r.k = 1e-14/ratio #change this to change period
 #r.k = 3e-14/ratio #max k for p=1 at D=1e-13
 r.p = 1
+
+#r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Cell/Surface:recruitPTENv')
+#r.VariableReferenceList = [['_', 'Variable:/Cell:PTENv', '-1']]
+#r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:VACANT', '-1']]
+#r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PTENm', '1']]
+#r.p = 1
+
+
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Cell/Surface:recruitPI3Km')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PIP3m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Surface:PI3K', '-1']]
