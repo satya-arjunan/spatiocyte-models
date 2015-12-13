@@ -7,7 +7,7 @@ latAmoebaDiameter = 10e-6
 
 sim = theSimulator
 s = sim.createStepper('SpatiocyteStepper', 'SS')
-s.VoxelRadius = 1e-8
+s.VoxelRadius = 3e-8
 s.SearchVacant = 0
 
 sim.rootSystem.StepperID = 'SS'
@@ -28,9 +28,9 @@ sim.createEntity('Variable', 'Variable:/Surface:DIMENSION').Value = 2
 sim.createEntity('Variable', 'Variable:/Surface:VACANT')
 
 PIP2m = sim.createEntity('Variable', 'Variable:/Surface:PIP2m')
-PIP2m.Value = 7000
+PIP2m.Value = 2300
 PIP3m = sim.createEntity('Variable', 'Variable:/Surface:PIP3m')
-PIP3m.Value = 7400
+PIP3m.Value = 2300
 PTENm = sim.createEntity('Variable', 'Variable:/Surface:PTENm')
 PTENm.Value = 150
 PI3Km = sim.createEntity('Variable', 'Variable:/Surface:PI3Km')
@@ -41,11 +41,11 @@ PIP2.Value = 0
 PIP2.Name = "HD"
 
 PI3K = sim.createEntity('Variable', 'Variable:/Surface:PI3K')
-PI3K.Value = 3000
+PI3K.Value = 2500
 PI3K.Name = "HD"
 
 PTEN = sim.createEntity('Variable', 'Variable:/Surface:PTEN')
-PTEN.Value = 7500
+PTEN.Value = 2500
 PTEN.Name = "HD"
 
 l = sim.createEntity('VisualizationLogProcess', 'Process:/Surface:logger')
@@ -143,7 +143,7 @@ b.VariableReferenceList = [['_', 'Variable:/Surface:PIP3m','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Surface:PTENm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Surface:PIP2m','1']]
 b.VariableReferenceList = [['_', 'Variable:/Surface:PTEN','1']]
-b.p = 0.2
+b.p = 0.8
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Surface:dissociatePTEN')
 r.VariableReferenceList = [['_', 'Variable:/Surface:PTENm', '-1']]

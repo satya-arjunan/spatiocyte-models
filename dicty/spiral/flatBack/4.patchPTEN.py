@@ -41,7 +41,7 @@ PIP2.Value = 0
 PIP2.Name = "HD"
 
 PI3K = sim.createEntity('Variable', 'Variable:/Surface:PI3K')
-PI3K.Value = 3000
+PI3K.Value = 7500
 PI3K.Name = "HD"
 
 PTEN = sim.createEntity('Variable', 'Variable:/Surface:PTEN')
@@ -143,7 +143,7 @@ b.VariableReferenceList = [['_', 'Variable:/Surface:PIP3m','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Surface:PTENm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/Surface:PIP2m','1']]
 b.VariableReferenceList = [['_', 'Variable:/Surface:PTEN','1']]
-b.p = 0.2
+b.p = 0.8
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Surface:dissociatePTEN')
 r.VariableReferenceList = [['_', 'Variable:/Surface:PTENm', '-1']]
