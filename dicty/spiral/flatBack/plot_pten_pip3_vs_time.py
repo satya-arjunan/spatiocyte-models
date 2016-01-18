@@ -5,23 +5,37 @@ import glob
 import numpy as np
 from matplotlib.colors import LinearSegmentedColormap
 
-fontsize = 20
+fontsize = 30
+linewidth = 4
 
-def plot_figure(data, row_labels, col_labels):
+def plot_figure(data, row_labels, col_labels, start_time, end_time):
+  bin_id = 4
+  logInterval = row_labels[1]-row_labels[0]
+  timePoints = (end_time-start_time)/logInterval
   dim, rows, cols = data.shape
-  x = data[0:1, 0:rows, 5][0]
-  y = data[1:2, 0:rows, 5][0]
+  x = data[0:1, 0:timePoints, bin_id][0]
+  #x = np.add(x, data[2:3, 0:timePoints, bin_id][0])
+  max_x = np.amax(x)
+  x = x/max_x
+  y = data[1:2, 0:timePoints, bin_id][0]
+  max_y = np.amax(y)
+  y = y/max_y
+  z = np.arange(len(x))*logInterval/60.0
+  print z
   fig, ax = plt.subplots()
-  ax.plot(x, y, marker="o", markerfacecolor="k", color='g')
-  ax.set_xlim(-1)
-  ax.set_ylim(-1)
-  ax.set_xlabel("PIP3 (number)")
-  ax.set_ylabel("PTEN (number)")
-  #ax.legend(loc=0, labelspacing=0.2, handletextpad=0.2, fancybox=True, fontsize=18)
+  ax.plot(z, x, 'g', label="PIP3", linewidth=linewidth)
+  ax.plot(z, y, 'r', label="PTEN", linewidth=linewidth)
+  plt.xlabel("Time (min)", fontsize=fontsize)
+  plt.ylabel("Normalized concentration", fontsize=fontsize)
+  plt.xticks(fontsize=fontsize)
+  plt.yticks(fontsize=fontsize)
+  ax.set_xlim(0,11.5)
+  ax.legend(loc=2, labelspacing=0.2, handletextpad=0.2, fancybox=True,
+      fontsize=fontsize)
   plt.show()
 
 def initialize(startTime):
-  filename = "longAmoeba.csv"
+  filename = "7.csv"
   data = np.loadtxt(filename, delimiter=',', skiprows=1)
   bins = 0
   initTime = float(data[0][0])
@@ -50,9 +64,8 @@ def get_data(filename, start_row, row_labels, col_labels):
   #meanCols = [cols-1]#, cols-2, cols-3] #Edit this to the species cols that you
                                       #want to average
   #meanCols = [cols-1]# cols-2, cols-3, cols-4, cols-5]
-  meanCols = [cols-3, cols-1]# cols-2, cols-3, cols-4, cols-5]
+  meanCols = [cols-2, cols-1]# cols-2, cols-3, cols-4, cols-5]
   bins = len(col_labels)
-  print bins
   dataset = np.empty([len(meanCols), rows/bins, bins])
   for i in range(len(meanCols)):
     dataset[i] = data[0:rows, meanCols[i]:meanCols[i]+1].reshape(rows/bins,
@@ -60,7 +73,8 @@ def get_data(filename, start_row, row_labels, col_labels):
   abs_val = np.amax(dataset)
   return dataset, abs_val
 
-start_time = 50000
+start_time = 300
+end_time = 990
 filename, start_row, row_labels, col_labels = initialize(start_time)
 data, abs_val = get_data(filename, start_row, row_labels, col_labels)
-plot_figure(data, row_labels, col_labels)
+plot_figure(data, row_labels, col_labels, start_time, end_time)
