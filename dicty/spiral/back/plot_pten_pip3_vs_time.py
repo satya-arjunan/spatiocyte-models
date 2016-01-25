@@ -27,7 +27,7 @@ def plot_figure(data, row_labels, col_labels, start_time, end_time):
   plt.show()
 
 def initialize(startTime):
-  filename = "original.csv"
+  filename = "26.csv"
   data = np.loadtxt(filename, delimiter=',', skiprows=1)
   bins = 0
   initTime = float(data[0][0])
@@ -65,8 +65,8 @@ def get_data(filename, start_row, row_labels, col_labels):
   abs_val = np.amax(dataset)
   return dataset, abs_val
 
-start_time = 500
-end_time = 1000
+start_time = 0
+end_time = 700
 filename, start_row, row_labels, col_labels = initialize(start_time)
 data, abs_val = get_data(filename, start_row, row_labels, col_labels)
 plot_figure(data, row_labels, col_labels, start_time, end_time)
