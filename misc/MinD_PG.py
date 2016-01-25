@@ -8,6 +8,7 @@ theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 1.0e-8
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 1.115e-7
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 1.115e-7
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
+theSimulator.createEntity('Variable', 'Variable:/:Vacant')
 theSimulator.createEntity('Variable', 'Variable:/:XYPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:XZPLANE').Value = 5
 theSimulator.createEntity('Variable', 'Variable:/:YZPLANE').Value = 3
@@ -362,6 +363,7 @@ diffuser.D = 0
 
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:filam')
+fil.VariableReferenceList = [['_', 'Variable:/:Vacant', '-1']]
 fil.VariableReferenceList = [['_', 'Variable:/Surface:MinDatp']]
 fil.VariableReferenceList = [['_', 'Variable:/Surface:PG_MinDatp', '1']]
 fil.VariableReferenceList = [['_', 'Variable:/Surface:PGs_MinDatp', '1']]
