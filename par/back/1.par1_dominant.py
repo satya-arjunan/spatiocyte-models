@@ -1,6 +1,6 @@
 import math
 
-T = 3000
+T = 1000
 interval = 0.1
 
 sim = theSimulator
@@ -38,7 +38,7 @@ sim.createEntity('Variable', 'Variable:/Cell/Cortex:DIMENSION').Value = 2
 sim.createEntity('Variable', 'Variable:/Cell/Cortex:VACANT').Value = 1
 
 MTm = sim.createEntity('Variable', 'Variable:/Cell/Cortex:MTm')
-MTm.Value = 40
+MTm.Value = 0
 PAR1m = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PAR1m')
 PAR1m.Value = 0
 PAR2m = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PAR2m')
@@ -46,7 +46,7 @@ PAR2m.Value = 0
 PAR3m = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PAR3m')
 PAR3m.Value = 0
 PKC3_PAR3m = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PKC3_PAR3m')
-PKC3_PAR3m.Value = 2500
+PKC3_PAR3m.Value = 0
 PKC3_PAR3m_PAR1m = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m')
 PKC3_PAR3m_PAR1m.Value = 0
 
@@ -59,11 +59,11 @@ PAR2.Value = 2000
 PAR2.Name = "HD"
 
 PAR3 = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PAR3')
-PAR3.Value = 2500
+PAR3.Value = 5000
 PAR3.Name = "HD"
 
 PKC3 = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PKC3')
-PKC3.Value = 2000
+PKC3.Value = 5000
 PKC3.Name = "HD"
 
 l = sim.createEntity('VisualizationLogProcess', 'Process:/Cell/Cortex:logger')
@@ -94,11 +94,8 @@ h.InnerRadius = 4.5e-6
 h.OuterRadius = 5.5e-6
 h.FileName = "original.csv"
 
-p = sim.createEntity('MoleculePopulateProcess', 'Process:/Cell/Cortex:popMT')
-p.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:MTm']]
-p.EdgeX = 1
-
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/Cell/Cortex:pop')
+p.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:MTm']]
 p.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m']]
 p.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m']]
 p.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3m']]
@@ -107,23 +104,23 @@ p.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m']]
 
 d = sim.createEntity('DiffusionProcess', 'Process:/Cell/Cortex:diffusePAR1')
 d.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m']]
-d.D = 1e-14
+d.D = 7e-14
 
 d = sim.createEntity('DiffusionProcess', 'Process:/Cell/Cortex:diffusePAR2')
 d.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m']]
-d.D = 1e-14
+d.D = 7e-14
 
 d = sim.createEntity('DiffusionProcess', 'Process:/Cell/Cortex:diffusePAR3')
 d.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3m']]
-d.D = 1e-14
+d.D = 7e-14
 
 d = sim.createEntity('DiffusionProcess', 'Process:/Cell/Cortex:diffusePKC3_PAR3')
 d.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m']]
-d.D = 1e-14
+d.D = 7e-14
 
 d = sim.createEntity('DiffusionProcess', 'Process:/Cell/Cortex:diffusePKC3_PAR3_PAR1')
 d.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m']]
-d.D = 1e-14
+d.D = 7e-14
 
 
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r1')
@@ -136,51 +133,51 @@ r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3m', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3m', '1']]
-r.k = 1e-15
+r.k = 1e-14
+
+r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r3')
+r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3m', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3', '-1']]
+r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m', '1']]
+r.k = 1e-14
 
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r4')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3m', '1']]
-r.k = 1e-15
-
-r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r3')
-r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3m', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3', '-1']]
-r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m', '1']]
-r.k = 1e-15
+r.k = 1e-14
 
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r5')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m', '1']]
-r.k = 1e-3
+r.k = 1e-2
 
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r6')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m', '1']]
-r.k = 5e-15
+r.k = 1e-14
 
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r7')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:MTm', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:MTm', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m', '1']]
-r.k = 5e-15
+r.k = 1e-14
 
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r8')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m', '1']]
-r.k = 1e-3
+r.k = 1e-2
 
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r9')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m', '1']]
-r.k = 1e-15
+r.k = 1e-14
 
 
 #phosphorylate PAR2
@@ -196,14 +193,14 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess','Process:/Cell/Cortex:
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m','1']]
-r.p = 0.5 #[unitless]
+r.p = 0.1 #[unitless]
 
 #phosphorylate PAR1
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r12')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1', '1']]
-r.k = 10 #change this to change period
+r.k = 15 #change this to change period
 
 #phosphorylate PAR3
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r13')
@@ -211,7 +208,7 @@ r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3', '1']]
-r.k = 20 #change this to change period
+r.k = 10 #change this to change period
 
 #phosphorylate PAR3
 r = sim.createEntity('DiffusionInfluencedReactionProcess','Process:/Cell/Cortex:r14')
@@ -223,4 +220,4 @@ r.p = 0.1 #[unitless]
 
 while getCurrentTime() < T:
   run(2)
-  print getCurrentTime(),"PAR1m:",PAR1m.Value,"PAR2m:",PAR2m.Value,"PAR3m:",PAR3m.Value,"PKC3_PAR3m:",PKC3_PAR3m.Value,"PKC3_PAR3m_PAR1m:",PKC3_PAR3m_PAR1m.Value,"PAR1:",PAR1.Value,"PAR2:",PAR2.Value,"PAR3:",PAR3.Value,"PKC3:",PKC3.Value
+  print getCurrentTime(),"PAR1:",PAR1.Value,"PAR1m:",PAR1m.Value,"PAR2:",PAR2.Value,"PAR2m:",PAR2m.Value,"PAR3:",PAR3.Value,"PAR3m:",PAR3m.Value,"PKC3:",PKC3.Value,"PKC3_PAR3m:",PKC3_PAR3m.Value,"PKC3_PAR3m_PAR1m:",PKC3_PAR3m_PAR1m.Value
