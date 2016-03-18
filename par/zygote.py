@@ -5,7 +5,7 @@ MT_nucleation = 1
 MT_PAR2m_rate = 8e-3
 MT_number = 300
 
-T = 200
+T = 700
 interval = 0.1
 
 sim = theSimulator
@@ -98,7 +98,7 @@ h.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m']]
 #h.VariableReferenceList = [['_', 'Variable:/:A', '-1']]
 #h.VariableReferenceList = [['_', 'Variable:/:B', '-2']]
 h.Density = 0
-h.Bins = 25
+h.Bins = 50
 h.LogInterval = interval/10.0
 h.ExposureTime = interval
 h.RadialHeight = 100*s.VoxelRadius

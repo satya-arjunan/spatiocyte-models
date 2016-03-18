@@ -5,6 +5,7 @@ import glob
 import numpy as np
 import csv
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.patches import Rectangle
 
 fontsize = 15
 mpl.rcParams.update({'font.size': fontsize})
@@ -197,7 +198,7 @@ def plot_legend(heatmap, fig, ax):
   label = '%% of max cytosolic kinesin concentration at bin #%d' %plot_bin
   cbar.ax.set_xlabel(label, size=fontsize)
 
-def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels):
+def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels, time, logInterval):
   dim, rows, cols = data.shape
   abs_val = np.amax(data)
   fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
@@ -212,7 +213,7 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels):
   #heatmap = ax.pcolor(data, cmap=red_black, vmax=abs_val*0.7)
   #heatmap = ax.pcolor(data, cmap=green_black, vmax=abs_val*0.7)
   #heatmap = ax1.pcolor(data[0], cmap=white_black)
-  heatmap = ax1.pcolor(data[0], cmap=red_black, vmax=abs_val*0.5)
+  heatmap = ax1.pcolor(data[0], cmap=green_black, vmax=abs_val*0.5)
   heatmap = ax2.pcolor(data[1], cmap=green_black, vmax=abs_val*0.5)
   #heatmap = ax.pcolor(data)
   # put the major ticks at the middle of each cell
@@ -247,6 +248,14 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels):
   #ax.xaxis.tick_top()
   #plt.xticks(rotation=90)
   #plot_colorbars(row_labels, col_labels, fig, ax)
+  ax1.add_patch(Rectangle((0.5, time/logInterval), cols-1, 10, edgecolor='w',
+    facecolor='none'))
+  ax2.add_patch(Rectangle((0.5, time/logInterval), cols-1, 10, edgecolor='w',
+    facecolor='none'))
+  ax1.add_patch(Rectangle((bin_id, 0.5/logInterval), 1, rows-0.5/logInterval,
+    edgecolor='w', facecolor='none'))
+  ax2.add_patch(Rectangle((bin_id, 0.5/logInterval), 1, rows-0.5/logInterval,
+    edgecolor='w', facecolor='none'))
   plt.show()
 
 def get_headers(filename):
@@ -279,7 +288,7 @@ def initialize(startTime):
     row_labels[i] = startTime+i*logInterval
   for i in range(bins):
     col_labels[i] = i*binInterval
-  return filename, start_row, row_labels, col_labels, headers
+  return filename, start_row, row_labels, col_labels, headers, logInterval
 
 def get_data(filename, start_row, row_labels, col_labels, headers, species):
   data = np.loadtxt(filename, delimiter=",", skiprows=start_row+1)
@@ -296,8 +305,9 @@ def get_data(filename, start_row, row_labels, col_labels, headers, species):
 
 start_time = 0
 end_time = 2000
-bin_id = 19
+bin_id = 35
+time = 150
 species = [1, 2]
-filename, start_row, row_labels, col_labels, headers = initialize(start_time)
+filename, start_row, row_labels, col_labels, headers, logInterval = initialize(start_time)
 data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species)
-plot_figure(data, row_labels, col_labels, abs_val, bin_id, labels)
+plot_figure(data, row_labels, col_labels, abs_val, bin_id, labels, time, logInterval)
