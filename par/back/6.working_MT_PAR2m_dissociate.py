@@ -1,11 +1,11 @@
 import math
 
-PAR1_kinase_dead = 0
+PAR1_kinase_dead = 1
 MT_nucleation = 1
 MT_PAR2m_rate = 8e-3
 MT_number = 300
 
-T = 20
+T = 2000
 interval = 0.1
 
 sim = theSimulator
@@ -59,12 +59,12 @@ PKC3_PAR3m_PAR1m = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PKC3_PAR3
 PKC3_PAR3m_PAR1m.Value = 0
 
 PAR1 = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PAR1')
-PAR1.Value = 3000
+PAR1.Value = 2000
 PAR1.Name = "HD"
 
 PAR2 = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PAR2')
 if(MT_nucleation):
-  PAR2.Value = 5900
+  PAR2.Value = 2900
 else:
   PAR2.Value = 2900 + MT_number
 PAR2.Name = "HD"
@@ -84,8 +84,6 @@ l.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m']]
 l.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3m']]
 l.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m']]
 l.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m']]
-#l.VariableReferenceList = [['_', 'Variable:/:A']]
-#l.VariableReferenceList = [['_', 'Variable:/:B']]
 l.LogInterval = 0.5
 
 h = sim.createEntity('HistogramLogProcess', 'Process:/Cell/Cortex:his')
@@ -95,13 +93,11 @@ h.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m']]
 h.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3m']]
 h.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m']]
 h.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m']]
-#h.VariableReferenceList = [['_', 'Variable:/:A', '-1']]
-#h.VariableReferenceList = [['_', 'Variable:/:B', '-2']]
 h.Density = 0
 h.Bins = 50
 h.LogInterval = interval/10.0
 h.ExposureTime = interval
-h.RadialHeight = 100*s.VoxelRadius
+h.RadialHeight = 20*s.VoxelRadius
 h.LogEnd = T-1
 h.Iterations = 1
 h.RotateX = math.pi/2
@@ -123,8 +119,8 @@ h.Iterations = 1
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/Cell/Cortex:popMT')
 p.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:MT_PAR2m']]
 #p.EdgeX = 1
-p.OriginY = 1
-p.UniformLengthY = 0.1
+p.OriginX = 1
+p.UniformLengthX = 0.1
 
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/Cell/Cortex:pop')
 p.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m']]
@@ -208,7 +204,7 @@ r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m', '1']]
-r.k = 2e-14
+r.k = 1e-15
 
 
 #phosphorylate PAR2
@@ -224,14 +220,14 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess','Process:/Cell/Cortex:
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m','1']]
-r.p = 1 #[unitless]
+r.p = 0.5 #[unitless]
 
 #phosphorylate PAR1
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r12')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1', '1']]
-r.k = 30 #change this to change period
+r.k = 10 #change this to change period
 
 #phosphorylate PAR3
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r13')

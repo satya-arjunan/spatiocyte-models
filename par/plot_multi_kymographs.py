@@ -243,7 +243,7 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels, time, l
   ax1.invert_yaxis()
   fig.text(0.5, 0.02, 'Bin # along cortex length', ha='center',
       fontsize=fontsize)
-  fig.text(0.06, 0.5, 'Time (s)', va='center', rotation='vertical',
+  fig.text(0.04, 0.5, 'Time (s)', va='center', rotation='vertical',
       fontsize=fontsize)
   #ax.xaxis.tick_top()
   #plt.xticks(rotation=90)

@@ -5,7 +5,7 @@ MT_nucleation = 1
 MT_PAR2m_rate = 8e-3
 MT_number = 300
 
-T = 20
+T = 200
 interval = 0.1
 
 sim = theSimulator
@@ -59,12 +59,12 @@ PKC3_PAR3m_PAR1m = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PKC3_PAR3
 PKC3_PAR3m_PAR1m.Value = 0
 
 PAR1 = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PAR1')
-PAR1.Value = 3000
+PAR1.Value = 1000
 PAR1.Name = "HD"
 
 PAR2 = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PAR2')
 if(MT_nucleation):
-  PAR2.Value = 5900
+  PAR2.Value = 2900
 else:
   PAR2.Value = 2900 + MT_number
 PAR2.Name = "HD"
@@ -224,14 +224,14 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess','Process:/Cell/Cortex:
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m','1']]
-r.p = 1 #[unitless]
+r.p = 0.5 #[unitless]
 
 #phosphorylate PAR1
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r12')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m', '1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1', '1']]
-r.k = 30 #change this to change period
+r.k = 10 #change this to change period
 
 #phosphorylate PAR3
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r13')
