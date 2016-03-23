@@ -213,8 +213,8 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels, time, l
   #heatmap = ax.pcolor(data, cmap=red_black, vmax=abs_val*0.7)
   #heatmap = ax.pcolor(data, cmap=green_black, vmax=abs_val*0.7)
   #heatmap = ax1.pcolor(data[0], cmap=white_black)
-  heatmap = ax1.pcolor(data[0], cmap=green_black, vmax=abs_val*0.5)
-  heatmap = ax2.pcolor(data[1], cmap=green_black, vmax=abs_val*0.5)
+  heatmap = ax1.pcolor(data[0], cmap=green_black, vmax=abs_val)
+  heatmap = ax2.pcolor(data[1], cmap=green_black, vmax=abs_val)
   #heatmap = ax.pcolor(data)
   # put the major ticks at the middle of each cell
   #ax.set_yticks(np.arange(data.shape[0]) + 0.5, minor=False)
