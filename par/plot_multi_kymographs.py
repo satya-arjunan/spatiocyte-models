@@ -305,8 +305,8 @@ def get_data(filename, start_row, row_labels, col_labels, headers, species):
 
 start_time = 0
 end_time = 2000
-bin_id = 35
-time = 150
+bin_id = 23
+time = 100
 species = [1, 2]
 filename, start_row, row_labels, col_labels, headers, logInterval = initialize(start_time)
 data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species)

@@ -1,10 +1,15 @@
 import numpy as np
 import pylab as P
+import matplotlib as mpl
 
-labelFontSize = 14
-tickFontSize = 14
-legendFontSize = 14
-lineFontSize = 14
+fontsize = 15
+mpl.rcParams.update({'font.size': fontsize})
+
+
+labelFontSize = fontsize
+tickFontSize = fontsize
+legendFontSize = fontsize
+lineFontSize = fontsize
 
 fileNames = ["IterateLog.csv"]
 legendTitles = []

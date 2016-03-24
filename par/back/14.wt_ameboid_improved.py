@@ -1,12 +1,12 @@
 import math
 
-PAR1_kinase_dead = 1
+PAR1_kinase_dead = 0
 MT_nucleation = 1
 MT_degradation = 0
 MT_PAR2m_rate = 6e-3
 MT_number = 200
 
-T = 1000
+T = 500
 interval = 0.1
 
 sim = theSimulator
@@ -55,7 +55,7 @@ PAR2m.Value = 0
 PAR3m = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PAR3m')
 PAR3m.Value = 0
 PKC3_PAR3m = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PKC3_PAR3m')
-PKC3_PAR3m.Value = 3000
+PKC3_PAR3m.Value = 3500
 PKC3_PAR3m_PAR1m = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m')
 PKC3_PAR3m_PAR1m.Value = 0
 
@@ -71,7 +71,7 @@ else:
 PAR2.Name = "HD"
 
 PAR3 = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PAR3')
-PAR3.Value = 1500
+PAR3.Value = 500
 PAR3.Name = "HD"
 
 PKC3 = sim.createEntity('Variable', 'Variable:/Cell/Cortex:PKC3')
@@ -126,7 +126,7 @@ p = sim.createEntity('MoleculePopulateProcess', 'Process:/Cell/Cortex:popMT')
 p.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:MT_PAR2m']]
 #p.EdgeX = 1
 p.OriginX = 1
-p.UniformLengthX = 0.2
+p.UniformLengthX = 0.1
 
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/Cell/Cortex:pop')
 p.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m']]
@@ -219,7 +219,7 @@ r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m','1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2','1']]
-r.p = 0.09 #[unitless]
+r.p = 0.07 #[unitless]
 
 #complex PKC3_PAR3m_PAR1m
 r = sim.createEntity('DiffusionInfluencedReactionProcess','Process:/Cell/Cortex:r11')

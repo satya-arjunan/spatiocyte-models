@@ -78,7 +78,7 @@ def get_data(filename, start_row, row_labels, col_labels, headers, species):
 
 start_time = 0
 end_time = 2000
-bin_id = 35
+bin_id = 23
 species = [1, 2]
 filename, start_row, row_labels, col_labels, headers = initialize(start_time)
 data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species)
