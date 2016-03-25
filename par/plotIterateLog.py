@@ -52,5 +52,5 @@ frame.set_facecolor('0.95')
 frame.set_edgecolor('0.75')
 P.ylabel('# Molecules')
 P.xlabel('Time (s)')
+P.savefig('iterate.png', bbox_inches='tight')
 P.show()
-

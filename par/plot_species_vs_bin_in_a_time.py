@@ -31,6 +31,7 @@ def plot_figure(data, row_labels, col_labels, labels, start_time, end_time, time
   plt.xlabel('Bin # along cortex length', fontsize=fontsize)
   plt.xticks(fontsize=fontsize)
   plt.yticks(fontsize=fontsize)
+  plt.savefig('density_vs_bins.png', bbox_inches='tight')
   plt.show()
 
 def get_headers(filename):
@@ -80,7 +81,7 @@ def get_data(filename, start_row, row_labels, col_labels, headers, species):
 
 start_time = 0
 end_time = 2000
-time = 490
+time = 800
 species = [1, 2]
 filename, start_row, row_labels, col_labels, headers = initialize(start_time)
 data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species)

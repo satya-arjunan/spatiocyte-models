@@ -256,6 +256,7 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels, time, l
     edgecolor='w', facecolor='none'))
   ax2.add_patch(Rectangle((bin_id, 0.5/logInterval), 1, rows-0.5/logInterval,
     edgecolor='w', facecolor='none'))
+  plt.savefig('kymo.png', bbox_inches='tight')
   plt.show()
 
 def get_headers(filename):
@@ -306,7 +307,7 @@ def get_data(filename, start_row, row_labels, col_labels, headers, species):
 start_time = 0
 end_time = 2000
 bin_id = 23
-time = 100
+time = 280
 species = [1, 2]
 filename, start_row, row_labels, col_labels, headers, logInterval = initialize(start_time)
 data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species)

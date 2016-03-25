@@ -29,6 +29,7 @@ def plot_figure(data, row_labels, col_labels, labels, start_time, end_time, bin_
   plt.xlabel('Time (s)', fontsize=fontsize)
   plt.xticks(fontsize=fontsize)
   plt.yticks(fontsize=fontsize)
+  plt.savefig('density_vs_time.png', bbox_inches='tight')
   plt.show()
 
 def get_headers(filename):

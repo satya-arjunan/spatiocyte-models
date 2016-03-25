@@ -209,7 +209,7 @@ r.k = 2e-14
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r8')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1', '-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m', '1']]
-r.k = 1e-3
+r.k = 1e-5
 
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r9')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR2m', '-1']]
