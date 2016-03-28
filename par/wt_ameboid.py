@@ -6,6 +6,7 @@ PAR3_number = 4500
 PKC3_PAR3m_number = 3000
 PKC3m_number = 0
 PAR1_kinase_dead = 0
+PAR1_unphosphorylated = 0
 PKC3_kinase_dead = 0
 MT_nucleation = 1
 MT_degradation = 0
@@ -241,7 +242,7 @@ r.p = 0.3 #[unitless]
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r12')
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m', '1']]
-if(PKC3_kinase_dead):
+if(PKC3_kinase_dead or PAR1_unphosphorylated):
   r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m', '1']]
 else:
   r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1', '1']]
