@@ -12,6 +12,9 @@ MT_nucleation = 1
 MT_degradation = 0
 MT_PAR2m_rate = 6e-3
 MT_number = 200
+pPKC3_PAR3m_PAR1m = 0.3
+kPhosPAR1 = 20
+kPhosPAR3 = 10
 
 T = 1000
 interval = 0.1
@@ -236,7 +239,7 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess','Process:/Cell/Cortex:
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3_PAR3m_PAR1m','1']]
-r.p = 0.3 #[unitless]
+r.p = pPKC3_PAR3m_PAR1m
 
 #phosphorylate PAR1
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r12')
@@ -246,7 +249,7 @@ if(PKC3_kinase_dead or PAR1_unphosphorylated):
   r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1m', '1']]
 else:
   r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR1', '1']]
-r.k = 20 #change this to change period
+r.k = kPhosPAR1
 
 #phosphorylate PAR3
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r13')
@@ -257,7 +260,7 @@ if(PAR1_kinase_dead):
 else:
   r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PKC3', '1']]
   r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3', '1']]
-r.k = 10 #change this to change period
+r.k = kPhosPAR3
 
 #phosphorylate PAR3
 r = sim.createEntity('DiffusionInfluencedReactionProcess','Process:/Cell/Cortex:r14')
@@ -268,7 +271,7 @@ r.VariableReferenceList = [['_', 'Variable:/Cell/Cortex:PAR3','1']]
 if(PAR1_kinase_dead):
   r.p = 0 #[unitless]
 else:
-  r.p = 0.1 #[unitless]
+  r.p = pPKC3_PAR3m_PAR1m*kPhosPAR3/(kPhosPAR3+kPhosPAR1)
 
 #dissociate MT_PAR2m
 r = sim.createEntity('SpatiocyteNextReactionProcess','Process:/Cell/Cortex:r15')
