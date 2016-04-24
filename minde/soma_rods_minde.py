@@ -18,7 +18,7 @@ nBin = 10+nBinX
 binLength = 0.2e-6
 filename = "_%d_%d_%.2f" %(int(V1), int(V2), V3)
 rodLength = nBin*binLength
-VoxelRadius = 1e-8
+VoxelRadius = 2e-8
 rodRadius = 0.5e-6
 somaRadius = 0.8e-6
 nRod = 3
@@ -91,6 +91,8 @@ for i in range(nRod):
 sim = theSimulator
 sim.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 sim.rootSystem.StepperID = 'SS'
+sim.RemoveSurfaceBias = 1
+sim.SearchVacant = 1
 
 sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLengths[0]
 sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = rootLengths[1]
@@ -151,7 +153,8 @@ for i in range(nRod):
   h.Density = 1
   h.Length = rodsLengthX[i]
   h.Radius = rodRadius*1.5
-  h.Bins = int(round(rodsLengthX[i]/binLength))/2 
+  #h.Bins = int(round(rodsLengthX[i]/binLength))/2 
+  h.Bins = 10
   h.LogInterval = interval/10.0
   h.ExposureTime = interval
   h.FileName = "histogram" + filename + ("_n%d.csv" %i)
