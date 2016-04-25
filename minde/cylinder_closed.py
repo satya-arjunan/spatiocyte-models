@@ -88,7 +88,7 @@ r.k = 5e-19
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r4')
 r.VariableReferenceList = [['_', 'Variable:/Surface:MinDEE','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Surface:MinEE','1']]
-r.VariableReferenceList = [['_', 'Variable:/:MinDatp','1']]
+r.VariableReferenceList = [['_', 'Variable:/:MinDadp','1']]
 r.k = 1
 
 r = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r5')
