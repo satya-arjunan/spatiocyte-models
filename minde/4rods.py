@@ -3,7 +3,7 @@ try:
   T
 except NameError:
   T = 400
-  V1 = 15 #extra nBin in one rod
+  V1 = 0 #extra nBin in one rod
   V2 = 55 #ratchet rate
   V3 = 1.0 #p
 
@@ -15,13 +15,18 @@ interval = 1
 
 nBinX = int(V1)
 nBin = 10+nBinX
-binLength = 0.24e-6
+binLength = 0.2e-6
 filename = "_%d_%d_%.2f" %(int(V1), int(V2), V3)
 rodLength = nBin*binLength
-VoxelRadius = 1.5e-8
+VoxelRadius = 2e-8
 rodRadius = 0.5e-6
-somaRadius = 0.5e-6
-nRod = 3
+somaRadius = 0.8e-6
+nRod = 4
+KinesinConc = 2e-7 #in Molar
+volumes = [1.6647e-17, 1.6796e-17, 1.6940e-17, 1.7088e-17, 1.7236e-17, 1.7384e-17, 1.7528e-17, 1.7676e-17, 1.7821e-17, 1.7969e-17, 1.8113e-17]
+Volume =  volumes[int(V1)]
+nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
+print "Volume:", Volume, "nKinesin:", nKinesin
 
 def rotatePointAlongVector(P, C, N, angle):
   x = P[0]
@@ -50,31 +55,24 @@ def rotatePointAlongVector(P, C, N, angle):
 angle = math.pi/nRod
 vectorZ = [0.0, 0.0, 1.0]
 vectorZpoint = [0.0, 0.0, 0.0]
-inSomaLength = VoxelRadius*10+rodRadius
+inSomaLength = VoxelRadius*10
 rodsLengthX = [rodLength-nBinX*binLength]*nRod
 rodsLengthX[nRod-1] = rodLength #longer rod
 rodsRotateZ = np.zeros(nRod)
 rodsOrigin = np.zeros((nRod, 3))
 maxPoint = np.full(3, -np.inf)
 minPoint = np.full(3, np.inf)
-somaAdjRadius = VoxelRadius*5+max(somaRadius, rodRadius)
 for i in range(nRod):
-  #tip = somaRadius+rodsLengthX[i]-inSomaLength+rodRadius*2
-  tip = somaRadius+rodsLengthX[i]+rodRadius*2
+  tip = somaRadius+rodsLengthX[i]-inSomaLength+rodRadius*2
   mid = somaRadius+rodsLengthX[i]/2-inSomaLength
-  rad = math.pi/2+angle*2*i
-  #rad = angle+angle*2*i
-  #rad = angle*2*i
+  rad = angle+angle*2*i
   rodsRotateZ[i] = -rad
   origin = [mid, 0, 0]
   rodsOrigin[i] = rotatePointAlongVector(origin, vectorZpoint, vectorZ, rad)
-  edge = [tip, rodRadius, 0]
+  edge = [tip, 0, 0]
   point = rotatePointAlongVector(edge, vectorZpoint, vectorZ, rad)
   maxPoint = np.amax([maxPoint, point], axis=0)
   minPoint = np.amin([minPoint, point], axis=0)
-
-maxPoint = np.amax([maxPoint, [somaAdjRadius, somaAdjRadius, somaAdjRadius]], axis=0)
-minPoint = np.amin([minPoint, [-somaAdjRadius, -somaAdjRadius, -somaAdjRadius]], axis=0)
 
 rootLengths = np.subtract(maxPoint, minPoint)
 halfRootLengths = np.divide(rootLengths, 2.0)
@@ -91,11 +89,10 @@ for i in range(nRod):
   rodsOrigin[i] = np.add(rodsOrigin[i], somaOrigin)
 
 sim = theSimulator
-s = sim.createStepper('SpatiocyteStepper', 'SS')
-s.VoxelRadius = VoxelRadius
-s.SearchVacant = 1
-s.RemoveSurfaceBias = 1
+sim.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 sim.rootSystem.StepperID = 'SS'
+sim.RemoveSurfaceBias = 1
+sim.SearchVacant = 1
 
 sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLengths[0]
 sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = rootLengths[1]
@@ -118,7 +115,7 @@ sim.createEntity('Variable', 'Variable:/Soma/Surface:VACANT')
 
 for i in range(nRod):
   sim.createEntity('System', 'System:/:Rod%d' %i).StepperID = 'SS'
-  sim.createEntity('Variable', 'Variable:/Rod%d:GEOMETRY' %i).Value = 3
+  sim.createEntity('Variable', 'Variable:/Rod%d:GEOMETRY' %i).Value = 2
   x = sim.createEntity('Variable', 'Variable:/Rod%d:LENGTHX' %i)
   x.Value = rodsLengthX[i]
   y = sim.createEntity('Variable', 'Variable:/Rod%d:LENGTHY' %i)
@@ -149,29 +146,24 @@ for i in range(nRod):
   h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEED' ]]
   h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEE' ]]
   h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinEE' ]]
-  if(i == -1):
-    h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:A', '-2']]
-    h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:B', '-3']]
-  if(i == -1):
-    h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:C', '-2']]
-    h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:D', '-3']]
+#  if(i == 2):
+#    h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:A', '-2']]
+#    h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:C', '-3']]
+#    h.VariableReferenceList = [['_', 'Variable:/Soma:B', '-1']]
   h.Density = 1
-  #h.Length = rodsLengthX[i]-inSomaLength/2+VoxelRadius*10
-  h.Length = rodsLengthX[i]-inSomaLength/2-VoxelRadius*15
-  h.OriginX = 0.1
+  h.Length = rodsLengthX[i]
   h.Radius = rodRadius*1.5
-  #h.Bins = int(round(rodsLengthX[i]/binLength))/2 
-  h.Bins = 20
+  h.Bins = int(round(rodsLengthX[i]/binLength))/2 
   h.LogInterval = interval/10.0
   h.ExposureTime = interval
   h.FileName = "histogram" + filename + ("_n%d.csv" %i)
   h.LogEnd = T-1
   h.Iterations = 1
 
-sim.createEntity('Variable', 'Variable:/Soma:MinDatp').Value = 0
-sim.createEntity('Variable', 'Variable:/Soma:MinDadp').Value = 1746
+sim.createEntity('Variable', 'Variable:/Soma:MinDatp').Value = 2706
+sim.createEntity('Variable', 'Variable:/Soma:MinDadp').Value = 0
 sim.createEntity('Variable', 'Variable:/Soma:MinEE').Value = 0
-#sim.createEntity('Variable', 'Variable:/Soma:B').Value = 0
+sim.createEntity('Variable', 'Variable:/Soma:B').Value = 0
 
 d = sim.createEntity('DiffusionProcess', 'Process:/Soma:diffuseMinDatp')
 d.VariableReferenceList = [['_', 'Variable:/Soma:MinDatp']]
@@ -190,12 +182,9 @@ l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinEE']]
 l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEE']]
 l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEED']]
 l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD']]
-#l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:VACANT']]
 l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:A']]
-l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:B']]
 l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:C']]
-l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:D']]
-#l.VariableReferenceList = [['_', 'Variable:/Soma:B']]
+l.VariableReferenceList = [['_', 'Variable:/Soma:B']]
 l.LogInterval = 0.5
 
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/Soma:pop')
@@ -210,12 +199,10 @@ p.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD']]
 
 sim.createEntity('Variable', 'Variable:/Soma/Surface:MinD').Value = 0
 sim.createEntity('Variable', 'Variable:/Soma/Surface:MinEE').Value = 0
-sim.createEntity('Variable', 'Variable:/Soma/Surface:MinDEE').Value = 1528
+sim.createEntity('Variable', 'Variable:/Soma/Surface:MinDEE').Value = 1457
 sim.createEntity('Variable', 'Variable:/Soma/Surface:MinDEED').Value = 0
 sim.createEntity('Variable', 'Variable:/Soma/Surface:A').Value = 0
-sim.createEntity('Variable', 'Variable:/Soma/Surface:B').Value = 0
 sim.createEntity('Variable', 'Variable:/Soma/Surface:C').Value = 0
-sim.createEntity('Variable', 'Variable:/Soma/Surface:D').Value = 0
 
 diffuser = sim.createEntity('DiffusionProcess', 'Process:/:diffuseMinD')
 diffuser.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD']]
@@ -269,12 +256,6 @@ r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEED','1']]
 r.k = 5e-15
 
-r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r9')
-r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinEE','-1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD','-1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEE','1']]
-r.k = 5e-15
-
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r7')
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEED','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEE','1']]
@@ -284,6 +265,6 @@ r.k = 1
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r8')
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinEE','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:MinEE','1']]
-r.k = 0.70
+r.k = 0.83
 
 run(T)

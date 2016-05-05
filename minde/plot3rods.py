@@ -200,7 +200,7 @@ def plot_legend(heatmap, fig, ax):
   cbar.ax.set_xlabel(label, size=fontsize)
 
 def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels, time, logInterval):
-  colors = ['#FF0000', '#00FF00', '#0000FF', 'magenta']
+  colors = ['#0077FF', '#FF0000', '#00FF00', 'magenta']
   cmaps = []
   for i in colors:
     cmaps.append(mpl.colors.LinearSegmentedColormap.from_list('m1',['black',i]))
@@ -222,6 +222,7 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels, time, l
   #  facecolor='none'))
   #ax.add_patch(Rectangle((bin_id, 0.5/logInterval), 1, rows-0.5/logInterval,
   #  edgecolor='w', facecolor='none'))
+  #plt.savefig('kymo.png', bbox_inches='tight')
   plt.savefig('kymo.png')
   plt.show()
 
@@ -284,7 +285,7 @@ end_time = 2000
 bin_id = 23
 time = 280
 species = [3]
-rods = [0, 1]
+rods = [0, 1, 2]
 filename = "histogram_0_55_1.00_n"
 start_row, row_labels, col_labels, headers, logInterval = initialize(start_time, filename, rods[0])
 data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species, rods)

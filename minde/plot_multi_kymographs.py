@@ -9,7 +9,6 @@ from matplotlib.patches import Rectangle
 
 fontsize = 15
 mpl.rcParams.update({'font.size': fontsize})
-mpl.rcParams['figure.figsize'] = 5, 10
 
 cdict1 = {'red':   ((0.0, 0.0, 0.0),
                    (1.0, 1.0, 1.0)),
@@ -139,7 +138,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   #cmap = mpl.cm.YlGn
   cmap = mpl.cm.YlOrBr
   ax1 = fig.add_axes([box.x1, box.y0, bar_width, box.height])
-  heatmap = ax1.imshow(V1, cmap=cmap, edgecolors='k')
+  heatmap = ax1.pcolor(V1, cmap=cmap, edgecolors='k')
   #ax1.set_axis_off()
   ax1.xaxis.tick_top()
   ax1.invert_yaxis()
@@ -157,7 +156,7 @@ def plot_colorbars(row_labels, col_labels, fig, ax):
   cmap = mpl.cm.YlOrBr
   ax2 = fig.add_axes([box.x0, box.y0+box.height+padding, box.width,
     bar_height])
-  heatmap = ax2.imshow(V2, cmap=cmap, edgecolors='k')
+  heatmap = ax2.pcolor(V2, cmap=cmap, edgecolors='k')
   #ax2.set_yticklabels(['p'])
   ax2.set_yticklabels([])
   ax2.set_xticklabels([])
@@ -200,31 +199,65 @@ def plot_legend(heatmap, fig, ax):
   cbar.ax.set_xlabel(label, size=fontsize)
 
 def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels, time, logInterval):
-  colors = ['#FF0000', '#00FF00', '#0000FF', 'magenta']
-  cmaps = []
-  for i in colors:
-    cmaps.append(mpl.colors.LinearSegmentedColormap.from_list('m1',['black',i]))
   dim, rows, cols = data.shape
-  vmax = np.amax(data)
-  vmin = np.amin(data)
-  fig, ax = plt.subplots()
-  c = np.zeros([rows, cols, 4])
-  for i in range(dim):
-    c = np.add(c, cmaps[i]((data[i]-vmin)/(vmax-vmin)))
-  c = np.clip(c, 0, 1)
-  pc = ax.imshow(c, aspect='auto', interpolation='none')
-  #ax.set_title(labels[0])
-  fig.text(0.5, 0.04, 'Bin # along rod length', ha='center',
+  abs_val = np.amax(data)
+  fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
+  #heatmap = ax.pcolormesh(data, cmap=plt.cm.YlOrBr, alpha=0.8)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.hot)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.afmhot, alpha=0.8)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.gist_heat, alpha=0.8)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.gist_heat, alpha=0.8)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.Oranges, alpha=0.8)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.Blues, alpha=0.8)
+  #heatmap = ax.pcolor(data, cmap=plt.cm.Blues, vmax=abs_val*0.7)
+  #heatmap = ax.pcolor(data, cmap=red_black, vmax=abs_val*0.7)
+  #heatmap = ax.pcolor(data, cmap=green_black, vmax=abs_val*0.7)
+  #heatmap = ax1.pcolor(data[0], cmap=white_black)
+  heatmap = ax1.pcolor(data[0], cmap=green_black, vmax=abs_val)
+  heatmap = ax2.pcolor(data[1], cmap=green_black, vmax=abs_val)
+  #heatmap = ax.pcolor(data)
+  # put the major ticks at the middle of each cell
+  #ax.set_yticks(np.arange(data.shape[0]) + 0.5, minor=False)
+  #ax.set_xticks(np.arange(data.shape[1]) + 0.5, minor=False)
+  #plt.gca().set_xlim((0, cols))
+  #plt.gca().set_ylim((0, rows))
+  #plot_legend(heatmap, fig, ax)
+  #show_values(heatmap, fmt="%d", size=fontsize)
+  #divider = make_axes_locatable(ax)
+  #cax = divider.append_axes("right", size="5%", pad=0.05)
+  #cbar = plt.colorbar(heatmap, cax)
+  #ax1.set_axis_off()
+  #ax.set_aspect("equal")
+  # want a more natural, table-like display
+  yticks = ax1.yaxis.get_major_ticks()
+  ylabels = np.linspace(row_labels[0], row_labels[-1],
+      num=len(yticks)).astype(int)
+  ax1.set_yticklabels(ylabels)
+  #ax1.set_xticklabels([])
+  #for tic in ax1.xaxis.get_major_ticks():
+  #  tic.tick1On = tic.tick2On = False
+  #for tic in ax1.yaxis.get_major_ticks():
+  #  tic.tick1On = tic.tick2On = False
+  ax1.set_title(labels[0])
+  ax2.set_title(labels[1])
+  ax1.invert_yaxis()
+  fig.text(0.5, 0.02, 'Bin # along cortex length', ha='center',
       fontsize=fontsize)
-  fig.text(0.0, 0.5, 'Time (s)', va='center', rotation='vertical',
+  fig.text(0.04, 0.5, 'Time (s)', va='center', rotation='vertical',
       fontsize=fontsize)
-  #ax.add_patch(Rectangle((0.5, time/logInterval), cols-1, 10, edgecolor='w',
-  #  facecolor='none'))
-  #ax.add_patch(Rectangle((bin_id, 0.5/logInterval), 1, rows-0.5/logInterval,
-  #  edgecolor='w', facecolor='none'))
-  plt.savefig('kymo.png')
+  #ax.xaxis.tick_top()
+  #plt.xticks(rotation=90)
+  #plot_colorbars(row_labels, col_labels, fig, ax)
+  ax1.add_patch(Rectangle((0.5, time/logInterval), cols-1, 10, edgecolor='w',
+    facecolor='none'))
+  ax2.add_patch(Rectangle((0.5, time/logInterval), cols-1, 10, edgecolor='w',
+    facecolor='none'))
+  ax1.add_patch(Rectangle((bin_id, 0.5/logInterval), 1, rows-0.5/logInterval,
+    edgecolor='w', facecolor='none'))
+  ax2.add_patch(Rectangle((bin_id, 0.5/logInterval), 1, rows-0.5/logInterval,
+    edgecolor='w', facecolor='none'))
+  plt.savefig('kymo.png', bbox_inches='tight')
   plt.show()
-
 
 def get_headers(filename):
   f = open(filename, 'rb')
@@ -235,8 +268,8 @@ def get_headers(filename):
     headers[i] = headers[i].split(':')[1] #remove path of species
   return headers
 
-def initialize(startTime, filename, n):
-  filename = filename + str(n) + ".csv"
+def initialize(startTime):
+  filename = "original.csv"
   headers = get_headers(filename)
   data = np.loadtxt(filename, delimiter=',', skiprows=1)
   bins = 0
@@ -256,36 +289,26 @@ def initialize(startTime, filename, n):
     row_labels[i] = startTime+i*logInterval
   for i in range(bins):
     col_labels[i] = i*binInterval
-  return start_row, row_labels, col_labels, headers, logInterval
+  return filename, start_row, row_labels, col_labels, headers, logInterval
 
-def get_data(filename, start_row, row_labels, col_labels, headers, species,
-    rods):
-  f = filename + str(rods[0]) + ".csv"
-  data = np.loadtxt(f, delimiter=",", skiprows=start_row+1)
+def get_data(filename, start_row, row_labels, col_labels, headers, species):
+  data = np.loadtxt(filename, delimiter=",", skiprows=start_row+1)
   rows,cols = data.shape
   bins = len(col_labels)
-  dataset = np.zeros([len(rods), rows/bins, bins])
+  dataset = np.empty([len(species), rows/bins, bins])
   labels = []
   for i in range(len(species)):
-    print headers[species[i]]
-  for r in range(len(rods)):
-    labels.append(str(rods[r]))
-    f = filename + str(rods[r]) + ".csv"
-    data = np.loadtxt(f, delimiter=",", skiprows=start_row+1)
-    #sum the vals of all selected species
-    for i in range(len(species)):
-      dataset[r] = np.add(dataset[r], data[0:rows, 
-        species[i]+2:species[i]+3].reshape(rows/bins, bins))
-    abs_val = np.amax(dataset)
+    dataset[i] = data[0:rows, species[i]+2:species[i]+3].reshape(rows/bins,
+        bins)
+    labels.append(headers[species[i]])
+  abs_val = np.amax(dataset)
   return dataset, abs_val, labels
 
 start_time = 0
 end_time = 2000
 bin_id = 23
 time = 280
-species = [3]
-rods = [0, 1]
-filename = "histogram_0_55_1.00_n"
-start_row, row_labels, col_labels, headers, logInterval = initialize(start_time, filename, rods[0])
-data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species, rods)
+species = [5, 6]
+filename, start_row, row_labels, col_labels, headers, logInterval = initialize(start_time)
+data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species)
 plot_figure(data, row_labels, col_labels, abs_val, bin_id, labels, time, logInterval)
