@@ -3,7 +3,7 @@ try:
   T
 except NameError:
   T = 400
-  V1 = -6 #extra nBin in one rod
+  V1 = 15 #extra nBin in one rod
   V2 = 55 #ratchet rate
   V3 = 1.0 #p
 
@@ -15,7 +15,7 @@ interval = 1
 
 nBinX = int(V1)
 nBin = 10+nBinX
-binLength = 0.6e-6
+binLength = 0.24e-6
 filename = "_%d_%d_%.2f" %(int(V1), int(V2), V3)
 rodLength = nBin*binLength
 VoxelRadius = 1.5e-8
@@ -60,7 +60,7 @@ minPoint = np.full(3, np.inf)
 somaAdjRadius = VoxelRadius*5+max(somaRadius, rodRadius)
 for i in range(nRod):
   #tip = somaRadius+rodsLengthX[i]-inSomaLength+rodRadius*2
-  tip = somaRadius+rodsLengthX[i]+rodRadius
+  tip = somaRadius+rodsLengthX[i]+rodRadius*2
   mid = somaRadius+rodsLengthX[i]/2-inSomaLength
   rad = math.pi/2+angle*2*i
   #rad = angle+angle*2*i
@@ -168,8 +168,8 @@ for i in range(nRod):
   h.LogEnd = T-1
   h.Iterations = 1
 
-sim.createEntity('Variable', 'Variable:/Soma:MinDatp').Value = 4801/2
-sim.createEntity('Variable', 'Variable:/Soma:MinDadp').Value = 4801/2
+sim.createEntity('Variable', 'Variable:/Soma:MinDatp').Value = 3140/2
+sim.createEntity('Variable', 'Variable:/Soma:MinDadp').Value = 3140/2
 sim.createEntity('Variable', 'Variable:/Soma:MinEE').Value = 0
 #sim.createEntity('Variable', 'Variable:/Soma:B').Value = 0
 
@@ -210,7 +210,7 @@ p.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD']]
 
 sim.createEntity('Variable', 'Variable:/Soma/Surface:MinD').Value = 0
 sim.createEntity('Variable', 'Variable:/Soma/Surface:MinEE').Value = 0
-sim.createEntity('Variable', 'Variable:/Soma/Surface:MinDEE').Value = 2057
+sim.createEntity('Variable', 'Variable:/Soma/Surface:MinDEE').Value = 1345
 sim.createEntity('Variable', 'Variable:/Soma/Surface:MinDEED').Value = 0
 sim.createEntity('Variable', 'Variable:/Soma/Surface:A').Value = 0
 sim.createEntity('Variable', 'Variable:/Soma/Surface:B').Value = 0

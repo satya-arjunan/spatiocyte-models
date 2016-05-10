@@ -10,13 +10,22 @@ fontsize = 15
 
 def plot_figure(data, row_labels, col_labels, labels, start_time, end_time, time):
   logInterval = row_labels[1]-row_labels[0]
-  timePoints = (end_time-start_time)/logInterval
+  timePoints = (end_time-0)/logInterval
   time_id = int(round(time/logInterval))
 
+  #dim: rods, rows: time points, cols: bins
   dim, rows, cols = data.shape
+  print dim, rows, cols, data[0][20][19], data[1][72][19], data[2][151][19]
+  last_bins = 20
+  times = []
+  for i in range(dim):
+    arg = np.argmax(data[i:i+1, start_time:rows, cols-last_bins:cols])
+    times.append(start_time + arg/last_bins)
+    #bine = cols-last_bins + arg%last_bins
+    #print i, time, bine, ':', data[i][time][bine]
   fig, ax = plt.subplots()
   for i in range(dim):
-    x = data[i:i+1, time_id, :][0]
+    x = data[i:i+1, times[i], :][0]
     z = np.arange(len(x))
     ax.plot(z, x, label=labels[i], linewidth=1.5)
   ax.grid(color='b', linestyle='--')
@@ -67,38 +76,36 @@ def initialize(startTime, filename, n):
   return start_row, row_labels, col_labels, headers, logInterval
 
 def get_data(filename, start_row, row_labels, col_labels, headers, species,
-    rod, species_names):
-  f = filename + str(rod) + ".csv"
+    rods):
+  f = filename + str(rods[0]) + ".csv"
   data = np.loadtxt(f, delimiter=",", skiprows=start_row+1)
   rows,cols = data.shape
   bins = len(col_labels)
-  dataset = np.zeros([len(species_names), rows/bins, bins])
+  dataset = np.zeros([len(rods), rows/bins, bins])
   labels = []
   abs_val = 0
-  for i in range(len(species_names)):
-    print species_names[i]
-    for j in range(len(species[i])):
-      print '\t', headers[species[i][j]]
-  for r in range(len(species_names)):
-    labels.append(str(species_names[r]))
-    f = filename + str(rod) + ".csv"
+  for i in range(len(species)):
+    print headers[species[i]]
+  for r in range(len(rods)):
+    labels.append(str(rods[r]))
+    f = filename + str(rods[r]) + ".csv"
     data = np.loadtxt(f, delimiter=",", skiprows=start_row+1)
     #sum the vals of all selected species
-    for i in range(len(species[r])):
+    for i in range(len(species)):
       dataset[r] = np.add(dataset[r], data[0:rows, 
-        species[r][i]+2:species[r][i]+3].reshape(rows/bins, bins))
+        species[i]+2:species[i]+3].reshape(rows/bins, bins))
     max_val = np.amax(data[0:rows,
-        species[r][i]+2:species[r][i]+3].reshape(rows/bins, bins))
+        species[i]+2:species[i]+3].reshape(rows/bins, bins))
+    print max_val
     abs_val = max(abs_val, max_val)
   return dataset, abs_val, labels
 
 start_time = 0
-end_time = 2000
-species_names = ['MinD', 'MinE']
-species = [[3, 4, 4, 5], [4, 5, 6]]
-rod = 0
-time = 328
+end_time = 500
+time = 281
+species = [3]
+rods = [0, 1, 2]
 filename = "histogram_0_55_1.00_n"
-start_row, row_labels, col_labels, headers, logInterval = initialize(0, filename, rod)
-data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species, rod, species_names)
+start_row, row_labels, col_labels, headers, logInterval = initialize(0, filename, rods[0])
+data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species, rods)
 plot_figure(data, row_labels, col_labels, labels, start_time, end_time, time)

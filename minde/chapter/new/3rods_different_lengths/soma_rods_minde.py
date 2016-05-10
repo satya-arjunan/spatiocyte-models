@@ -184,7 +184,7 @@ d.D = 16e-12
 
 d = sim.createEntity('DiffusionProcess', 'Process:/Soma:diffuseMinE')
 d.VariableReferenceList = [['_', 'Variable:/Soma:MinEE']]
-d.D = 10e-12
+d.D = 16e-12
 
 l = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:logger')
 l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinEE']]
@@ -241,7 +241,7 @@ r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD','1']]
 #r.k = 3e-7
 #r.p = 0.0000578
 #not workr.p = 0.0002
-r.p = 0.00007
+r.p = 0.00004
 
 r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r2')
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD','-1']]
@@ -251,7 +251,7 @@ r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD','1']]
 #r.k = 3e-22
 #r.p = 0.005
 #not workr.p = 0.001
-r.p = 0.004
+r.p = 0.0045
 
 r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r3')
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD','-1']]
@@ -263,7 +263,7 @@ r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r4')
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEE','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinEE','1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:MinDadp','1']]
-r.k = 1
+r.k = 0.4
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r5')
 r.VariableReferenceList = [['_', 'Variable:/Soma:MinDadp','-1']]
@@ -274,13 +274,13 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r6')
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEE','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEED','1']]
-r.k = 5e-15
+r.p = 0.1
 
 r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r9')
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinEE','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinD','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEE','1']]
-r.k = 5e-15
+r.p = 0.1
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r7')
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinDEED','-1']]
@@ -291,6 +291,6 @@ r.k = 1
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r8')
 r.VariableReferenceList = [['_', 'Variable:/Soma/Surface:MinEE','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:MinEE','1']]
-r.k = 0.9
+r.k = 1
 
 run(T)
