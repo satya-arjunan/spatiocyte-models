@@ -5,12 +5,13 @@ nNeurite = 5
 neuriteRadius = 0.2e-6
 neuriteSpace = neuriteRadius*2
 somaLength = nNeurite*neuriteRadius*2+neuriteSpace*(nNeurite+1)
-somaWidth = somaLength/2
-somaHeight = neuriteRadius*3
+print somaLength
+somaWidth = somaLength/4
+somaHeight = neuriteRadius*4
 inSomaLength = VoxelRadius*6
 neuriteLengths = np.empty((nNeurite))
-neuriteLengths.fill(4e-6+inSomaLength)
-rootSpace = VoxelRadius*6
+neuriteLengths.fill(5e-6+inSomaLength)
+rootSpace = VoxelRadius*20
 rootLengths = np.empty((1,3))
 rootLengths = (somaWidth+np.amax(neuriteLengths)-inSomaLength+rootSpace*2,
     somaLength+rootSpace*2, somaHeight+rootSpace*2)
@@ -48,6 +49,10 @@ sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLengths[0]
 sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = rootLengths[1]
 sim.createEntity('Variable', 'Variable:/:LENGTHZ').Value = rootLengths[2]
 sim.createEntity('Variable', 'Variable:/:VACANT')
+
+#sim.createEntity('System', 'System:/:Surface').StepperID = 'SS'
+#sim.createEntity('Variable', 'Variable:/Surface:DIMENSION').Value = 2
+#sim.createEntity('Variable', 'Variable:/Surface:VACANT')
 
 sim.createEntity('System', 'System:/:Soma').StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/Soma:GEOMETRY').Value = 0
@@ -96,9 +101,10 @@ d.D = 1e-12
 l = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:logger')
 l.VariableReferenceList = [['_', 'Variable:/Soma:MinDadp']]
 l.VariableReferenceList = [['_', 'Variable:/Soma/Surface:VACANT']]
+#l.VariableReferenceList = [['_', 'Variable:/Surface:VACANT']]
 l.LogInterval = 0.1
 
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/Soma:pop')
 p.VariableReferenceList = [['_', 'Variable:/Soma:MinDadp']]
 
-run(100)
+run(1)

@@ -66,6 +66,7 @@ vectorZ = [0.0, 0.0, 1.0]
 vectorZpoint = [0.0, 0.0, 0.0]
 inSomaLength = VoxelRadius*30
 neuritesLengthX = [neuriteLength-nBinX*binLength]*nNeurite
+print neuritesLengthX
 neuritesLengthX[nNeurite-1] = neuriteLength #longer neurite
 maxNeuriteRadius = neuriteRadius*(1.0+V1/100.0)
 neuriteRadii = [maxNeuriteRadius]*nNeurite
