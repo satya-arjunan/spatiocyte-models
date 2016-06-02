@@ -20,7 +20,7 @@ def plot_figure(data, row_labels, col_labels, labels, start_time, end_time, bin_
     x = data[i:i+1, 0:timePoints, bin_id][0]
     z = np.arange(len(x))*logInterval
     ax.plot(z, x, label='Rod '+str(int(labels[i])+1), color=colors[i],
-        linewidth=4)
+        linewidth=1)
   #ax.grid(color='b', linestyle='--')
   #leg = plt.legend(loc=0, labelspacing=0.2, handletextpad=0.2, fancybox=True)
   #for t in leg.get_texts():
@@ -37,7 +37,7 @@ def plot_figure(data, row_labels, col_labels, labels, start_time, end_time, bin_
   ax.get_xaxis().set_visible(False)
   plt.xticks(fontsize=fontsize)
   plt.yticks(fontsize=fontsize)
-  plt.savefig('3rods_species_vs_time.pdf', bbox_inches='tight')
+  plt.savefig('3rods_different_lengths_ratioed_species_vs_time.pdf', bbox_inches='tight')
   plt.show()
 
 def get_headers(filename):

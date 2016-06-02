@@ -20,7 +20,7 @@ def plot_figure(data, row_labels, col_labels, labels, start_time, end_time, bin_
     x = data[i:i+1, 0:timePoints, bin_id][0]
     z = np.arange(len(x))*logInterval
     ax.plot(z, x, label='Rod '+str(int(labels[i])+1), color=colors[i],
-        linewidth=4)
+        linewidth=1)
   #ax.grid(color='b', linestyle='--')
   #leg = plt.legend(loc=0, labelspacing=0.2, handletextpad=0.2, fancybox=True)
   #for t in leg.get_texts():
@@ -32,7 +32,7 @@ def plot_figure(data, row_labels, col_labels, labels, start_time, end_time, bin_
   ax.yaxis.tick_right()
   ax.yaxis.set_label_position('right')
   plt.yticks(rotation=90)
-  #ax.yaxis.set_ticks([0, 1, 2, 3])
+  ax.yaxis.set_ticks([0, 1, 2, 3])
   #plt.ylabel("Density in Bin #%d (a.u.)" %bin_id, fontsize=fontsize)
   #plt.xlabel('Time (s)', fontsize=fontsize)
   #ax.get_xaxis().set_visible(False)

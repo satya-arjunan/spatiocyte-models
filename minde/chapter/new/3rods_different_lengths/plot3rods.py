@@ -223,7 +223,7 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_bin, labels, time, l
   #ax.add_patch(Rectangle((bin_id, 0.5/logInterval), 1, rows-0.5/logInterval,
   #  edgecolor='w', facecolor='none'))
   #plt.savefig('kymo.png', bbox_inches='tight')
-  plt.savefig('3rods_kymo.pdf')
+  plt.savefig('3rods_different_lengths_kymo.pdf')
   plt.show()
 
 
