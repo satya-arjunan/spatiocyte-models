@@ -2,10 +2,10 @@
 try:
   T
 except NameError:
-  T = 54000
-  V1 = 80 #percentage increase in all except one neurite radius
-  V2 = 0.00002 #p TUB
-  V3 = 0.8 #p aTUB
+  T = 180000
+  V1 = 0 #percentage increase in all except one neurite radius
+  V2 = 55 #ratchet rate
+  V3 = 1.0 #p
 
 import math
 import scipy.constants
@@ -26,13 +26,12 @@ somaRadius = 1.3e-6
 nNeurite = 4
 pPlusEnd_Detach = 1
 KinesinConc = 2e-7 #in Molar
-volumes = [5.8822e-18, 6.5798e-18, 7.2979e-18, 8.0669e-18, 8.8546e-18, 9.6954e-18, 1.0553e-17, 1.1466e-17, 1.2395e-17, 1.3378e-17, 1.4378e-17]
-Volume = [9.6945e-18]
+volumes = [1.5691e-17, 1.6931e-17, 1.8196e-17, 1.9486e-17, 2.0801e-17, 2.2141e-17, 2.3506e-17, 2.4895e-17, 2.6304e-17, 2.7741e-17, 2.9199e-17]
 #Volume =  math.pi*pow(neuriteRadius, 2.0)*neuriteLength*nNeurite
-#Volume =  volumes[int(V1)/10]
+Volume =  volumes[int(V1)/10]
 #nKinesin = int(round(KinesinConc*scipy.constants.N_A*1e+3*Volume))
-nKinesin = 35*volumes[int(V1)/10]/volumes[0]
-print "nKinesin:", nKinesin
+nKinesin = 25
+print "Volume:", Volume, "nKinesin:", nKinesin
 
 nNeuriteMT = 5
 EdgeSpace = 25e-9
@@ -64,12 +63,12 @@ def rotatePointAlongVector(P, C, N, angle):
 angle = math.pi/nNeurite
 vectorZ = [0.0, 0.0, 1.0]
 vectorZpoint = [0.0, 0.0, 0.0]
-inSomaLength = VoxelRadius*30
+inSomaLength = VoxelRadius*63
 neuritesLengthX = [neuriteLength-nBinX*binLength]*nNeurite
 neuritesLengthX[nNeurite-1] = neuriteLength #longer neurite
 maxNeuriteRadius = neuriteRadius*(1.0+V1/100.0)
-neuriteRadii = [maxNeuriteRadius]*nNeurite
-neuriteRadii[nNeurite-1] = neuriteRadius
+neuriteRadii = [neuriteRadius]*nNeurite
+neuriteRadii[nNeurite-1] = maxNeuriteRadius
 neuritesRotateZ = np.zeros(nNeurite)
 neuritesOrigin = np.zeros((nNeurite, 3))
 maxPoint = np.full(3, -np.inf)
@@ -139,10 +138,7 @@ for i in range(nNeurite):
     N = [1.0, 0.0, 0.0]
     angle = 2*math.pi/(nNeuriteMT-1)
     for j in range(nNeuriteMT-2):
-      if(i == 0):
-          P = rotatePointAlongVector(P, C, N, angle/2);
-      else:
-          P = rotatePointAlongVector(P, C, N, angle);
+      P = rotatePointAlongVector(P, C, N, angle);
       MTsOriginX[i][j+1] = P[0]
       MTsOriginY[i][j+1] = P[1]
       MTsOriginZ[i][j+1] = P[2]
@@ -184,7 +180,7 @@ sim.createEntity('Variable', 'Variable:/Soma/Membrane:VACANT')
 
 #Loggers-----------------------------------------------------------------------
 v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
@@ -194,11 +190,10 @@ v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
+v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
-v.LogInterval = 10
-v.FileName = "visual" + filename + ".dat"
+v.LogInterval = 1
 
 m = sim.createEntity('MicroscopyTrackingProcess', 'Process:/Soma:m')
 m.VariableReferenceList = [['_', 'Variable:/Soma:KIF', '1']]
@@ -210,7 +205,7 @@ m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF', '-1']]
 m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF', '12500']]
 m.LogInterval = 1
 m.ExposureTime = 60
-m.FileName = "micro" + filename + ".dat"
+m.FileName = "translocation.dat"
 #-------------------------------------------------------------------------------
 
 #Collision----------------------------------------------------------------------
@@ -264,7 +259,7 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b1')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','1']]
-r.p = 0.00001
+r.p = 0.00005
 
 r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b2')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
@@ -276,7 +271,7 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b3')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:aTUB','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','1']]
-r.p = 0.9
+r.p = V3
 #-------------------------------------------------------------------------------
 
 #MT KIF detachment to cytosol---------------------------------------------------
@@ -373,7 +368,7 @@ r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']] #option 1
 r.VariableReferenceList = [['_', 'Variable:/Soma:aTUB','0']] #Elif BindingSite[1]==TUB_GTP
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']] #option 2
 r.BindingSite = 1
-r.k = 55
+r.k = V2
 
 #r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:rat1')
 #r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','-1']]
@@ -383,7 +378,7 @@ r.k = 55
 #r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']] #Elif BindingSite[1]==TUB_GTP
 #r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']] #option 2
 #r.BindingSite = 1
-#r.k = 55
+#r.k = V2
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:rat2')
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF','-1']]    #A
@@ -393,7 +388,7 @@ r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','1']]     #D
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP','0']]         #H
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP','1']] #F
 r.BindingSite = 1
-r.k = 55
+r.k = V2
 #-------------------------------------------------------------------------------
 
 #KIF random walk between GTP and GDP tubulins-----------------------------------
