@@ -5,7 +5,7 @@ except NameError:
   T = 54000
   V1 = 80 #percentage increase in all except one neurite radius
   V2 = 0.00002 #p TUB
-  V3 = 0.8 #p aTUB
+  V3 = 0.9 #p aTUB
 
 import math
 import scipy.constants
