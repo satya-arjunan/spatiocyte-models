@@ -204,6 +204,45 @@ for i in range(nNeurite):
     m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P', '-3']]
 
 
+nSomaMT = 16
+somaMTrotateAngle = math.pi*2/max(1.0, nSomaMT)
+somaMTorigin = [0.5, 0.0, 0.0]
+somaMTvectorZ = [0.0, 0.0, 1.0]
+somaMTvectorZpoint = [0.0, 0.0, 0.0]
+for i in range(nSomaMT):
+  for j in range(3):
+    startAngle = math.pi/3.3
+    OriginZ = 0.0
+    if(j != 0):
+      startAngle = math.pi/2
+      if(j == 1):
+        OriginZ = 0.5 
+      else:
+        OriginZ = -0.5 
+    m = theSimulator.createEntity('MicrotubuleProcess', 'Process:/Soma:Microtubule%d%d' %(i,j))
+    P = rotatePointAlongVector(somaMTorigin, somaMTvectorZpoint, somaMTvectorZ, somaMTrotateAngle*i+startAngle)
+    m.OriginX = P[0]
+    m.OriginY = P[1]
+    m.OriginZ = OriginZ
+    m.RotateX = 0
+    m.RotateY = 0
+    m.RotateZ =  somaMTrotateAngle*i+startAngle
+    m.Radius = MTRadius
+    m.SubunitRadius = KinesinRadius
+    m.Length = somaRadius*0.7
+    m.Filaments = Filaments
+    m.Periodic = 0
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB', '-1']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M', '-2']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P', '-3']]
+
+
 sim.createEntity('Variable', 'Variable:/Soma:KIF').Value = nKinesin
 sim.createEntity('Variable', 'Variable:/Soma:TUB_GTP' ).Value = 0
 sim.createEntity('Variable', 'Variable:/Soma:TUB_KIF' ).Value = 0
