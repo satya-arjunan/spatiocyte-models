@@ -6,7 +6,7 @@ volumes = [5.8822e-18]
 
 T = 540000
 #nKinesin = 35*2.258e-17/volumes[0]
-nKinesin = 100
+nKinesin = 50
 pPlusEnd_Detach = 1
 VoxelRadius = 0.8e-8
 nNeurite = 5
