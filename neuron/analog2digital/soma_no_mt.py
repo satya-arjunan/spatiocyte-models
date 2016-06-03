@@ -6,7 +6,7 @@ volumes = [5.8822e-18]
 
 T = 540000
 #nKinesin = 35*2.258e-17/volumes[0]
-nKinesin = 100
+nKinesin = 50
 pPlusEnd_Detach = 1
 VoxelRadius = 0.8e-8
 nNeurite = 5
@@ -182,7 +182,7 @@ for i in range(nNeurite):
   for j in range(nNeuriteMT):
     m = sim.createEntity('MicrotubuleProcess',
         'Process:/Neurite%d:Microtubule%d' %(i, j))
-    m.OriginX = MTsOriginX[i][j]
+    m.OriginX = MTsOriginX[i][j]-VoxelRadius*30/(MTLengths[i]/2)
     m.OriginY = MTsOriginY[i][j]
     m.OriginZ = MTsOriginZ[i][j]
     m.RotateX = 0
@@ -191,40 +191,6 @@ for i in range(nNeurite):
     m.Radius = MTRadius
     m.SubunitRadius = KinesinRadius
     m.Length = MTLengths[i]
-    m.Filaments = Filaments
-    m.Periodic = 0
-    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
-    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
-    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP' ]]
-    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
-    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
-    m.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
-    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB', '-1']]
-    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M', '-2']]
-    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P', '-3']]
-
-
-nSomaMT = 16
-mtSpaceY = somaLength/(nSomaMT)
-for i in range(nSomaMT):
-  for j in range(3):
-    OriginZ = 0.0
-    if(j != 0):
-      if(j == 1):
-        OriginZ = 0.5 
-      else:
-        OriginZ = -0.5 
-    m = theSimulator.createEntity('MicrotubuleProcess',
-        'Process:/Soma:Microtubule%d%d' %(i,j))
-    m.OriginX = 0
-    m.OriginY = (mtSpaceY/2+i*mtSpaceY)/(somaLength/2)-1
-    m.OriginZ = OriginZ
-    m.RotateX = 0
-    m.RotateY = 0
-    m.RotateZ = 0
-    m.Radius = MTRadius
-    m.SubunitRadius = KinesinRadius
-    m.Length = somaWidth*0.8
     m.Filaments = Filaments
     m.Periodic = 0
     m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
@@ -261,7 +227,7 @@ v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:VACANT']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
 v.LogInterval = 10

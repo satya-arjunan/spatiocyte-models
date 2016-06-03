@@ -182,7 +182,7 @@ for i in range(nNeurite):
   for j in range(nNeuriteMT):
     m = sim.createEntity('MicrotubuleProcess',
         'Process:/Neurite%d:Microtubule%d' %(i, j))
-    m.OriginX = MTsOriginX[i][j]-VoxelRadius*30/(MTLengths[i]/2)
+    m.OriginX = MTsOriginX[i][j]
     m.OriginY = MTsOriginY[i][j]
     m.OriginZ = MTsOriginZ[i][j]
     m.RotateX = 0
@@ -205,26 +205,19 @@ for i in range(nNeurite):
 
 
 nSomaMT = 16
-somaMTrotateAngle = math.pi*2/max(1.0, nSomaMT)
-somaMTorigin = [0.5, 0.0, 0.0]
-somaMTvectorZ = [0.0, 0.0, 1.0]
-somaMTvectorZpoint = [0.0, 0.0, 0.0]
-mtSpaceY = somaLength/(nSomaMT+1)
-
+mtSpaceY = somaLength/(nSomaMT)
 for i in range(nSomaMT):
   for j in range(3):
-    startAngle = math.pi/3.3
     OriginZ = 0.0
     if(j != 0):
-      startAngle = math.pi/2
       if(j == 1):
         OriginZ = 0.5 
       else:
         OriginZ = -0.5 
     m = theSimulator.createEntity('MicrotubuleProcess',
         'Process:/Soma:Microtubule%d%d' %(i,j))
-    m.OriginX = somaOrigin[0]
-    m.OriginY = (rootSpace+mtSpaceY+i*mtSpaceY)/halfRootLengths[1]
+    m.OriginX = 0
+    m.OriginY = (mtSpaceY/2+i*mtSpaceY)/(somaLength/2)-1
     m.OriginZ = OriginZ
     m.RotateX = 0
     m.RotateY = 0
@@ -268,7 +261,7 @@ v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:VACANT']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
 v.LogInterval = 10
