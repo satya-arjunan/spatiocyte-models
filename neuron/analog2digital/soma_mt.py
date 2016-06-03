@@ -209,6 +209,8 @@ somaMTrotateAngle = math.pi*2/max(1.0, nSomaMT)
 somaMTorigin = [0.5, 0.0, 0.0]
 somaMTvectorZ = [0.0, 0.0, 1.0]
 somaMTvectorZpoint = [0.0, 0.0, 0.0]
+mtSpaceY = somaLength/(nSomaMT+1)
+
 for i in range(nSomaMT):
   for j in range(3):
     startAngle = math.pi/3.3
@@ -219,17 +221,17 @@ for i in range(nSomaMT):
         OriginZ = 0.5 
       else:
         OriginZ = -0.5 
-    m = theSimulator.createEntity('MicrotubuleProcess', 'Process:/Soma:Microtubule%d%d' %(i,j))
-    P = rotatePointAlongVector(somaMTorigin, somaMTvectorZpoint, somaMTvectorZ, somaMTrotateAngle*i+startAngle)
-    m.OriginX = P[0]
-    m.OriginY = P[1]
+    m = theSimulator.createEntity('MicrotubuleProcess',
+        'Process:/Soma:Microtubule%d%d' %(i,j))
+    m.OriginX = somaOrigin[0]
+    m.OriginY = (rootSpace+mtSpaceY+i*mtSpaceY)/halfRootLengths[1]
     m.OriginZ = OriginZ
     m.RotateX = 0
     m.RotateY = 0
-    m.RotateZ =  somaMTrotateAngle*i+startAngle
+    m.RotateZ = 0
     m.Radius = MTRadius
     m.SubunitRadius = KinesinRadius
-    m.Length = somaRadius*0.7
+    m.Length = somaWidth*0.8
     m.Filaments = Filaments
     m.Periodic = 0
     m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
