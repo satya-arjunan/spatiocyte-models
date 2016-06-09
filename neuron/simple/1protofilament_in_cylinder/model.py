@@ -10,6 +10,8 @@ sim.createEntity('Variable', 'Variable:/:VACANT')
 sim.createEntity('Variable', 'Variable:/:KIF').Value = 100
 sim.createEntity('Variable', 'Variable:/:TUB_KIF' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB' ).Value = 0
+sim.createEntity('Variable', 'Variable:/:TUBM' ).Value = 0
+sim.createEntity('Variable', 'Variable:/:TUBP' ).Value = 0
 
 p = sim.createEntity('MoleculePopulateProcess', 'Process:/:populateK')
 p.VariableReferenceList = [['_', 'Variable:/:KIF']]
@@ -34,6 +36,8 @@ v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
 v.VariableReferenceList = [['_', 'Variable:/:KIF']]
 v.VariableReferenceList = [['_', 'Variable:/:TUB']]
 v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF']]
+v.VariableReferenceList = [['_', 'Variable:/:TUBM']]
+v.VariableReferenceList = [['_', 'Variable:/:TUBP']]
 v.LogInterval = 1e-3
 
 v = sim.createEntity('FilamentProcess', 'Process:/:Filament')
@@ -48,6 +52,8 @@ v.Length = 0.38e-6
 v.Periodic = 0
 v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF' ]]
 v.VariableReferenceList = [['_', 'Variable:/:TUB' , '-1']]
+v.VariableReferenceList = [['_', 'Variable:/:TUBM' , '-2']]
+v.VariableReferenceList = [['_', 'Variable:/:TUBP' , '-3']]
 
 run(1)
 
