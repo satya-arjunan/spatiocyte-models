@@ -1,12 +1,21 @@
+
+try:
+  T
+except NameError:
+  T = 100
+  V1 = 50 #nKinesin
+  V2 = 0 #iteration
+  V3 = 0.8 #p aTUB
+
 import numpy as np
 import math
 
-
-volumes = [5.8822e-18]
-
-T = 540000
+filename = "_%d_%d_" %(int(V1), int(V2))
+#volumes = [5.8822e-18]
 #nKinesin = 35*2.258e-17/volumes[0]
-nKinesin = 50
+#80 at 2 hr
+binLength = 5e-6/5
+nKinesin = V1
 pPlusEnd_Detach = 1
 VoxelRadius = 0.8e-8
 nNeurite = 5
@@ -14,7 +23,7 @@ nNeuriteMT = 5
 EdgeSpace = VoxelRadius*5
 neuriteRadius = 0.2e-6
 MTRadius = 12.5e-9
-KinesinRadius = 0.4e-8
+KinesinRadius = VoxelRadius/2
 Filaments = 13
 neuriteSpace = neuriteRadius*2
 somaLength = nNeurite*neuriteRadius*2+neuriteSpace*(nNeurite+1)
@@ -82,7 +91,7 @@ def rotatePointAlongVector(P, C, N, angle):
 
 MTLengths = np.zeros(nNeurite)
 for i in range(len(neuriteLengths)):
-  MTLengths[i] = neuriteLengths[i]-2*EdgeSpace
+  MTLengths[i] = neuriteLengths[i]-2*EdgeSpace-inSomaLength
 MTsOriginX = np.zeros((nNeurite, nNeuriteMT))
 MTsOriginY = np.zeros((nNeurite, nNeuriteMT))
 MTsOriginZ = np.zeros((nNeurite, nNeuriteMT))
@@ -179,10 +188,33 @@ for i in range(nNeurite):
       'Variable:/Neurite%d/Surface:DIFFUSIVE' %i).Name = '/Soma:Surface'
 
 
+  h = sim.createEntity('HistogramLogProcess', 'Process:/Neurite%d:Histogram' %i)
+  h.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+  h.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+  h.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+  h.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+  h.VariableReferenceList = [['_', 'Variable:/Soma:KIF' ]]
+  if(i == 0):
+    h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:A', '-3']]
+    h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:B', '-4']]
+  if(i == 1):
+    h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:C', '-3']]
+    h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:D', '-4']]
+  h.OriginX = inSomaLength/(neuriteLengths[i]/2)
+  h.Density = 1
+  h.Length = neuriteLengths[i]
+  h.Radius = neuriteRadius*1.2
+  h.Bins = int(round(neuriteLengths[i]/binLength)) 
+  h.LogInterval = 1e-1
+  h.ExposureTime = 40
+  h.FileName = "histogram" + filename + ("_n%d.csv" %i)
+  h.LogEnd = T-1
+  h.Iterations = 1
+
   for j in range(nNeuriteMT):
     m = sim.createEntity('MicrotubuleProcess',
         'Process:/Neurite%d:Microtubule%d' %(i, j))
-    m.OriginX = MTsOriginX[i][j]-VoxelRadius*30/(MTLengths[i]/2)
+    m.OriginX = MTsOriginX[i][j]
     m.OriginY = MTsOriginY[i][j]
     m.OriginZ = MTsOriginZ[i][j]
     m.RotateX = 0
@@ -191,6 +223,41 @@ for i in range(nNeurite):
     m.Radius = MTRadius
     m.SubunitRadius = KinesinRadius
     m.Length = MTLengths[i]
+    m.Filaments = Filaments
+    m.Periodic = 0
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB', '-1']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M', '-2']]
+    m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P', '-3']]
+
+
+
+nSomaMT = 16
+mtSpaceY = somaLength/(nSomaMT)
+for i in range(nSomaMT):
+  for j in range(3):
+    OriginZ = 0.0
+    if(j != 0):
+      if(j == 1):
+        OriginZ = 0.5 
+      else:
+        OriginZ = -0.5 
+    m = theSimulator.createEntity('MicrotubuleProcess',
+        'Process:/Soma:Microtubule%d%d' %(i,j))
+    m.OriginX = 0
+    m.OriginY = (mtSpaceY/2+i*mtSpaceY)/(somaLength/2)-1
+    m.OriginZ = OriginZ
+    m.RotateX = 0
+    m.RotateY = 0
+    m.RotateZ = 0
+    m.Radius = MTRadius
+    m.SubunitRadius = KinesinRadius
+    m.Length = somaWidth*0.8
     m.Filaments = Filaments
     m.Periodic = 0
     m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
@@ -214,23 +281,32 @@ sim.createEntity('Variable', 'Variable:/Soma:aTUB' ).Value = 0
 sim.createEntity('Variable', 'Variable:/Soma:TUB' ).Value = 0
 sim.createEntity('Variable', 'Variable:/Soma:TUB_M' ).Value = 0
 sim.createEntity('Variable', 'Variable:/Soma:TUB_P' ).Value = 0
+sim.createEntity('Variable', 'Variable:/Soma/Surface:A').Value = 0
+sim.createEntity('Variable', 'Variable:/Soma/Surface:B').Value = 0
+sim.createEntity('Variable', 'Variable:/Soma/Surface:C').Value = 0
+sim.createEntity('Variable', 'Variable:/Soma/Surface:D').Value = 0
 
 
 v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:aTUB']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF' ]]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP_KIF_ATP' ]]
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:VACANT']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_GTP']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:PlusSensor']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Membrane:MinusSensor']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:A']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:B']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:C']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:D']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:VACANT']]
 v.LogInterval = 10
+v.FileName = "visual" + filename + ".dat"
 
 #Populate-----------------------------------------------------------------------
 #p = sim.createEntity('MoleculePopulateProcess', 'Process:/Soma:pPlusSensor')
@@ -258,7 +334,7 @@ r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b1')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','-1']]
 r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','1']]
-r.p = 0.0001
+r.p = 0.00001
 
 r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:b2')
 r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','-1']]
