@@ -7,7 +7,7 @@ sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = 0.4e-6
 sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = 0.15e-6
 
 sim.createEntity('Variable', 'Variable:/:VACANT')
-sim.createEntity('Variable', 'Variable:/:KIF').Value = 60
+sim.createEntity('Variable', 'Variable:/:KIF').Value = 400
 sim.createEntity('Variable', 'Variable:/:TUB_KIF0' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB_KIF1' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB_KIF2' ).Value = 0
