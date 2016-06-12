@@ -15,19 +15,20 @@ ka0 = k0*p3d # 1/s
 ka1 = gamma*ka0 # 1/s
 ka2 = gamma*gamma*ka0 # 1/s
 
-VoxelRadius = 0.4e-8
-Length = 20e-6
+VoxelRadius = 0.8e-8
+Length = 18.5e-6
+RodRadius = 0.6e-6
 
 sim = theSimulator
 sim.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
 sim.rootSystem.StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 3
 sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = Length+VoxelRadius*40
-sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = 0.15e-6
+sim.createEntity('Variable', 'Variable:/:LENGTHY').Value = RodRadius
 
 sim.createEntity('Variable', 'Variable:/:VACANT')
 v = sim.createEntity('Variable', 'Variable:/:KIF')
-v.Value = 300*13
+v.Value = 0
 v.Name = "HD"
 sim.createEntity('Variable', 'Variable:/:TUB_KIF0' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB_KIF1' ).Value = 0
