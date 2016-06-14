@@ -356,7 +356,7 @@ l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
 l.LogInterval = 1e-1
 l.LogEnd = T-1
 l.Iterations = 100
-l.FileName = "IterateLog.csv"
+l.FileName = "HDIterateLog.csv"
 
 run(T)
 

@@ -11,7 +11,7 @@ tickFontSize = fontsize
 legendFontSize = fontsize
 lineFontSize = fontsize
 
-fileNames = ["compared_b1.csv", "1DIterateLog.csv"]
+fileNames = ["HDIterateLog.csv", "1DIterateLog.csv"]
 legendTitles = []
 lines = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
 colors = ['y', 'r', 'b', 'm', 'c', 'g', '#6b420c', '#33aa00', '#990022', '#005599', '#220088', '#aa8822', '#110077','#003355']
