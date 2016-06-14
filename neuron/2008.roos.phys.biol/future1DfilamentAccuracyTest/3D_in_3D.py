@@ -29,7 +29,6 @@ Length = 18.5e-6
 RodRadius = 0.6e-6
 
 #convert k0_v
-#nl = 1417
 nl = 2312
 ka0_vf = k0_v*nl/Length # m^2/s
 
@@ -44,6 +43,7 @@ sim.createEntity('Variable', 'Variable:/:VACANT')
 v = sim.createEntity('Variable', 'Variable:/:KIF')
 v.Value = nKinesin
 #v.Name = "HD"
+sim.createEntity('Variable', 'Variable:/:TUB_3D' ).Value = 2312
 sim.createEntity('Variable', 'Variable:/:TUB_KIF0' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB_KIF1' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB_KIF2' ).Value = 0
@@ -61,10 +61,14 @@ p.VariableReferenceList = [['_', 'Variable:/:TUB1']]
 p.VariableReferenceList = [['_', 'Variable:/:TUB2']]
 p.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
 
+p = sim.createEntity('MoleculePopulateProcess', 'Process:/:populate3D')
+p.VariableReferenceList = [['_', 'Variable:/:TUB_3D']]
+#p.UniformRadiusYZ = VoxelRadius*1.2
+
 # Attachments -----------------------------------------------------------------
 r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:b1')
 r.VariableReferenceList = [['_', 'Variable:/:KIF','-1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_3D','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:KIF','1']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','1']]
 ##reactAdjoinsB
@@ -79,7 +83,8 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','1']]
 #r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-20']]
 #r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','20']]
 r.RandomC = 1
-r.k = ka0_vf
+#r.k = ka0_vf
+r.k = ka0_v
 
 #r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:b2')
 #r.VariableReferenceList = [['_', 'Variable:/:KIF','-1']]
@@ -328,6 +333,7 @@ d.D = 0.5e-12
 v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
 v.VariableReferenceList = [['_', 'Variable:/:KIF']]
 v.VariableReferenceList = [['_', 'Variable:/:TUB']]
+v.VariableReferenceList = [['_', 'Variable:/:TUB_3D']]
 #v.VariableReferenceList = [['_', 'Variable:/:TUBM']]
 #v.VariableReferenceList = [['_', 'Variable:/:TUBP']]
 v.VariableReferenceList = [['_', 'Variable:/:TUB0']]
@@ -338,27 +344,27 @@ v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
 v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
 v.LogInterval = 1
 
-v = sim.createEntity('FilamentProcess', 'Process:/:Filament')
-v.OriginX = 0
-v.OriginY = 0
-v.OriginZ = 0
-v.RotateX = 0
-v.RotateY = 0
-v.RotateZ = 0
-#v.Radius = 12.5e-9
-#v.Filaments = 13
-v.SubunitRadius = 0.4e-8
-v.Length = Length
-v.Periodic = 0
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB0' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB1' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB2' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB' , '-1']]
-#v.VariableReferenceList = [['_', 'Variable:/:TUBM' , '-2']]
-#v.VariableReferenceList = [['_', 'Variable:/:TUBP' , '-3']]
+#v = sim.createEntity('FilamentProcess', 'Process:/:Filament')
+#v.OriginX = 0
+#v.OriginY = 0
+#v.OriginZ = 0
+#v.RotateX = 0
+#v.RotateY = 0
+#v.RotateZ = 0
+##v.Radius = 12.5e-9
+##v.Filaments = 13
+#v.SubunitRadius = 0.4e-8
+#v.Length = Length
+#v.Periodic = 0
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB0' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB1' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB2' ]]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB' , '-1']]
+##v.VariableReferenceList = [['_', 'Variable:/:TUBM' , '-2']]
+##v.VariableReferenceList = [['_', 'Variable:/:TUBP' , '-3']]
 
 l = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
 l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0']]
@@ -367,7 +373,7 @@ l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
 l.LogInterval = 1e-1
 l.LogEnd = T-1
 l.Iterations = 5
-l.FileName = "1DIterateLog.csv"
+l.FileName = "3DIterateLog.csv"
 
 run(T)
 
