@@ -11,7 +11,7 @@ tickFontSize = fontsize
 legendFontSize = fontsize
 lineFontSize = fontsize
 
-fileNames = ["HDIterateLog.csv", "MTIterateLog.csv"]
+fileNames = ["verified_hd_b4.csv", "test_nonHD_b4.csv"]
 legendTitles = []
 lines = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
 colors = ['y', 'r', 'b', 'm', 'c', 'g', '#6b420c', '#33aa00', '#990022', '#005599', '#220088', '#aa8822', '#110077','#003355']
