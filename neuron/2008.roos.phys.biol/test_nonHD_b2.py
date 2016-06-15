@@ -18,7 +18,7 @@ ka0 = k0*p3d # 1/s
 ka1 = gamma*ka0 # 1/s
 ka2 = gamma*gamma*ka0 # 1/s
 
-k0_v = k0/(1e-9*const.N_A*1e+3) # m^3/s
+k0_v = k0/(1e-9*const.N_A*1e+3)*1.2 # m^3/s
 #ka0_v = k0_v*0.55 # m^3/s good fit
 ka0_v = k0_v # m^3/s
 ka1_v = gamma*ka0_v # m^3/s
@@ -30,7 +30,7 @@ RodRadius = 0.6e-6
 
 #convert k0_v
 #nl = 1417
-nl = 2312
+nl = 30056
 ka0_vf = k0_v*nl/Length # m^2/s
 
 sim = theSimulator
@@ -48,7 +48,7 @@ sim.createEntity('Variable', 'Variable:/:TUB_KIF0' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB_KIF1' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB_KIF2' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB' ).Value = 0
-sim.createEntity('Variable', 'Variable:/:TUB0' ).Value = 2312
+sim.createEntity('Variable', 'Variable:/:TUB0' ).Value = 30056
 sim.createEntity('Variable', 'Variable:/:TUB1' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB2' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUBM' ).Value = 0
@@ -338,15 +338,15 @@ v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
 v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
 v.LogInterval = 1
 
-v = sim.createEntity('FilamentProcess', 'Process:/:Filament')
+v = sim.createEntity('MicrotubuleProcess', 'Process:/:Filament')
 v.OriginX = 0
 v.OriginY = 0
 v.OriginZ = 0
 v.RotateX = 0
 v.RotateY = 0
 v.RotateZ = 0
-#v.Radius = 12.5e-9
-#v.Filaments = 13
+v.Radius = 12.5e-9
+v.Filaments = 13
 v.SubunitRadius = 0.4e-8
 v.Length = Length
 v.Periodic = 0
@@ -366,7 +366,7 @@ l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
 l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
 l.LogInterval = 1e-1
 l.LogEnd = T-1
-l.Iterations = 1
+l.Iterations = 5
 l.FileName = "test_nonHD_b2.csv"
 
 run(T)

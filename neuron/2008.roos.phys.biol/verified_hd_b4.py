@@ -43,7 +43,7 @@ sim.createEntity('Variable', 'Variable:/:TUB_KIF2' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB0' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB1' ).Value = 0
-sim.createEntity('Variable', 'Variable:/:TUB2' ).Value = 500
+sim.createEntity('Variable', 'Variable:/:TUB2' ).Value = 30056
 sim.createEntity('Variable', 'Variable:/:TUBM' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUBP' ).Value = 0
 
@@ -327,15 +327,15 @@ r.k = ka2_v
 #v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
 #v.LogInterval = 1000
 
-v = sim.createEntity('FilamentProcess', 'Process:/:Filament')
+v = sim.createEntity('MicrotubuleProcess', 'Process:/:Filament')
 v.OriginX = 0
 v.OriginY = 0
 v.OriginZ = 0
 v.RotateX = 0
 v.RotateY = 0
 v.RotateZ = 0
-#v.Radius = 12.5e-9
-#v.Filaments = 13
+v.Radius = 12.5e-9
+v.Filaments = 13
 v.SubunitRadius = 0.4e-8
 v.Length = Length
 v.Periodic = 0

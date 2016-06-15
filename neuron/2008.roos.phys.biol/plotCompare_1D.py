@@ -11,7 +11,7 @@ tickFontSize = fontsize
 legendFontSize = fontsize
 lineFontSize = fontsize
 
-fileNames = ["HDIterateLog.csv", "MTIterateLog.csv"]
+fileNames = ["HDIterateLog.csv", "1DIterateLog.csv"]
 legendTitles = []
 lines = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
 colors = ['y', 'r', 'b', 'm', 'c', 'g', '#6b420c', '#33aa00', '#990022', '#005599', '#220088', '#aa8822', '#110077','#003355']
@@ -37,12 +37,12 @@ speciesSize = len(speciesNames)
 data = np.genfromtxt(fileNames[0], delimiter=',', skip_header=1).T
 colSize = len(data)-1
 for i in range(colSize):
-  P.plot(data[0], data[i+1], ls=lines[i], color=colors[i], label=fileNames[0], linewidth=1.5)
+  P.plot(data[0], data[i+1], ls=lines[i], color=colors[i], label=speciesNames[i], linewidth=1.5)
 
 data = np.genfromtxt(fileNames[1], delimiter=',', skip_header=1).T
 colSize = len(data)-1
 for i in range(colSize):
-  P.plot(data[0], data[i+1], ls=lines[i], color=colors[i+3], label=fileNames[1], linewidth=1.5)
+  P.plot(data[0], data[i+1], ls=lines[i], color=colors[i+3], label=speciesNames[i], linewidth=1.5)
 
 ax = P.gca()
 ax.grid(color='b', linestyle='--')
