@@ -325,18 +325,18 @@ d.D = 0.6e-12
 #d.D = 0.04e-12
 #-------------------------------------------------------------------------------
 
-v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
-v.VariableReferenceList = [['_', 'Variable:/:KIF']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB']]
-#v.VariableReferenceList = [['_', 'Variable:/:TUBM']]
-#v.VariableReferenceList = [['_', 'Variable:/:TUBP']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB0']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB1']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB2']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
-v.LogInterval = 1
+#v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
+#v.VariableReferenceList = [['_', 'Variable:/:KIF']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB']]
+##v.VariableReferenceList = [['_', 'Variable:/:TUBM']]
+##v.VariableReferenceList = [['_', 'Variable:/:TUBP']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB0']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB1']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB2']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
+#v.LogInterval = 1
 
 v = sim.createEntity('MicrotubuleProcess', 'Process:/:Filament')
 v.OriginX = 0
