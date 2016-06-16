@@ -1,6 +1,6 @@
 
 import scipy.constants as const
-T = 1+15*60.0
+T = 1+125*60.0
 #T = 1+2
 delta = 0.4 #0.3 < delta < 0.6
 kd0 = 1/(10*60.0)
@@ -9,7 +9,7 @@ kd2 = delta*delta*kd0
 
 gamma = 2.0 #1.5 < gamma < 2.5
 #p3d = 50 #concentration of kinesin in nM
-p3d = 24 #concentration of kinesin in nM
+p3d = 3 #concentration of kinesin in nM
 volume = 5.53723e-18 #m^3
 nKinesin = p3d*1e-9*const.N_A*1e+3*volume
 print 'nKinesin',nKinesin
@@ -18,7 +18,7 @@ ka0 = k0*p3d # 1/s
 ka1 = gamma*ka0 # 1/s
 ka2 = gamma*gamma*ka0 # 1/s
 
-k0_v = k0/(1e-9*const.N_A*1e+3) # m^3/s
+k0_v = k0/(1e-9*const.N_A*1e+3)*1.2 # m^3/s
 #ka0_v = k0_v*0.55 # m^3/s good fit
 ka0_v = k0_v # m^3/s
 ka1_v = gamma*ka0_v # m^3/s
@@ -30,7 +30,7 @@ RodRadius = 0.6e-6
 
 #convert k0_v
 #nl = 1417
-nl = 2312
+nl = 30056
 ka0_vf = k0_v*nl/Length # m^2/s
 
 sim = theSimulator
@@ -338,15 +338,15 @@ v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
 v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
 v.LogInterval = 1
 
-v = sim.createEntity('FilamentProcess', 'Process:/:Filament')
+v = sim.createEntity('MicrotubuleProcess', 'Process:/:Filament')
 v.OriginX = 0
 v.OriginY = 0
 v.OriginZ = 0
 v.RotateX = 0
 v.RotateY = 0
 v.RotateZ = 0
-#v.Radius = 12.5e-9
-#v.Filaments = 13
+v.Radius = 12.5e-9
+v.Filaments = 13
 v.SubunitRadius = 0.4e-8
 v.Length = Length
 v.Periodic = 0
@@ -366,8 +366,8 @@ l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
 l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
 l.LogInterval = 1e-1
 l.LogEnd = T-1
-l.Iterations = 100
-l.FileName = "1DIterateLog.csv"
+l.Iterations = 5
+l.FileName = "MTIterateLog_3nM.csv"
 
 run(T)
 
