@@ -11,7 +11,7 @@ tickFontSize = fontsize
 legendFontSize = fontsize
 lineFontSize = fontsize
 
-fileNames = ["MTIterateLog.6nM.csv", "Fig.5.6nM.sim.csv", "Fig.5.6nM.exp.csv"]
+fileNames = ["MTIterateLog.12nM.csv", "Fig.5.12nM.sim.csv", "Fig.5.12nM.exp.csv"]
 legendTitles = ["3D Particle Simulation", "Simulation", "Experiment"]
 lines = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
 colors = ['y', 'r', 'b', 'm', 'c', 'g', '#6b420c', '#33aa00', '#990022', '#005599', '#220088', '#aa8822', '#110077','#003355']
@@ -40,7 +40,7 @@ P.plot(data[0], data[1], linewidth=0, marker='o', color='r', markersize=10, labe
 ax = P.gca()
 ax.grid(color='k', linestyle='--')
 ax.set_ylim([-0.01, 1.1])
-ax.set_xlim([-1.0, 80.1])
+ax.set_xlim([-0.5, 40.1])
 #ax.yaxis.set_major_locator(MaxNLocator(14))
 leg = P.legend(loc=0, labelspacing=0.2, handletextpad=0.2, fancybox=True)
 for t in leg.get_texts():
@@ -49,8 +49,8 @@ frame = leg.get_frame()
 frame.set_linewidth(None)
 frame.set_facecolor('0.95')
 frame.set_edgecolor('0.75')
-P.title("6 nM")
+P.title("12 nM")
 P.ylabel('Density/Equilibrium_Density')
 P.xlabel('Time (min)')
-P.savefig('6nM.png', bbox_inches='tight')
+P.savefig('12nM.png', bbox_inches='tight')
 P.show()

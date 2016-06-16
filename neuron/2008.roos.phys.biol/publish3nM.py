@@ -31,16 +31,16 @@ amax = np.amax(combined)
 
 P.plot(np.divide(data[0],60.0), np.divide(combined, amax), linewidth=1.5, label=legendTitles[0].split('.csv')[0])
 
-data = np.genfromtxt(fileNames[1], delimiter=',', skip_header=0).T
-P.plot(data[0], data[1], linewidth=0, marker='o', color='k', markersize=5, label=legendTitles[1].split('.csv')[0])
+#data = np.genfromtxt(fileNames[1], delimiter=',', skip_header=0).T
+#P.plot(data[0], data[1], linewidth=0, marker='o', color='k', markersize=5, label=legendTitles[1].split('.csv')[0])
 
 data = np.genfromtxt(fileNames[2], delimiter=',', skip_header=0).T
 P.plot(data[0], data[1], linewidth=0, marker='o', color='r', markersize=10, label=legendTitles[2].split('.csv')[0])
 
 ax = P.gca()
 ax.grid(color='k', linestyle='--')
-ax.set_ylim([-0.02, 1.1])
-ax.set_xlim([-0.1, 15.1])
+ax.set_ylim([-0.01, 1.1])
+ax.set_xlim([-1.0, 125.1])
 #ax.yaxis.set_major_locator(MaxNLocator(14))
 leg = P.legend(loc=0, labelspacing=0.2, handletextpad=0.2, fancybox=True)
 for t in leg.get_texts():
@@ -49,8 +49,8 @@ frame = leg.get_frame()
 frame.set_linewidth(None)
 frame.set_facecolor('0.95')
 frame.set_edgecolor('0.75')
-P.title("24 nM")
-P.ylabel('P/Pequilibrium')
+P.title("3 nM")
+P.ylabel('Density/Equilibrium_Density')
 P.xlabel('Time (min)')
-P.savefig('24nM.png', bbox_inches='tight')
+P.savefig('3nM.png', bbox_inches='tight')
 P.show()
