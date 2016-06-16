@@ -312,7 +312,7 @@ r.p = 1
 # Diffusion --------------------------------------------------------------------
 d = sim.createEntity('DiffusionProcess', 'Process:/:dKIF')
 d.VariableReferenceList = [['_', 'Variable:/:KIF']]
-d.D = 0.5e-12
+d.D = 2e-12
 
 #d = sim.createEntity('DiffusionProcess', 'Process:/:dTUB_KIF0')
 #d.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0']]
@@ -364,6 +364,7 @@ l = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')
 l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0']]
 l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
 l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
+l.VariableReferenceList = [['_', 'Variable:/:KIF']]
 l.LogInterval = 1e-1
 l.LogEnd = T-1
 l.Iterations = 1

@@ -18,7 +18,7 @@ ka0 = k0*p3d # 1/s
 ka1 = gamma*ka0 # 1/s
 ka2 = gamma*gamma*ka0 # 1/s
 
-k0_v = k0/(1e-9*const.N_A*1e+3) # m^3/s
+k0_v = k0/(1e-9*const.N_A*1e+3)*1.2 # m^3/s
 #ka0_v = k0_v*0.55 # m^3/s good fit
 ka0_v = k0_v # m^3/s
 ka1_v = gamma*ka0_v # m^3/s
