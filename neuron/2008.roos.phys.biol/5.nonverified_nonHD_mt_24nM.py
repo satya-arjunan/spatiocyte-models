@@ -312,7 +312,7 @@ r.p = 1
 # Diffusion --------------------------------------------------------------------
 d = sim.createEntity('DiffusionProcess', 'Process:/:dKIF')
 d.VariableReferenceList = [['_', 'Variable:/:KIF']]
-d.D = 0.5e-12
+d.D = 0.6e-12
 
 #d = sim.createEntity('DiffusionProcess', 'Process:/:dTUB_KIF0')
 #d.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0']]
