@@ -1,20 +1,49 @@
 
-T = 1+10*60.0
+import scipy.constants as const
+#T = 1+80*60.0
+T = 1+2
+delta = 0.4 #0.3 < delta < 0.6
+kd0 = 1/(10*60.0)
+kd1 = delta*kd0
+kd2 = delta*delta*kd0
 
-nKinesin = 10
+
+gamma = 2.0 #1.5 < gamma < 2.5
+#p3d = 50 #concentration of kinesin in nM
+p3d = 6 #concentration of kinesin in nM
+volume = 5.53723e-18 #m^3
+nKinesin = p3d*1e-9*const.N_A*1e+3*volume
+print 'nKinesin',nKinesin
+k0 = 8.9e-3/60 # 1/nM 1/s
+ka0 = k0*p3d # 1/s
+ka1 = gamma*ka0 # 1/s
+ka2 = gamma*gamma*ka0 # 1/s
+
+k0_v = k0/(1e-9*const.N_A*1e+3)*1.2 # m^3/s
+#ka0_v = k0_v*0.55 # m^3/s good fit
+ka0_v = k0_v # m^3/s
+ka1_v = gamma*ka0_v # m^3/s
+ka2_v = gamma*gamma*ka0_v # m^3/s
+
 VoxelRadius = 0.8e-8
-#Length = 15e-6
-#RodRadius = 4.1e-6
-Length = 1e-6
-RodRadius = 0.5e-6
+Length = 18.5e-6
+RodRadius = 0.6e-6
 
+#convert k0_v
+#nl = 1417
+nl = 30056
+ka0_vf = k0_v*nl/Length # m^2/s
+
+print ka0_v, ka1_v, ka2_v
 ka0_v = 2.9557e-22
 ka1_v = 5.9115e-22
 ka2_v = 1.1823e-21
 
+print kd0, kd1, kd2
 kd0 = 0.001667
 kd1 = 0.000667
 kd2 = 0.000267
+
 
 sim = theSimulator
 sim.createStepper('SpatiocyteStepper', 'SS').VoxelRadius = VoxelRadius
@@ -30,9 +59,6 @@ v.Value = nKinesin
 sim.createEntity('Variable', 'Variable:/:TUB_KIF0' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB_KIF1' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB_KIF2' ).Value = 0
-sim.createEntity('Variable', 'Variable:/:TUB_KIF0_ATP' ).Value = 0
-sim.createEntity('Variable', 'Variable:/:TUB_KIF1_ATP' ).Value = 0
-sim.createEntity('Variable', 'Variable:/:TUB_KIF2_ATP' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB0' ).Value = 0
 sim.createEntity('Variable', 'Variable:/:TUB1' ).Value = 0
@@ -64,12 +90,7 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','20']]
 r.RandomC = 1
-#r.k = ka0_vf
 r.k = ka0_v
 
 r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:b2')
@@ -88,10 +109,6 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','20']]
 r.RandomC = 1
 r.k = ka0_v
 
@@ -111,10 +128,6 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','20']]
 r.RandomC = 1
 r.k = ka1_v
 
@@ -134,17 +147,13 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','20']]
 r.RandomC = 1
 r.k = ka2_v
 #------------------------------------------------------------------------------
 
 # Detachments -----------------------------------------------------------------
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r1')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB0','1']]
 #r.VariableReferenceList = [['_', 'Variable:/:KIF','1']]
 #reactAdjoinsA
@@ -156,14 +165,10 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','10']]
 r.k = kd0
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r2')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB1','1']]
 #r.VariableReferenceList = [['_', 'Variable:/:KIF','1']]
 #reactAdjoinsA
@@ -175,14 +180,10 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','10']]
 r.k = kd1
 
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r3')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','-1']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB2','1']]
 #r.VariableReferenceList = [['_', 'Variable:/:KIF','1']]
 #reactAdjoinsA
@@ -194,10 +195,6 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','10']]
 r.k = kd2
 #-------------------------------------------------------------------------------
 
@@ -219,10 +216,6 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','10']]
 #reactAdjoinsB
 r.VariableReferenceList = [['_', 'Variable:/:TUB','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB1','20']]
@@ -234,10 +227,6 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','20']]
 r.ForcedSequence = 1
 r.p = 1
 
@@ -257,10 +246,6 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','10']]
 #reactAdjoinsB
 r.VariableReferenceList = [['_', 'Variable:/:TUB','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB1','20']]
@@ -272,10 +257,6 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','20']]
 r.ForcedSequence = 1
 r.p = 1
 #
@@ -295,10 +276,6 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','10']]
 #reactAdjoinsB
 r.VariableReferenceList = [['_', 'Variable:/:TUB','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB1','20']]
@@ -310,10 +287,6 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','20']]
 r.ForcedSequence = 1
 r.p = 1
 #
@@ -333,10 +306,6 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','-10']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','10']]
 #reactAdjoinsB
 r.VariableReferenceList = [['_', 'Variable:/:TUB','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB1','20']]
@@ -348,82 +317,9 @@ r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-20']]
 r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-20']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','20']]
 r.ForcedSequence = 1
 r.p = 1
 #-------------------------------------------------------------------------------
-
-#KIF ATP hydrolysis-------------------------------------------------------------
-r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:h1')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','-1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','1']]
-r.k = 100
-
-r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:h2')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','-1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','1']]
-r.k = 100
-
-r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:h3')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','-1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','1']]
-r.k = 100
-#-------------------------------------------------------------------------------
-
-
-#KIF ADP phosphorylation--------------------------------------------------------
-r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:phos1')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','1']]
-r.SearchVacant = 1
-r.k = 145
-
-r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:phos2')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP','1']]
-r.SearchVacant = 1
-r.k = 145
-
-r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:phos3')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2','-1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP','1']]
-r.SearchVacant = 1
-r.k = 145
-#-------------------------------------------------------------------------------
-
-
-#KIF ratchet biased walk_-------------------------------------------------------
-r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:rat1')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0','-1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB0','1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB','0']] #If BindingSite[1]==TUB
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','1']] #option 1
-r.VariableReferenceList = [['_', 'Variable:/:TUB0','0']] #Elif BindingSite[1]==TUB_GTP
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','1']] #option 2
-r.BindingSite = 1
-r.k = 55
-
-r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:rat2')
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1','-1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB1','1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB','0']] #If BindingSite[1]==TUB
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','1']] #option 1
-r.VariableReferenceList = [['_', 'Variable:/:TUB0','0']] #Elif BindingSite[1]==TUB_GTP
-r.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP','1']] #option 2
-r.BindingSite = 1
-r.k = 55
-#-------------------------------------------------------------------------------
-
-#Active tubulin inactivation----------------------------------------------------
-r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/:d9')
-r.VariableReferenceList = [['_', 'Variable:/:TUB0','-1']]
-r.VariableReferenceList = [['_', 'Variable:/:TUB','1']]
-r.k = 10
-#-------------------------------------------------------------------------------
-
 
 # Diffusion --------------------------------------------------------------------
 d = sim.createEntity('DiffusionProcess', 'Process:/:dKIF')
@@ -441,21 +337,18 @@ d.D = 0.6e-12
 #d.D = 0.04e-12
 #-------------------------------------------------------------------------------
 
-v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
-v.VariableReferenceList = [['_', 'Variable:/:KIF']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB']]
-#v.VariableReferenceList = [['_', 'Variable:/:TUBM']]
-#v.VariableReferenceList = [['_', 'Variable:/:TUBP']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB0']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB1']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB2']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP']]
-v.LogInterval = 1
+#v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
+#v.VariableReferenceList = [['_', 'Variable:/:KIF']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB']]
+##v.VariableReferenceList = [['_', 'Variable:/:TUBM']]
+##v.VariableReferenceList = [['_', 'Variable:/:TUBP']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB0']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB1']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB2']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
+#v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
+#v.LogInterval = 1
 
 v = sim.createEntity('MicrotubuleProcess', 'Process:/:Filament')
 v.OriginX = 0
@@ -472,9 +365,6 @@ v.Periodic = 0
 v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0' ]]
 v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1' ]]
 v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2' ]]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0_ATP']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1_ATP']]
-v.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2_ATP']]
 v.VariableReferenceList = [['_', 'Variable:/:TUB0' ]]
 v.VariableReferenceList = [['_', 'Variable:/:TUB1' ]]
 v.VariableReferenceList = [['_', 'Variable:/:TUB2' ]]
@@ -489,7 +379,7 @@ l.VariableReferenceList = [['_', 'Variable:/:TUB_KIF2']]
 l.LogInterval = 1e-1
 l.LogEnd = T-1
 l.Iterations = 1
-l.FileName = "IterateLog.9pM.csv"
+l.FileName = "MTIterateLog.6nM.csv"
 
 run(T)
 
