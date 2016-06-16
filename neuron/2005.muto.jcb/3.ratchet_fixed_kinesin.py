@@ -430,15 +430,15 @@ d = sim.createEntity('DiffusionProcess', 'Process:/:dKIF')
 d.VariableReferenceList = [['_', 'Variable:/:KIF']]
 d.D = 0.6e-12
 
-#d = sim.createEntity('DiffusionProcess', 'Process:/:dTUB_KIF0')
-#d.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0']]
-#d.WalkReact = 1
-#d.D = 0.04e-12
-#
-#d = sim.createEntity('DiffusionProcess', 'Process:/:dTUB_KIF1')
-#d.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
-#d.WalkReact = 1
-#d.D = 0.04e-12
+d = sim.createEntity('DiffusionProcess', 'Process:/:dTUB_KIF0')
+d.VariableReferenceList = [['_', 'Variable:/:TUB_KIF0']]
+d.WalkReact = 1
+d.D = 0.04e-12
+
+d = sim.createEntity('DiffusionProcess', 'Process:/:dTUB_KIF1')
+d.VariableReferenceList = [['_', 'Variable:/:TUB_KIF1']]
+d.WalkReact = 1
+d.D = 0.04e-12
 #-------------------------------------------------------------------------------
 
 v = sim.createEntity('VisualizationLogProcess', 'Process:/:v')
