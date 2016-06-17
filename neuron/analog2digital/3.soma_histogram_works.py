@@ -660,23 +660,91 @@ r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','1']]
 r.k = 0.055
 #-------------------------------------------------------------------------------
 
-##MT KIF detachment to cytosol at plus end---------------------------------------
-#r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p3')
-#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','-1']]
-#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
-#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','1']]
-#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
-#r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
-#r.p = pPlusEnd_Detach
-#
-#r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p4')
-#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','-1']]
-#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
-#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','1']]
-#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
-#r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
-#r.p = pPlusEnd_Detach
-##-------------------------------------------------------------------------------
+#MT KIF detachment to cytosol at plus end---------------------------------------
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p1')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
+#reactAdjoinsA
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB2','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0_ATP','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2_ATP','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','10']]
+r.p = pPlusEnd_Detach
+
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p2')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
+#reactAdjoinsA
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB2','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0_ATP','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2_ATP','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','10']]
+r.p = pPlusEnd_Detach
+
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p3')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
+#reactAdjoinsA
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB2','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0_ATP','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2_ATP','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','10']]
+r.p = pPlusEnd_Detach
+
+r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p4')
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
+#reactAdjoinsA
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB2','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0_ATP','10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2_ATP','-10']]
+r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','10']]
+r.p = pPlusEnd_Detach
+#-------------------------------------------------------------------------------
 
 #KIF ATP hydrolysis-------------------------------------------------------------
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:h1')
