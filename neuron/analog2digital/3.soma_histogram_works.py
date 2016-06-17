@@ -3,8 +3,8 @@
 try:
   T
 except NameError:
-  T = 100
-  V1 = 50 #nKinesin
+  T = 1000
+  V1 = 290 #nKinesin
   V2 = 0 #iteration
   V3 = 0.8 #p aTUB
 
@@ -40,15 +40,22 @@ neuriteLengths[3] = 10e-6
 neuriteLengths[4] = 5e-6
 rootSpace = VoxelRadius*20
 rootLengths = np.empty((1,3))
-rootLengths = (somaWidth+np.amax(neuriteLengths)*2-inSomaLength*2+rootSpace*2,
+rootLengths = (somaWidth+np.amax(neuriteLengths)-inSomaLength+rootSpace*2,
     somaLength+rootSpace*2, somaHeight+rootSpace*2)
 neuriteOrigins = np.zeros((nNeurite, 3))
 halfRootLengths = np.divide(rootLengths, 2.0)
-somaOrigin = np.array([0,0,0])
+somaOrigin = np.zeros((nNeurite, 3))
+somaOrigin = (rootSpace+somaWidth/2, rootSpace+somaLength/2,
+    rootSpace+somaHeight/2)
+with np.errstate(divide='ignore', invalid='ignore'):
+  somaOrigin = np.divide(np.subtract(somaOrigin, halfRootLengths),
+      halfRootLengths)
+  somaOrigin[somaOrigin == np.inf] = 0
+  somaOrigin = np.nan_to_num(somaOrigin)
 
 for i in range(nNeurite):
-  neuriteOrigins[i] = np.array([halfRootLengths[0]+somaWidth/2+
-    (neuriteLengths[i]-inSomaLength)/2,
+  neuriteOrigins[i] = np.array([rootSpace+somaWidth+(neuriteLengths[i]-
+    inSomaLength)/2, 
     rootSpace+neuriteSpace+i*(neuriteRadius*2+neuriteSpace)+neuriteRadius,
     rootSpace+somaHeight/2])
   with np.errstate(divide='ignore', invalid='ignore'):
@@ -194,32 +201,18 @@ h.FileName = "histogram_soma" + filename + ".csv"
 h.LogEnd = T-1
 h.Iterations = 1
 
-for i in range(nNeurite*2):
-  if(i > nNeurite-1):
-    j = nNeurite*2-1-i
-  else:
-    j = i
+for i in range(nNeurite):
   sim.createEntity('System', 'System:/:Neurite%d' %i).StepperID = 'SS'
   sim.createEntity('Variable', 'Variable:/Neurite%d:GEOMETRY' %i).Value = 2
   x = sim.createEntity('Variable', 'Variable:/Neurite%d:LENGTHX' %i)
-  x.Value = neuriteLengths[j]
+  x.Value = neuriteLengths[i]
   y = sim.createEntity('Variable', 'Variable:/Neurite%d:LENGTHY' %i)
   y.Value = neuriteRadius*2
   x = sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINX' %i)
-  if(i > nNeurite-1):
-    x.Value = -neuriteOrigins[j][0]
-  else:
-    x.Value = neuriteOrigins[j][0]
+  x.Value = neuriteOrigins[i][0]
   y = sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINY' %i)
-  if(i > 4):
-    y.Value = neuriteOrigins[i-nNeurite][1]
-  else:
-    y.Value = neuriteOrigins[i][1]
+  y.Value = neuriteOrigins[i][1]
   sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINZ' %i).Value = 0
-  z = sim.createEntity('Variable', 'Variable:/Neurite%d:ROTATEZ' %i)
-  z.Value = 0
-  if(i > nNeurite-1):
-    z.Value = math.pi
   sim.createEntity('Variable', 'Variable:/Neurite%d:VACANT' %i)
   d = sim.createEntity('Variable', 'Variable:/Neurite%d:DIFFUSIVE' %i)
   d.Name = '/:Soma'
@@ -243,34 +236,32 @@ for i in range(nNeurite*2):
  # if(i == 0):
  #   h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:A', '-3']]
  #   h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:B', '-4']]
- # if(i == 7):
+ # if(i == 1):
  #   h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:C', '-3']]
  #   h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:D', '-4']]
-  h.OriginX = inSomaLength/(neuriteLengths[j]/2)
-  if(i > nNeurite-1):
-    h.OriginX = -h.OriginX
+  h.OriginX = inSomaLength/(neuriteLengths[i]/2)
   h.Density = 1
-  h.Length = neuriteLengths[j]
+  h.Length = neuriteLengths[i]
   h.Radius = neuriteRadius*1.2
-  h.Bins = int(round(neuriteLengths[j]/binLength)) 
+  h.Bins = int(round(neuriteLengths[i]/binLength)) 
   h.LogInterval = 1e-1
   h.ExposureTime = 40
   h.FileName = "histogram" + filename + ("_n%d.csv" %i)
   h.LogEnd = T-1
   h.Iterations = 1
 
-  for k in range(nNeuriteMT):
+  for j in range(nNeuriteMT):
     m = sim.createEntity('MicrotubuleProcess',
-        'Process:/Neurite%d:Microtubule%d' %(i, k))
-    m.OriginX = MTsOriginX[j][k]
-    m.OriginY = MTsOriginY[j][k]
-    m.OriginZ = MTsOriginZ[j][k]
+        'Process:/Neurite%d:Microtubule%d' %(i, j))
+    m.OriginX = MTsOriginX[i][j]
+    m.OriginY = MTsOriginY[i][j]
+    m.OriginZ = MTsOriginZ[i][j]
     m.RotateX = 0
     m.RotateY = 0
     m.RotateZ = 0
     m.Radius = MTRadius
     m.SubunitRadius = KinesinRadius
-    m.Length = MTLengths[j]
+    m.Length = MTLengths[i]
     m.Filaments = Filaments
     m.Periodic = 0
     m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0' ]]
@@ -285,6 +276,7 @@ for i in range(nNeurite*2):
     m.VariableReferenceList = [['_', 'Variable:/Soma:TUB', '-1']]
     m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M', '-2']]
     m.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P', '-3']]
+
 
 
 nSomaMT = 16
@@ -305,8 +297,6 @@ for i in range(nSomaMT):
     m.RotateX = 0
     m.RotateY = 0
     m.RotateZ = 0
-    if(i%2):
-      m.RotateZ = math.pi
     m.Radius = MTRadius
     m.SubunitRadius = KinesinRadius
     m.Length = somaWidth*0.8
@@ -670,91 +660,23 @@ r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','1']]
 r.k = 0.055
 #-------------------------------------------------------------------------------
 
-#MT KIF detachment to cytosol at plus end---------------------------------------
-r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p1')
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0','-1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
-#reactAdjoinsA
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB2','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','10']]
-r.p = pPlusEnd_Detach
-
-r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p2')
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','-1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
-#reactAdjoinsA
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB2','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','10']]
-r.p = pPlusEnd_Detach
-
-r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p3')
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0_ATP','-1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
-#reactAdjoinsA
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB2','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','10']]
-r.p = pPlusEnd_Detach
-
-r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p4')
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','-1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
-#reactAdjoinsA
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB0','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB2','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB1','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0_ATP','10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF2_ATP','-10']]
-r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1_ATP','10']]
-r.p = pPlusEnd_Detach
-#-------------------------------------------------------------------------------
+##MT KIF detachment to cytosol at plus end---------------------------------------
+#r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p3')
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF_ATP','-1']]
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','1']]
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
+#r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
+#r.p = pPlusEnd_Detach
+#
+#r = sim.createEntity('DiffusionInfluencedReactionProcess', 'Process:/Soma:p4')
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF','-1']]
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','-1']]
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB','1']]
+#r.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P','1']]
+#r.VariableReferenceList = [['_', 'Variable:/Soma:KIF','1']]
+#r.p = pPlusEnd_Detach
+##-------------------------------------------------------------------------------
 
 #KIF ATP hydrolysis-------------------------------------------------------------
 r = sim.createEntity('SpatiocyteNextReactionProcess', 'Process:/Soma:h1')
@@ -901,8 +823,8 @@ v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB0']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB1']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB2']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_M']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_P']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:A']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:B']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:C']]
