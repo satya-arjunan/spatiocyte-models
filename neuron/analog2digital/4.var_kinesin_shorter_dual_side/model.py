@@ -141,6 +141,7 @@ s = sim.createStepper('SpatiocyteStepper', 'SS')
 s.VoxelRadius = VoxelRadius
 s.SearchVacant = 1
 s.RemoveSurfaceBias = 1
+s.DebugLevel = 0
 sim.rootSystem.StepperID = 'SS'
 
 sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLengths[0]

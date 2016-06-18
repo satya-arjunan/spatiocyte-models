@@ -45,6 +45,8 @@ if __name__ == '__main__':
   subproc = add_job(param)
   resultTable = []
   startTime = time.time()
+  #If it gets stuck here, you need to set SpatiocyteStepper DebugLevel=0
+  #to remove stdout
   while subproc.poll() == None:
     resultTable.append(psutil.Process(subproc.pid).memory_info().vms)
     #resultTable.append(psutil.Process(subproc.pid).get_memory_info().vms)
