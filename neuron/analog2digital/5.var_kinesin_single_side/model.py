@@ -7,10 +7,12 @@ except NameError:
   V1 = 0 #iteration
   V2 = 50 #nKinesin
   V3 = 0.8 #p aTUB
+  V4 = 1 #DebugLevel
 
 import numpy as np
 import math
 
+DebugLevel = V4
 filename = "_%d_%d_" %(int(V2), int(V1))
 #volumes = [5.8822e-18]
 #nKinesin = 35*2.258e-17/volumes[0]
@@ -141,7 +143,7 @@ s = sim.createStepper('SpatiocyteStepper', 'SS')
 s.VoxelRadius = VoxelRadius
 s.SearchVacant = 1
 s.RemoveSurfaceBias = 1
-s.DebugLevel = 0
+s.DebugLevel = DebugLevel
 sim.rootSystem.StepperID = 'SS'
 
 sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLengths[0]
@@ -189,11 +191,12 @@ h.FileName = "histogram_soma" + filename + ".csv"
 h.LogEnd = T-1
 h.Iterations = 1
 
-for i in range(nNeurite*2):
-  if(i > nNeurite-1):
-    j = nNeurite*2-1-i
-  else:
-    j = i
+for i in range(nNeurite):
+  #if(i > nNeurite-1):
+  #  j = nNeurite*2-1-i
+  #else:
+  #  j = i
+  j = i
   sim.createEntity('System', 'System:/:Neurite%d' %i).StepperID = 'SS'
   sim.createEntity('Variable', 'Variable:/Neurite%d:GEOMETRY' %i).Value = 2
   x = sim.createEntity('Variable', 'Variable:/Neurite%d:LENGTHX' %i)
@@ -201,20 +204,20 @@ for i in range(nNeurite*2):
   y = sim.createEntity('Variable', 'Variable:/Neurite%d:LENGTHY' %i)
   y.Value = neuriteRadius*2
   x = sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINX' %i)
-  if(i > nNeurite-1):
-    x.Value = -neuriteOrigins[j][0]
-  else:
-    x.Value = neuriteOrigins[j][0]
+  #if(i > nNeurite-1):
+  #  x.Value = -neuriteOrigins[j][0]
+  #else:
+  x.Value = neuriteOrigins[j][0]
   y = sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINY' %i)
-  if(i > nNeurite-1):
-    y.Value = neuriteOrigins[i-nNeurite][1]
-  else:
-    y.Value = neuriteOrigins[i][1]
+  #if(i > nNeurite-1):
+  #  y.Value = neuriteOrigins[i-nNeurite][1]
+  #else:
+  y.Value = neuriteOrigins[i][1]
   sim.createEntity('Variable', 'Variable:/Neurite%d:ORIGINZ' %i).Value = 0
   z = sim.createEntity('Variable', 'Variable:/Neurite%d:ROTATEZ' %i)
   z.Value = 0
-  if(i > nNeurite-1):
-    z.Value = math.pi
+  #if(i > nNeurite-1):
+  #  z.Value = math.pi
   sim.createEntity('Variable', 'Variable:/Neurite%d:VACANT' %i)
   d = sim.createEntity('Variable', 'Variable:/Neurite%d:DIFFUSIVE' %i)
   d.Name = '/:Soma'
@@ -242,8 +245,8 @@ for i in range(nNeurite*2):
  #   h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:C', '-3']]
  #   h.VariableReferenceList = [['_', 'Variable:/Soma/Surface:D', '-4']]
   h.OriginX = inSomaLength/(neuriteLengths[j]/2)
-  if(i > nNeurite-1):
-    h.OriginX = -h.OriginX
+  #if(i > nNeurite-1):
+  #  h.OriginX = -h.OriginX
   h.Density = 1
   h.Length = neuriteLengths[j]
   h.Radius = neuriteRadius*1.2
@@ -892,7 +895,7 @@ d.D = 0.04e-12
 #-------------------------------------------------------------------------------
 
 v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
-#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
+v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB0']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB1']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB2']]
@@ -902,7 +905,7 @@ v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:B']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:C']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:D']]
-#v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:VACANT']]
+v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:VACANT']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1']]
