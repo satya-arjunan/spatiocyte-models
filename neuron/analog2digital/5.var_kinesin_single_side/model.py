@@ -895,7 +895,7 @@ d.D = 0.04e-12
 #-------------------------------------------------------------------------------
 
 v = sim.createEntity('VisualizationLogProcess', 'Process:/Soma:v')
-v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB0']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB1']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma:TUB2']]
@@ -905,7 +905,7 @@ v.VariableReferenceList = [['_', 'Variable:/Soma:TUB']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:B']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:C']]
 #v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:D']]
-v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:VACANT']]
+#v.VariableReferenceList = [['_', 'Variable:/Soma/Surface:VACANT']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:KIF']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF0']]
 v.VariableReferenceList = [['_', 'Variable:/Soma:TUB_KIF1']]
