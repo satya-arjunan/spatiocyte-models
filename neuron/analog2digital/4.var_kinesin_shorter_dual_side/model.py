@@ -7,10 +7,12 @@ except NameError:
   V1 = 0 #iteration
   V2 = 50 #nKinesin
   V3 = 0.8 #p aTUB
+  V4 = 1 #DebugLevel
 
 import numpy as np
 import math
 
+DebugLevel = V4
 filename = "_%d_%d_" %(int(V2), int(V1))
 #volumes = [5.8822e-18]
 #nKinesin = 35*2.258e-17/volumes[0]
@@ -141,7 +143,7 @@ s = sim.createStepper('SpatiocyteStepper', 'SS')
 s.VoxelRadius = VoxelRadius
 s.SearchVacant = 1
 s.RemoveSurfaceBias = 1
-s.DebugLevel = 0
+s.DebugLevel = DebugLevel
 sim.rootSystem.StepperID = 'SS'
 
 sim.createEntity('Variable', 'Variable:/:LENGTHX').Value = rootLengths[0]

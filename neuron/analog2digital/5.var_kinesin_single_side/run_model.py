@@ -25,7 +25,7 @@ def register_job(param, obj, fdmap, epoll, jobCnt):
 T = 10800
 Iterations = 1
 V1 = np.arange(1,4,1)
-V2 = np.arange(0,2000,50)
+V2 = np.arange(2000,4000,50)
 V3 = [0.9]
 V4 = [0]
 String = 'None'
