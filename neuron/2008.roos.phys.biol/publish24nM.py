@@ -11,8 +11,8 @@ tickFontSize = fontsize
 legendFontSize = fontsize
 lineFontSize = fontsize
 
-fileNames = ["MTIterateLog.24nM.csv", "Fig.5.24nM.sim.csv", "Fig.5.24nM.exp.csv"]
-legendTitles = ["3D Particle Simulation", "Simulation", "Experiment"]
+fileNames = ["MTIterateLog.24nM.csv", "Fig.5.24nM.sim.csv", "Fig.5.24nM.exp.csv""HDIterateLog_24nM.csv"]
+legendTitles = ["3D Particle Simulation", "Simulation", "Experiment", "No Cooperativity"]
 lines = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
 colors = ['y', 'r', 'b', 'm', 'c', 'g', '#6b420c', '#33aa00', '#990022', '#005599', '#220088', '#aa8822', '#110077','#003355']
 
@@ -36,6 +36,9 @@ P.plot(np.divide(data[0],60.0), np.divide(combined, amax), linewidth=1.5, label=
 
 data = np.genfromtxt(fileNames[2], delimiter=',', skip_header=0).T
 P.plot(data[0], data[1], linewidth=0, marker='o', color='r', markersize=10, label=legendTitles[2].split('.csv')[0])
+
+data = np.genfromtxt(fileNames[3], delimiter=',', skip_header=0).T
+P.plot(data[0], data[1], linewidth=0, marker='o', color='b', markersize=10, label=legendTitles[3].split('.csv')[0])
 
 ax = P.gca()
 ax.grid(color='k', linestyle='--')
