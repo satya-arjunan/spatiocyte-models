@@ -61,12 +61,12 @@ def get_data(filename, start_row, row_labels, col_labels, headers, species):
 def func(x,M,a):
    return M*(1.0-np.exp(-x/a))
 
-start_time = 8000
-end_time = 10000
+start_time = 1000
+end_time = 1700
 bin_id = -1 #last bin
 species = [0, 1, 2, 3, 4, 5, 6]
 cut_off = 0.1
-iteration = 2
+iteration = 1
 filenames = glob.glob("histogram_*.csv")
 nKinesin = np.empty(0)
 for file in filenames:
@@ -96,11 +96,12 @@ ax.bar(kinesins, cnts)
 #ax.plot(kinesins, cnts)
 popt, pcov = curve_fit(func, kinesins, cnts, bounds=(0,[16.0,1500.0]))
 y = func(kinesins, *popt)
-#y = np.empty(0)
-#for i in kinesins:
-#  y = np.append(y, func(i, 12.5, 350.0))
 ax.plot(kinesins,y)
-
+y = np.empty(0)
+for i in kinesins:
+  y = np.append(y, i*0.025)
+ax.plot(kinesins,y)
+ax.set_ylim([0,17])
 plt.ylabel("# branch switched on", fontsize=fontsize)
 plt.xlabel('# kinesin', fontsize=fontsize)
 plt.xticks(fontsize=fontsize)
