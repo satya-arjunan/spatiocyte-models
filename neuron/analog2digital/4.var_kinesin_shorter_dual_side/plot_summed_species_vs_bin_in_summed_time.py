@@ -8,8 +8,33 @@ import csv
 
 fontsize = 15 
 
-def get_mean(data, row_labels, col_labels, labels, start_time, end_time, bin_id):
-  return np.mean(data[:, :, bin_id][0])
+def plot_figure(data, row_labels, col_labels, labels, start_time, end_time):
+  logInterval = row_labels[1]-row_labels[0]
+  timePoints = (end_time-start_time)/logInterval
+
+  dim, rows, cols = data.shape
+  print dim, rows, cols
+  print data[:, :, :]
+  print np.mean(data, axis=1)
+  fig, ax = plt.subplots()
+  for i in range(dim):
+    x = np.mean(data, axis=1)[0]
+    z = np.arange(len(x))
+    ax.plot(z, x, label=labels[i], linewidth=1.5)
+  ax.grid(color='b', linestyle='--')
+  leg = plt.legend(loc=0, labelspacing=0.2, handletextpad=0.2, fancybox=True)
+  for t in leg.get_texts():
+    t.set_fontsize(fontsize)
+  frame = leg.get_frame()
+  frame.set_linewidth(None)
+  frame.set_facecolor('0.95')
+  frame.set_edgecolor('0.75')
+  plt.ylabel("Density (a.u.)", fontsize=fontsize)
+  plt.xlabel('Bin # along cortex length', fontsize=fontsize)
+  plt.xticks(fontsize=fontsize)
+  plt.yticks(fontsize=fontsize)
+  plt.savefig('density_vs_bins.png', bbox_inches='tight')
+  plt.show()
 
 def get_headers(filename):
   f = open(filename, 'rb')
@@ -20,7 +45,8 @@ def get_headers(filename):
     headers[i] = headers[i].split(':')[1] #remove path of species
   return headers
 
-def initialize(startTime, filename):
+def initialize(startTime):
+  filename = "histogram_soma_1950_1_.csv"
   headers = get_headers(filename)
   data = np.loadtxt(filename, delimiter=',', skiprows=1)
   bins = 0
@@ -40,7 +66,7 @@ def initialize(startTime, filename):
     row_labels[i] = startTime+i*logInterval
   for i in range(bins):
     col_labels[i] = i*binInterval
-  return start_row, row_labels, col_labels, headers
+  return filename, start_row, row_labels, col_labels, headers
 
 def get_data(filename, start_row, row_labels, col_labels, headers, species):
   data = np.loadtxt(filename, delimiter=",", skiprows=start_row+1)
@@ -55,36 +81,9 @@ def get_data(filename, start_row, row_labels, col_labels, headers, species):
   abs_val = np.amax(dataset)
   return dataset, abs_val, labels
 
-start_time = 8000
+start_time = 1000
 end_time = 10000
-bin_id = -1 #last bin
 species = [0, 1, 2, 3, 4, 5, 6]
-cut_off = 0.05
-filenames = glob.glob("histogram_*.csv")
-nKinesin = np.empty(0)
-for file in filenames:
-  nKinesin = np.append(nKinesin, int(file.split("_")[1]))
-nKinesin = np.unique(nKinesin)
-cnts = np.empty(0)
-for val in nKinesin:
-  filenames = glob.glob("histogram_%d_3_*.csv" %val)
-  cnt = 0
-  for file in filenames:
-    start_row, row_labels, col_labels, headers = initialize(start_time, file)
-    data, abs_val, labels = get_data(file, start_row, row_labels, col_labels, headers, species)
-    mean = np.mean(data[:, :, bin_id][0])
-    if(mean > cut_off):
-      mean = 1
-      cnt = cnt+1
-    else:
-      mean = 0
-  cnts = np.append(cnts, cnt)
-print nKinesin, cnts
-fig, ax = plt.subplots()
-ax.bar(nKinesin, cnts)
-plt.ylabel("# neurites switched on", fontsize=fontsize)
-plt.xlabel('# kinesin', fontsize=fontsize)
-plt.xticks(fontsize=fontsize)
-plt.yticks(fontsize=fontsize)
-plt.savefig('analog2digital_dual.png', bbox_inches='tight')
-plt.show()
+filename, start_row, row_labels, col_labels, headers = initialize(start_time)
+data, abs_val, labels = get_data(filename, start_row, row_labels, col_labels, headers, species)
+plot_figure(data, row_labels, col_labels, labels, start_time, end_time)
