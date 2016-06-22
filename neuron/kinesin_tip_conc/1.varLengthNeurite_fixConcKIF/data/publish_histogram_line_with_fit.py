@@ -77,6 +77,7 @@ def plot_figure(data, row_labels, col_labels, abs_val, plot_cols, plot_rows,
       rects.append(ax.plot(x, y, color=colors[i], linewidth=4)[0])
       #if (i == prows-1):
       popt, pcov = curve_fit(func, x, y, bounds=(0,[100.0,100.0,100.0]))
+      print popt
       n = np.linspace(np.min(x), np.max(x),50)
       m = func(n, *popt)
       if(i == prows-1):
