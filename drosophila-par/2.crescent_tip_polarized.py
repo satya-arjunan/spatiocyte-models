@@ -32,24 +32,24 @@ sim.createEntity('System', 'System:/:Membrane').StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/Membrane:DIMENSION').Value = 2
 sim.createEntity('Variable', 'Variable:/Membrane:VACANT')
 
-#sim.createEntity('System', 'System:/:Cell2').StepperID = 'SS'
-#sim.createEntity('Variable', 'Variable:/Cell2:GEOMETRY').Value = 1
-#sim.createEntity('Variable', 'Variable:/Cell2:LENGTHX').Value = 13e-6*1.2
-#sim.createEntity('Variable', 'Variable:/Cell2:LENGTHY').Value = 11e-6*1.2
-#sim.createEntity('Variable', 'Variable:/Cell2:LENGTHZ').Value = 10e-6*1.2
-#sim.createEntity('Variable', 'Variable:/Cell2:ORIGINX').Value = -0.9
-#sim.createEntity('Variable', 'Variable:/Cell2:VACANT')
-#
-#sim.createEntity('System', 'System:/Cell2:Cortex').StepperID = 'SS'
-#sim.createEntity('Variable', 'Variable:/Cell2/Cortex:DIMENSION').Value = 2
-#sim.createEntity('Variable', 'Variable:/Cell2/Cortex:VACANT').Value = 1
+sim.createEntity('System', 'System:/:Cell2').StepperID = 'SS'
+sim.createEntity('Variable', 'Variable:/Cell2:GEOMETRY').Value = 1
+sim.createEntity('Variable', 'Variable:/Cell2:LENGTHX').Value = 13e-6*1.2
+sim.createEntity('Variable', 'Variable:/Cell2:LENGTHY').Value = 11e-6*1.2
+sim.createEntity('Variable', 'Variable:/Cell2:LENGTHZ').Value = 10e-6*1.2
+sim.createEntity('Variable', 'Variable:/Cell2:ORIGINX').Value = -0.9
+sim.createEntity('Variable', 'Variable:/Cell2:VACANT')
+
+sim.createEntity('System', 'System:/Cell2:Cortex').StepperID = 'SS'
+sim.createEntity('Variable', 'Variable:/Cell2/Cortex:DIMENSION').Value = 2
+sim.createEntity('Variable', 'Variable:/Cell2/Cortex:VACANT').Value = 1
 
 sim.createEntity('System', 'System:/:Cell').StepperID = 'SS'
 sim.createEntity('Variable', 'Variable:/Cell:GEOMETRY').Value = 1
 sim.createEntity('Variable', 'Variable:/Cell:LENGTHX').Value = 20e-6*1.2
 sim.createEntity('Variable', 'Variable:/Cell:LENGTHY').Value = 10e-6*1.2
 sim.createEntity('Variable', 'Variable:/Cell:LENGTHZ').Value = 5.35e-6*1.2
-sim.createEntity('Variable', 'Variable:/Cell:ORIGINX').Value = -1.37
+sim.createEntity('Variable', 'Variable:/Cell:ORIGINX').Value = -0.7
 sim.createEntity('Variable', 'Variable:/Cell:VACANT')
 
 sim.createEntity('System', 'System:/Cell:Cortex').StepperID = 'SS'

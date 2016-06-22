@@ -5,7 +5,7 @@ MT_nucleation = 0
 MT_PAR2m_rate = 8e-3
 MT_number = 300
 
-T = 3000
+T = 10
 interval = 0.1
 
 sim = theSimulator
