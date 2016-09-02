@@ -35,6 +35,8 @@ imp.load_source('spatiocyte_out', 'spatiocyte/spatiocyte_out.py')
 from spatiocyte_out import *
 imp.load_source('gpu_out', 'spatiocyte/gpu_out.py')
 from gpu_out import *
+imp.load_source('gpu_dillute_out', 'spatiocyte/gpu_dillute_out.py')
+from gpu_dillute_out import *
 imp.load_source('spatiocyte_dillute_out', 'spatiocyte/spatiocyte_dillute_out.py')
 from spatiocyte_dillute_out import *
 imp.load_source('egfrd_out', 'egfrd/egfrd_out.py')
@@ -59,7 +61,7 @@ annotate(r'$T\propto N^{\mathsf{\frac{5}{3}}}$', xy=(X[2], egfrd_dense_data[2][0
 
 plot(Nv, egfrd_data,'bo', label=r'eGFRD ($V=3000\ \mathrm{\mu m}^{3}$)')
 loglog(X, 2.05e-4*X**(5.0/3.0), 'b--')
-annotate(r'$T\propto N^{\mathsf{\frac{5}{3}}}$', xy=(X[3], egfrd_data[3][0]),  xycoords='data', xytext=(-15, -25), textcoords='offset points', color='b', size=14)
+annotate(r'$T\propto N^{\mathsf{\frac{5}{3}}}$', xy=(X[7], egfrd_data[8][0]),  xycoords='data', xytext=(-5, -5), textcoords='offset points', color='b', size=14)
 
 plot(Nv, smoldyn_data,'g^', label=r'Smoldyn ($V=3\ \mathrm{\mu m}^{3}$)')
 loglog(X, 2e-1*X, 'g--')
@@ -75,7 +77,9 @@ plot(Nv, spatiocyte_dillute_data,'r>', label=r'Spatiocyte ($V=30\ \mathrm{\mu m}
 
 
 plot(Nv, gpu_data,'ko', label=r'Spatiocyte GPU ($V=3\ \mathrm{\mu m}^{3}$)')
+plot(Nv, gpu_dillute_data,'ks', label=r'Spatiocyte GPU ($V=30\ \mathrm{\mu m}^{3}$)')
 loglog(X, 5e-3*X, 'k--')
+annotate(r'$T\propto N$', xy=(X[5], gpu_data[3][0]),  xycoords='data', xytext=(-15, -8), textcoords='offset points', color='k', size=14)
 
 
 #annotate('B', xy=(0, 1),  xycoords='axes fraction', xytext=(-60,-20), textcoords='offset points', color='k', size=30)
