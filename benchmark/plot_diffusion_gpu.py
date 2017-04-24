@@ -74,10 +74,30 @@ loglog(X, 0.4*X, 'r--')
 #loglog(X, 0.24*X**1.05, 'r-')
 annotate(r'$T\propto N$', xy=(X[5], spatiocyte_data[5][0]),  xycoords='data', xytext=(-15, 12), textcoords='offset points', color='r', size=14)
 plot(Nv, spatiocyte_dillute_data,'r>', label=r'Spatiocyte ($V=30\ \mathrm{\mu m}^{3}$)')
+print "Serial BUPS:"
+spatiocyte_s = 0
+spatiocyte_d = 0
+for i in range(len(Nv)):
+    spatiocyte_s = 240000.0*float(Nv[i])/(float(spatiocyte_data[i][0])/10.0)/1e+9 
+    print Nv[i], spatiocyte_s 
+for i in range(len(Nv)):
+    spatiocyte_d = 240000.0*float(Nv[i])/(float(spatiocyte_dillute_data[i][0])/10.0)/1e+9
+    print Nv[i], spatiocyte_d
 
 
 plot(Nv, gpu_data,'ko', label=r'Spatiocyte GPU ($V=3\ \mathrm{\mu m}^{3}$)')
 plot(Nv, gpu_dillute_data,'ks', label=r'Spatiocyte GPU ($V=30\ \mathrm{\mu m}^{3}$)')
+print "GPU BUPS:"
+gpu_s = 0
+gpu_d = 0
+for i in range(len(Nv)):
+    gpu_s = 240000.0*float(Nv[i])/(float(gpu_data[i][0])/10.0)/1e+9
+    print Nv[i], gpu_s
+for i in range(len(Nv)):
+    gpu_d = 240000.0*float(Nv[i])/(float(gpu_dillute_data[i][0])/10.0)/1e+9
+    print Nv[i], gpu_d
+print "GPU speedup vs Serial:"
+print gpu_s/spatiocyte_s, gpu_d/spatiocyte_d
 loglog(X, 5e-3*X, 'k--')
 annotate(r'$T\propto N$', xy=(X[5], gpu_data[3][0]),  xycoords='data', xytext=(-15, -8), textcoords='offset points', color='k', size=14)
 
