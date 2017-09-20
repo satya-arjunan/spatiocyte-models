@@ -34,31 +34,31 @@ from run_all import Nv
 
 X = numpy.array(Nv)
 data = numpy.empty([len(Nv)])
-print "Serial BUPS:"
+print "Serial GUPS:"
 for i in range(len(Nv)):
     data[i] = 240000.0*float(Nv[i])/(float(spatiocyte_dillute_data[i][0])/10.0)/1e+9 
     print Nv[i], data[i]
 print data
 plot(Nv, data,'ro', label=r'Spatiocyte CPU')
 loglog(X, numpy.ones(len(X))*0.00315, 'r--')
-annotate(r'BUPS = 0.0031', xy=(X[0], data[8]), xycoords='data', xytext=(10,-20), textcoords='offset points', color='r', size=14)
+annotate(r'GUPS = 0.0031', xy=(X[0], data[8]), xycoords='data', xytext=(10,-20), textcoords='offset points', color='r', size=14)
 
-print "GPU BUPS:"
+print "GPU GUPS:"
 for i in range(len(Nv)):
     data[i] = 240000.0*float(Nv[i])/(float(gpu_dillute_data[i][0])/10.0)/1e+9 
     print Nv[i], data[i]
 print data
 plot(Nv, data,'bo', label=r'Spatiocyte GPU (Thrust)')
 loglog(X, numpy.ones(len(X))*0.45, 'b--')
-annotate(r'BUPS = 0.45', xy=(X[0], data[8]), xycoords='data', xytext=(10,-20), textcoords='offset points', color='b', size=14)
-
-
+annotate(r'GUPS = 0.45', xy=(X[0], data[8]), xycoords='data', xytext=(10,-20), textcoords='offset points', color='b', size=14)
 leg = legend(loc="center right", labelspacing=0.3, handletextpad=0.2)
+
+#leg = legend(loc="upper right", labelspacing=0.3, handletextpad=0.2)
 for t in leg.get_texts():
   t.set_fontsize(legendFontSize) 
 
 xlabel('$N$ (\# Molecules)', size=17)
-ylabel('Billion updates per second (BUPS)', size=17)
+ylabel('Giga updates per second (GUPS)', size=17)
 xscale("log")
 yscale("log")
 xlim(X[0]*0.9,X[len(X)-1]*1.1)

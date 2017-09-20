@@ -55,13 +55,13 @@ axes([.12,.14,.86,.83])
 
 X = numpy.array(Nv)
 
-plot(Nv, egfrd_dense_data,'bs', label=r'eGFRD ($V=3\ \mathrm{\mu m}^{3}$)')
-loglog(X, 2e-2*X**(5.0/3.0), 'b--')
-annotate(r'$T\propto N^{\mathsf{\frac{5}{3}}}$', xy=(X[2], egfrd_dense_data[2][0]),  xycoords='data', xytext=(-20, 15), textcoords='offset points', color='b', size=14)
+plot(Nv, egfrd_dense_data,'ks', label=r'eGFRD ($V=3\ \mathrm{\mu m}^{3}$)')
+loglog(X, 2e-2*X**(5.0/3.0), 'k--')
+annotate(r'$T\propto N^{\mathsf{\frac{5}{3}}}$', xy=(X[2], egfrd_dense_data[2][0]),  xycoords='data', xytext=(-20, 15), textcoords='offset points', color='k', size=14)
 
-plot(Nv, egfrd_data,'bo', label=r'eGFRD ($V=3000\ \mathrm{\mu m}^{3}$)')
-loglog(X, 2.05e-4*X**(5.0/3.0), 'b--')
-annotate(r'$T\propto N^{\mathsf{\frac{5}{3}}}$', xy=(X[7], egfrd_data[8][0]),  xycoords='data', xytext=(-5, -5), textcoords='offset points', color='b', size=14)
+plot(Nv, egfrd_data,'ko', label=r'eGFRD ($V=3000\ \mathrm{\mu m}^{3}$)')
+loglog(X, 2.05e-4*X**(5.0/3.0), 'k--')
+annotate(r'$T\propto N^{\mathsf{\frac{5}{3}}}$', xy=(X[7], egfrd_data[8][0]),  xycoords='data', xytext=(-5, -5), textcoords='offset points', color='k', size=14)
 
 plot(Nv, smoldyn_data,'g^', label=r'Smoldyn ($V=3\ \mathrm{\mu m}^{3}$)')
 loglog(X, 2e-1*X, 'g--')
@@ -69,17 +69,17 @@ loglog(X, 2e-1*X, 'g--')
 annotate(r'$T\propto N$', xy=(X[1], smoldyn_data[1][0]),  xycoords='data', xytext=(-25, -23), textcoords='offset points', color='g', size=14)
 plot(Nv, smoldyn_dillute_data,'gv', label=r'Smoldyn ($V=30\ \mathrm{\mu m}^{3}$)')
 
-plot(Nv, spatiocyte_data,'r<', label=r'Spatiocyte ($V=3\ \mathrm{\mu m}^{3}$)')
+plot(Nv, spatiocyte_data,'r<', label=r'Spatiocyte CPU ($V=3\ \mathrm{\mu m}^{3}$)')
 loglog(X, 0.4*X, 'r--')
 #loglog(X, 0.24*X**1.05, 'r-')
 annotate(r'$T\propto N$', xy=(X[5], spatiocyte_data[5][0]),  xycoords='data', xytext=(-15, 12), textcoords='offset points', color='r', size=14)
-plot(Nv, spatiocyte_dillute_data,'r>', label=r'Spatiocyte ($V=30\ \mathrm{\mu m}^{3}$)')
+plot(Nv, spatiocyte_dillute_data,'r>', label=r'Spatiocyte CPU ($V=30\ \mathrm{\mu m}^{3}$)')
 
 
-plot(Nv, gpu_data,'ko', label=r'Spatiocyte GPU ($V=3\ \mathrm{\mu m}^{3}$)')
-plot(Nv, gpu_dillute_data,'ks', label=r'Spatiocyte GPU ($V=30\ \mathrm{\mu m}^{3}$)')
-loglog(X, 5e-3*X, 'k--')
-annotate(r'$T\propto N$', xy=(X[5], gpu_data[3][0]),  xycoords='data', xytext=(-15, -8), textcoords='offset points', color='k', size=14)
+plot(Nv, gpu_data,'bo', label=r'Spatiocyte GPU ($V=3\ \mathrm{\mu m}^{3}$)')
+plot(Nv, gpu_dillute_data,'bs', label=r'Spatiocyte GPU ($V=30\ \mathrm{\mu m}^{3}$)')
+loglog(X, 5e-3*X, 'b--')
+annotate(r'$T\propto N$', xy=(X[5], gpu_data[3][0]),  xycoords='data', xytext=(-15, -8), textcoords='offset points', color='b', size=14)
 
 
 #annotate('B', xy=(0, 1),  xycoords='axes fraction', xytext=(-60,-20), textcoords='offset points', color='k', size=30)
