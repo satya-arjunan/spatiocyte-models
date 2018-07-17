@@ -75,14 +75,14 @@ binder = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r
 binder.VariableReferenceList = [['_', 'Variable:/:MinE','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEm','1']]
-binder.k = 0.0051e-19
+binder.k = 0.0051e-18
 
 # kdE
 binder = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r5')
 binder.VariableReferenceList = [['_', 'Variable:/:MinE','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEEm','1']]
-binder.k = 0.0051e-19
+binder.k = 0.0051e-18
 
 binder = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r6')
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEEm','-1']]
