@@ -10,7 +10,7 @@ theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:Vacant').Value = 0
 #
 theSimulator.createEntity('Variable', 'Variable:/:MinDm').Value = 50000
-theSimulator.createEntity('Variable', 'Variable:/:MinEm').Value = 80000
+theSimulator.createEntity('Variable', 'Variable:/:MinEm').Value = 30000
 theSimulator.createEntity('Variable', 'Variable:/:MinDEm').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:MinDEEm').Value = 0
 s = theSimulator.createEntity('Variable', 'Variable:/:MinD')
@@ -53,7 +53,7 @@ dif.D = 1e-13
 # MinEm
 dif = theSimulator.createEntity('DiffusionProcess', 'Process:/:diff_MinEm')
 dif.VariableReferenceList = [['_', 'Variable:/:MinEm']]
-dif.D = 1e-13
+dif.D = 4e-13
 #
 # MinDEm
 dif = theSimulator.createEntity('DiffusionProcess', 'Process:/:diff_MinDEm')
@@ -71,20 +71,20 @@ dif.D = 1e-13
 b = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r1')
 b.VariableReferenceList = [['_', 'Variable:/:MinD','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinDm','1']]
-b.k = 5e-8
+b.k = 1e-7
 #
 # MinE -> MinEm (kE)
 b = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r2')
 b.VariableReferenceList = [['_', 'Variable:/:MinE','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','1']]
-b.k = 2e-11
+b.k = 0.34e-7
 #
 # MinEm + MinDm -> MinDEm (kde)
 b = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r3')
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinDm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinDEm','1']]
-b.p = 0.9
+b.p = 1
 #
 ## MinEm + MinDEm -> MinDEEm (kde)
 b = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r4')
@@ -99,12 +99,12 @@ b.VariableReferenceList = [['_', 'Variable:/:MinDEEm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinD','1']]
-b.k = 1000000
+b.k = 10000
 #
 # MinEm -> MinE (ke)
 b = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r6')
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinE','1']]
-b.k = 0.01
+b.k = 0.3
 #
 run(10000)

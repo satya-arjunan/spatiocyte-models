@@ -5,13 +5,13 @@ sim.SearchVacant = 0
 
 theSimulator.rootSystem.StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 200e-6
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 200e-6
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 100e-6
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 100e-6
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 1e-6
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:Vacant').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:MinDm').Value = 50000*4
-theSimulator.createEntity('Variable', 'Variable:/:MinEm').Value = 30000*4
+theSimulator.createEntity('Variable', 'Variable:/:MinDm').Value = 50000
+theSimulator.createEntity('Variable', 'Variable:/:MinEm').Value = 30000
 theSimulator.createEntity('Variable', 'Variable:/:MinDEm').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:MinDEEm').Value = 0
 s = theSimulator.createEntity('Variable', 'Variable:/:MinD')

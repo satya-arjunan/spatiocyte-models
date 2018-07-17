@@ -9,16 +9,16 @@ theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 1e-6
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:Vacant').Value = 0
 #
-theSimulator.createEntity('Variable', 'Variable:/:MinDm').Value = 50000
-theSimulator.createEntity('Variable', 'Variable:/:MinEm').Value = 80000
+theSimulator.createEntity('Variable', 'Variable:/:MinDm').Value = 0
+theSimulator.createEntity('Variable', 'Variable:/:MinEm').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:MinDEm').Value = 0
 theSimulator.createEntity('Variable', 'Variable:/:MinDEEm').Value = 0
 s = theSimulator.createEntity('Variable', 'Variable:/:MinD')
-s.Value = 0
+s.Value = 50000
 s.Name = "HD"
 #
 s = theSimulator.createEntity('Variable', 'Variable:/:MinE')
-s.Value = 0
+s.Value = 30000
 s.Name = "HD"
 #
 # Surface Compartment
@@ -38,10 +38,10 @@ l.VariableReferenceList = [['_', 'Variable:/:MinDEm']]
 l.VariableReferenceList = [['_', 'Variable:/:MinDEEm']]
 l.LogInterval = 1
 #
-# Populate non-HD molecules in compartment
-pop = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop')
-pop.VariableReferenceList = [['_', 'Variable:/:MinDm']]
-pop.VariableReferenceList = [['_', 'Variable:/:MinEm']]
+## Populate non-HD molecules in compartment
+##pop = theSimulator.createEntity('MoleculePopulateProcess', 'Process:/:pop')
+##pop.VariableReferenceList = [['_', 'Variable:/:MinDm']]
+##pop.VariableReferenceList = [['_', 'Variable:/:MinEm']]
 #
 #
 # Diffusion 
@@ -73,36 +73,51 @@ b.VariableReferenceList = [['_', 'Variable:/:MinD','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinDm','1']]
 b.k = 5e-8
 #
-# MinE -> MinEm (kE)
+# MinE -> MinEm
 b = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r2')
 b.VariableReferenceList = [['_', 'Variable:/:MinE','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','1']]
-b.k = 2e-11
-#
-# MinEm + MinDm -> MinDEm (kde)
+b.k = 5e-10
+
+# MinEm + MinDm -> MinDEm
 b = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r3')
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinDm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinDEm','1']]
-b.p = 0.9
+b.k = 6.8e-13
+
+# MinE + MinDm -> MinDEm
+b = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r4')
+b.VariableReferenceList = [['_', 'Variable:/:MinE','-1']]
+b.VariableReferenceList = [['_', 'Variable:/:MinDm','-1']]
+b.VariableReferenceList = [['_', 'Variable:/:MinDEm','1']]
+b.k = 6.8e-22
 #
-## MinEm + MinDEm -> MinDEEm (kde)
-b = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r4')
+#
+## MinEm + MinDEm -> MinDEEm
+b = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r5')
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinDEm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinDEEm','1']]
-b.p = 1
+b.k = 6.8e-13
+
+## MinE + MinDEm -> MinDEEm
+b = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r6')
+b.VariableReferenceList = [['_', 'Variable:/:MinE','-1']]
+b.VariableReferenceList = [['_', 'Variable:/:MinDEm','-1']]
+b.VariableReferenceList = [['_', 'Variable:/:MinDEEm','1']]
+b.k = 6.8e-22
 #
 # MinDEEm -> MinEm + MinEm + MinD
-b = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r5')
+b = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r7')
 b.VariableReferenceList = [['_', 'Variable:/:MinDEEm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinD','1']]
-b.k = 1000000
+b.k = 10000
 #
-# MinEm -> MinE (ke)
-b = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r6')
+# MinEm -> MinE
+b = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r8')
 b.VariableReferenceList = [['_', 'Variable:/:MinEm','-1']]
 b.VariableReferenceList = [['_', 'Variable:/:MinE','1']]
 b.k = 0.01
