@@ -174,7 +174,7 @@ multi.VariableReferenceList = [['_', 'Variable:/Surface:RAS', '1']]
 
 iterator = theSimulator.createEntity('CoordinateLogProcess', 'Process:/:iterate')
 iterator.VariableReferenceList = [['_', 'Variable:/Surface:RAS']]
-iterator.LogInterval = 1e-4
+iterator.LogInterval = 1e-3
 iterator.LogEnd = 9
 
 fil = theSimulator.createEntity('CompartmentProcess', 'Process:/:filam')
