@@ -80,8 +80,8 @@ for i in range(len(fileNames)):
       area = (x_max-x_min)*(y_max-y_min)
       Kest = RipleysKEstimator(area=area, x_max=x_max, y_max=y_max,
           x_min=x_min, y_min=y_min)
-      plt.plot(r, [1]*len(r), color='green')
-      plt.plot(r, (Kest.Lfunction(data=data, radii=r, mode='ohser')-r)/max_ci, color='red')
+      plt.plot(r, [1]*len(r), color='green', label="99% CI")
+      plt.plot(r, (Kest.Lfunction(data=data, radii=r, mode='ohser')-r)/max_ci, color='red', label="K-Ras")
       plt.xlabel('r (nm)')
       plt.ylabel('L(r)-r')
       plt.xticks([0,80,160,240])
