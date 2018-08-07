@@ -2,7 +2,7 @@ try:
   T
 except NameError:
   T = 2000
-  Iterations = 5000
+  Iterations = 1
 
 import math 
 sim = theSimulator
