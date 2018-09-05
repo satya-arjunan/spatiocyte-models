@@ -21,7 +21,7 @@ s.Value = 0
 s.Name = "HD"
 
 s = theSimulator.createEntity('Variable', 'Variable:/:MinE')
-s.Value = MinD*20
+s.Value = MinD*3
 s.Name = "HD"
 
 logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
@@ -56,35 +56,35 @@ diffuser.D = 2.25e-15
 binder = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r1')
 binder.VariableReferenceList = [['_', 'Variable:/:MinD','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDm','1']]
-binder.k = 1e-6
+binder.k = 1e-4
 
 # kde
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r2')
 binder.VariableReferenceList = [['_', 'Variable:/:MinEm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEm','1']]
-binder.p = 0.1 #0.36
+binder.p = 0.8 #0.36
 
 # kde
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r3')
 binder.VariableReferenceList = [['_', 'Variable:/:MinEm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEEm','1']]
-binder.p = 0.1 #0.36
+binder.p = 0.8 #0.36
 
 # kdE
 binder = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r4')
 binder.VariableReferenceList = [['_', 'Variable:/:MinE','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEm','1']]
-binder.k = 1e-26
+binder.k = 8e-26
 
 # kdE
 binder = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r5')
 binder.VariableReferenceList = [['_', 'Variable:/:MinE','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEEm','1']]
-binder.k = 1e-26
+binder.k = 8e-26
 
 binder = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r6')
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEEm','-1']]
@@ -96,7 +96,7 @@ binder.k = 10000000
 binder = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r7')
 binder.VariableReferenceList = [['_', 'Variable:/:MinEm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinE','1']]
-binder.k = 0.03
+binder.k = 0.1
 
 
 #logger = theSimulator.createEntity('IteratingLogProcess', 'Process:/:iter')

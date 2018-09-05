@@ -43,8 +43,8 @@ int main()
   for (unsigned n(0); n < nSim; ++n) {
     for (unsigned j(0); j < nA; ++j) {
       mols[j].x = mod(mols[j].x+normdist(gen), L);
-      mols[j].y = mod(mols[j].x+normdist(gen), L);
-      mols[j].z = mod(mols[j].x+normdist(gen), L);
+      mols[j].y = mod(mols[j].y+normdist(gen), L);
+      mols[j].z = mod(mols[j].z+normdist(gen), L);
     }
   }
   auto finish = std::chrono::high_resolution_clock::now();

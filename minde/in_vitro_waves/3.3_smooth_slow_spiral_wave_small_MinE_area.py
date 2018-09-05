@@ -21,7 +21,7 @@ s.Value = 0
 s.Name = "HD"
 
 s = theSimulator.createEntity('Variable', 'Variable:/:MinE')
-s.Value = MinD*20
+s.Value = MinD*3
 s.Name = "HD"
 
 logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
