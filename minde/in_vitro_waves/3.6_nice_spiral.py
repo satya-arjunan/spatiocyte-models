@@ -3,12 +3,12 @@ sim = theSimulator.createStepper('SpatiocyteStepper', 'SS')
 sim.VoxelRadius = 5e-9
 sim.SearchVacant = 0
 
-MinD = 80000.0*5*5
+MinD = 80000.0
 
 theSimulator.rootSystem.StepperID = 'SS'
 theSimulator.createEntity('Variable', 'Variable:/:GEOMETRY').Value = 0
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 5e-6*5
-theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 5e-6*5
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHX').Value = 5e-6
+theSimulator.createEntity('Variable', 'Variable:/:LENGTHY').Value = 5e-6
 theSimulator.createEntity('Variable', 'Variable:/:LENGTHZ').Value = 5e-8
 theSimulator.createEntity('Variable', 'Variable:/:VACANT')
 theSimulator.createEntity('Variable', 'Variable:/:Vacant').Value = 0
@@ -21,7 +21,7 @@ s.Value = 0
 s.Name = "HD"
 
 s = theSimulator.createEntity('Variable', 'Variable:/:MinE')
-s.Value = MinD*3
+s.Value = MinD*0.5
 s.Name = "HD"
 
 logger = theSimulator.createEntity('VisualizationLogProcess', 'Process:/:logger')
@@ -63,14 +63,14 @@ binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Proces
 binder.VariableReferenceList = [['_', 'Variable:/:MinEm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEm','1']]
-binder.p = 0.08 #0.36
+binder.p = 0.1 #0.36
 
 # kde
 binder = theSimulator.createEntity('DiffusionInfluencedReactionProcess', 'Process:/:r3')
 binder.VariableReferenceList = [['_', 'Variable:/:MinEm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEm','-1']]
 binder.VariableReferenceList = [['_', 'Variable:/:MinDEEm','1']]
-binder.p = 0.08 #0.36
+binder.p = 0.1 #0.36
 
 # kdE
 binder = theSimulator.createEntity('SpatiocyteNextReactionProcess', 'Process:/:r4')
